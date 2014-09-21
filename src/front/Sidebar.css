@@ -1,0 +1,77 @@
+.sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  z-index: 2000; 
+  width: 460px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+  transition: width 500ms;
+  background-color: #444;
+  color: #efefef;
+}
+.sidebar.collapsed {
+  width: 60px; 
+}
+.sidebar-tabs {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 60px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.sidebar-tabs > li {
+  width: 100%;
+  height: 60px;
+  font-size: 12pt;
+  overflow: hidden;
+  transition: all 80ms;
+  color: #efefef;
+  line-height: 60px;
+  cursor: pointer;
+  border-bottom: 1px solid #555;
+}
+.sidebar-tabs > li:hover {
+  background-color: #555;
+}
+.sidebar-tabs > li.active {
+  color: #fff;
+  background-color: #666;
+}
+
+.sidebar-content {
+  position: absolute;
+  right: 60px;
+  top: 0;
+  bottom: 0;
+  background-color: #666;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-left: 10px;
+}
+
+.sidebar-pane {
+  display: none;
+  right: 0;
+  padding: 10px 20px;
+  width: 400px;
+}
+.sidebar-pane.active {
+  display: block;
+}
+.sidebar-pane h3 {
+  margin-bottom: 28px;
+}
+.sidebar-map .leaflet-right {
+  transition: right 500ms; 
+  right: 470px; 
+}
+.sidebar.collapsed ~ .sidebar-map .leaflet-right {
+  right: 70px;
+}

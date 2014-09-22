@@ -105,5 +105,6 @@ exports.LocalConfig = function (localizer) {
 
 ## Kown plugins
 
-- kosmtik-overpass-layer: to add Overpass Layer in your carto project
-- kosmtik-fetch-remote: automagically fetch remote files in your layers
+- [kosmtik-overpass-layer](https://github.com/kosmtik/kosmtik-overpass-layer): add Overpass Layer in your carto project
+- [kosmtik-fetch-remote](https://github.com/kosmtik/kosmtik-fetch-remote): automagically fetch remote files in your layers
+- [kosmtik-place-search](https://github.com/kosmtik/kosmtik-place-search): search places control

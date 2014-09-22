@@ -11,6 +11,10 @@
     "map",
     "design"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kosmtik/kosmtik.git"
+  },
   "author": "Yohan Boniface",
   "license": "WTFPL",
   "dependencies": {

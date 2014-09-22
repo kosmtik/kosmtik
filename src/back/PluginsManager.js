@@ -13,12 +13,16 @@ var PluginsManager = function (config) {
         flag: true,
         help: 'Show available plugins in registry'
     });
+    this.config.commands.plugins.option('install', {
+        metavar: 'NAME',
+        help: 'Install a plugin'
+    });
     this.config.on('command:plugins', this.handleCommand.bind(this));
     this._registered = [
         '../plugins/base-exporters/index.js',
         '../plugins/hash/index.js',
         '../plugins/local-config/index.js'
-    ].concat(this.config.sysconfig.plugins || []);
+    ].concat(this.config.userConfig.plugins || []);
     for (var i = 0; i < this._registered.length; i++) {
         this.register(this._registered[i]);
     }
@@ -40,10 +44,13 @@ PluginsManager.prototype.isInstalled = function (name) {
     return this._registered.indexOf(name) !== -1;
 };
 
+PluginsManager.prototype.loadPackage = function () {
+    return fs.readFileSync(path.join(this.config.root, 'package.json'));
+};
+
 PluginsManager.prototype.available = function (callback) {
-    var conf = fs.readFileSync(path.join(this.config.root, 'package.json')),
-        self = this;
-    npm.load(conf, function () {
+    var self = this;
+    npm.load(this.loadPackage(), function () {
         npm.commands.search(['kosmtik'], true, function (err, results) {
             if (err) return callback(err);
             var plugin, installed, plugins = [];
@@ -56,6 +63,31 @@ PluginsManager.prototype.available = function (callback) {
         });
     });
 
+};
+
+PluginsManager.prototype.install = function (name) {
+    var self = this;
+    npm.load(this.loadPackage(), function () {
+        npm.commands.view([name, 'peerDependencies'], true, function (err, data) {
+            if (err) throw err.message;
+            var version = Object.keys(data)[0];
+            if (!data[version].peerDependencies.kosmtik) return self.config.log('Missing peerDependencies to install', name, 'aborting');
+            npm.commands.install([name], function (err) {
+                if (err) self.config.log('Error when installing package', name);
+                self.config.log('Successfully installed package', name);
+                self.attach(name);
+                self.config.saveUserConfig();
+            });
+        });
+    });
+
+};
+
+PluginsManager.prototype.attach = function (name) {
+    // Attach plugin to user config
+    this.config.userConfig.plugins = this.config.userConfig.plugins || [];
+    if (this.config.userConfig.plugins.indexOf(name) === -1) this.config.userConfig.plugins.push(name);
+    this.config.log('Attached plugin:', name);
 };
 
 PluginsManager.prototype.handleCommand = function () {
@@ -75,6 +107,8 @@ PluginsManager.prototype.handleCommand = function () {
                 console.log(installed, plugin.name, '(' + plugin.description + ')');
             }
         });
+    } else if (this.config.parsed_opts.install) {
+        this.install(this.config.parsed_opts.install);
     }
 };
 

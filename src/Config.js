@@ -12,7 +12,7 @@ var Config = function (root) {
     this.initExporters();
     this.initLoaders();
     this.initStatics();
-    this.loadConfig();
+    this.loadUserConfig();
     this.pluginsManager = new PluginsManager(this);  // Do we need back ref?
     this.emit('loaded');
     this.on('server:init', this.attachRoutes.bind(this));
@@ -20,9 +20,13 @@ var Config = function (root) {
 
 util.inherits(Config, StateBase);
 
-Config.prototype.loadConfig = function () {
-    var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE,
-        configpath = path.join(home, '.config', 'kosmtik', 'config.yml'),
+Config.prototype.getUserConfigPath = function () {
+    var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+    return path.join(home, '.config', 'kosmtik', 'config.yml');
+};
+
+Config.prototype.loadUserConfig = function () {
+    var configpath = this.getUserConfigPath(),
         config = {};
     try {
         config = fs.readFileSync(configpath, 'utf-8');
@@ -30,7 +34,15 @@ Config.prototype.loadConfig = function () {
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
-    this.sysconfig = config;
+    this.userConfig = config;
+};
+
+Config.prototype.saveUserConfig = function () {
+    var configpath = this.getUserConfigPath(),
+        self = this;
+    fs.writeFile(configpath, yaml.safeDump(this.userConfig), function (err) {
+        self.log('Saved env conf to', configpath);
+    });
 };
 
 Config.prototype.initExporters = function () {

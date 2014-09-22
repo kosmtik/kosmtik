@@ -6,6 +6,6 @@ var Config = require('./src/Config.js').Config,
     fs = require('fs'),
     npm = require('npm');
 
-var config = new Config();
+var config = new Config(__dirname);
 var server = new Server(config, __dirname);
 config.parseOptions();

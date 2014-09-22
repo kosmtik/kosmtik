@@ -60,7 +60,7 @@ BaseExporters.prototype.handleCommand = function () {
                 process.stdout.write(buffer);
             };
         }
-        var Project = require(path.join(this.root, 'back/Project.js')).Project,
+        var Project = require(path.join(this.root, 'src/back/Project.js')).Project,
             project = new Project(this, this.parsed_opts.project),
             options = {
                 format: this.parsed_opts.format,

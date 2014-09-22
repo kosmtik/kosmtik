@@ -41,7 +41,7 @@ PluginsManager.prototype.isInstalled = function (name) {
 };
 
 PluginsManager.prototype.available = function (callback) {
-    var conf = fs.readFileSync(path.join(this.config.root, '..', 'package.json')),
+    var conf = fs.readFileSync(path.join(this.config.root, 'package.json')),
         self = this;
     npm.load(conf, function () {
         npm.commands.search(['kosmtik'], true, function (err, results) {

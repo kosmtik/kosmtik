@@ -5,9 +5,9 @@ var util = require('util'),
     StateBase = require('./back/StateBase.js').StateBase,
     PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
-var Config = function () {
+var Config = function (root) {
     StateBase.call(this);
-    this.root = __dirname;
+    this.root = root;
     this.initOptions();
     this.initExporters();
     this.initLoaders();

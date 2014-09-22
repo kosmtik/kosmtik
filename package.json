@@ -14,7 +14,7 @@
   "author": "Yohan Boniface",
   "license": "WTFPL",
   "dependencies": {
-    "carto": "^0.12.1",
+    "carto": "^0.13.0",
     "js-yaml": "^3.2.2",
     "json-localizer": "^0.0.1",
     "leaflet": "^0.7.3",

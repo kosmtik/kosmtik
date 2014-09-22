@@ -38,7 +38,9 @@ Server.prototype.registerProject = function (project) {
 };
 
 Server.prototype.serve = function (req, res) {
-    console.warn('[httpserver]', req.url);
+    res.on('finish', function () {
+        console.warn('[httpserver]', req.url, this.statusCode);
+    });
     var uri = url.parse(req.url, true),
         urlpath = uri.pathname,
         els = urlpath.split('/');

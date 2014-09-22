@@ -38,7 +38,7 @@ node index.js -h
 To run a Carto project (or `.yml`, `.yaml`):
 
 ```
-node index.js project <path/to/your/project.mml>
+node index.js serve <path/to/your/project.mml>
 ```
 
 Then open your browser at http://127.0.0.1:6789/.

@@ -2,9 +2,10 @@ var http = require('http'),
     url = require('url'),
     fs = require('fs'),
     util = require('util'),
-    ConfigEmitter = require('./ConfigEmitter.js').ConfigEmitter,
     path = require('path'),
-    ProjectServer = require('./server/ProjectServer.js').ProjectServer,
+    ConfigEmitter = require('./ConfigEmitter.js').ConfigEmitter,
+    Project = require('./Project.js').Project,
+    ProjectServer = require('./ProjectServer.js').ProjectServer,
     MIMES = {
         ".html" : "text/html",
         ".css" : "text/css",
@@ -25,13 +26,21 @@ var Server = function (config, root, options) {
     this.server.timeout = 0;
     this.port = options.port || 6789;
     this.root = root;
-
     this.emitAndForward('init');
-    this.server.listen(this.port);
-    this.config.log('Server started, you can browse http://127.0.0.1:' + this.port);
+    this.config.on('command:serve', this.listen.bind(this));
 };
 
 util.inherits(Server, ConfigEmitter);
+
+Server.prototype.listen = function () {
+    if (this.config.parsed_opts.path) {
+        var project = new Project(this.config, this.config.parsed_opts.path);
+        this.registerProject(project);
+    }
+    this.server.listen(this.port);
+    this.config.log('Server started, you can browse http://127.0.0.1:' + this.port);
+    this.emitAndForward('listen');
+};
 
 Server.prototype.registerProject = function (project) {
     this.projects[project.id] = new ProjectServer(project, this);  // TODO avoid cross ref

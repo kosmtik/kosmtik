@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    Tile = require('../Tile.js').Tile,
+    Tile = require('./Tile.js').Tile,
     TILEPREFIX = 'tiles';
 
 var ProjectServer = function (project, parent) {

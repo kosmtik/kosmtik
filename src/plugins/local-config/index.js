@@ -3,7 +3,7 @@ var fs = require('fs'),
     Localizer = require('json-localizer').Localizer;
 
 var LocalConfig = function (config) {
-    config.commands.project.option('localconfig', {help: 'Path to local config file [Default: {projectpath}/localconfig.json|.js]'});
+    config.commands.serve.option('localconfig', {help: 'Path to local config file [Default: {projectpath}/localconfig.json|.js]'});
     config.beforeState('project:loaded', this.patchMML);
 };
 

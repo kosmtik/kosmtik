@@ -2,19 +2,18 @@ var util = require('util'),
     path = require('path'),
     fs = require('fs'),
     yaml = require('js-yaml'),
-    StateBase = require('./back/StateBase.js').StateBase;
+    StateBase = require('./back/StateBase.js').StateBase,
+    PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
 var Config = function () {
     StateBase.call(this);
+    this.root = __dirname;
     this.initOptions();
     this.initExporters();
     this.initLoaders();
     this.initStatics();
     this.loadConfig();
-    for (var i = 0; i < this.plugins.length; i++) {
-        this.registerPlugin(this.plugins[i]);
-    }
-    this.parseOptions();
+    this.pluginsManager = new PluginsManager(this);  // Do we need back ref?
     this.emit('loaded');
     this.on('server:init', this.attachRoutes.bind(this));
 };
@@ -31,25 +30,7 @@ Config.prototype.loadConfig = function () {
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
-    var internals = [
-        './plugins/base-exporters/index.js',
-        './plugins/hash/index.js',
-        './plugins/local-config/index.js'
-    ];
-    this.plugins = internals.concat(config.plugins || []);
-};
-
-Config.prototype.registerPlugin = function (name_or_path) {
-    var Plugin, plugin;
-    try {
-        Plugin = require(name_or_path).Plugin;
-    } catch (err) {
-        this.log('Unable to load plugin', name_or_path);
-        this.log(err);
-        return;
-    }
-    this.log('Loading plugin from', name_or_path);
-    new Plugin(this);
+    this.sysconfig = config;
 };
 
 Config.prototype.initExporters = function () {
@@ -79,16 +60,11 @@ Config.prototype.getLoader = function (ext) {
 Config.prototype.initOptions = function () {
     this.opts = require("nomnom");
     this.commands = {};
-    this.commands.project = this.opts.command('project').help('Load a project');
-    this.commands.project.option('path', {
+    this.commands.serve = this.opts.command('serve').help('Run the server');
+    this.commands.serve.option('path', {
         position: 1,
-        help: 'Project path to run at start.'
+        help: 'Optional project path to load at start.'
     });
-    this.commands.plugins = this.opts.command('plugins');
-    this.commands.plugins.option('list', {
-        flag: true,
-        help: 'Show installed plugins list'
-    }).help('Manage plugins');
 };
 
 Config.prototype.parseOptions = function () {
@@ -96,6 +72,7 @@ Config.prototype.parseOptions = function () {
     // added by plugins.
     this.emit('parseopts');
     this.parsed_opts = this.opts.parse();
+    this.emit('command:' + this.parsed_opts[0]);
 };
 
 Config.prototype.initStatics = function () {

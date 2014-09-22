@@ -25,6 +25,7 @@ var BaseExporters = function (config) {
         help: 'BBox to use [Default: project extent]',
         metavar: 'minX,minY,maxX,maxY'
     });
+    config.on('command:export', this.handleCommand);
     config.registerExporter('xml', path.join(__dirname, 'XML.js'));
     config.registerExporter('png', path.join(__dirname, 'PNG.js'));
     config.registerExporter('png8', path.join(__dirname, 'PNG.js'));
@@ -42,6 +43,32 @@ BaseExporters.prototype.parseOpts = function (e) {
         default: 'xml',
         choices: Object.keys(this.exporters)
     });
+};
+
+BaseExporters.prototype.handleCommand = function () {
+    var self = this;
+    if (this.parsed_opts.project) {
+        var callback;
+        if (this.parsed_opts.output) {
+            callback = function (err, buffer) {
+                fs.writeFile(self.parsed_opts.output, buffer, function done () {
+                    console.log('Exported project to', self.parsed_opts.output);
+                });
+            };
+        } else {
+            callback = function (err, buffer) {
+                process.stdout.write(buffer);
+            };
+        }
+        var Project = require(path.join(this.root, 'back/Project.js')).Project,
+            project = new Project(this, this.parsed_opts.project),
+            options = {
+                format: this.parsed_opts.format,
+                width: this.parsed_opts.width,
+                height: this.parsed_opts.height
+            };
+        project.export(options, callback);
+    }
 };
 
 exports.Plugin = BaseExporters;

@@ -53,24 +53,22 @@ L.Kosmtik.Sidebar = L.Control.extend({
         this.removeFrom(this._map).addTo(this._map);
     },
 
-    open: function(el) {
+    closeAll: function () {
+        for (var i = this._panes.length - 1; i >= 0; i--) L.DomUtil.removeClass(this._panes[i], 'active');
+        for (var j = this._tabitems.length - 1; j >= 0; j--) L.DomUtil.removeClass(this._tabitems[j], 'active');
+    },
 
-        for (i = this._panes.length - 1; i >= 0; i--) L.DomUtil.removeClass(this._panes[i], 'active');
-
-        for (i = this._tabitems.length - 1; i >= 0; i--) L.DomUtil.removeClass(this._tabitems[i], 'active');
-
-        this.fire('content', {el: el});
-
+    open: function (el) {
+        this.closeAll();
         L.DomUtil.addClass(el, 'active');
         L.DomUtil.addClass(el._pane, 'active');
         L.DomUtil.removeClass(this._sidebar, 'collapsed');
+        this.fire('open', {el: el});
      },
 
-    close: function() {
-        for (var i = this._tabitems.length - 1; i >= 0; i--) L.DomUtil.removeClass(this._tabitems[i], 'active');
-
-        // close sidebar
+    close: function () {
         if (!L.DomUtil.hasClass(this._sidebar, 'collapsed')) {
+            this.closeAll();
             this.fire('closing');
             L.DomUtil.addClass(this._sidebar, 'collapsed');
         }

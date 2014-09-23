@@ -34,7 +34,7 @@ var BaseExporters = function (config) {
     config.registerExporter('png32', path.join(__dirname, 'PNG.js'));
     config.registerExporter('png256', path.join(__dirname, 'PNG.js'));
     config.on('parseopts', this.parseOpts);
-    config.addJS('/src/plugins/base-exporters/front/tab.js');
+    config.addJS('/src/plugins/base-exporters/front/export.js');
 };
 
 BaseExporters.prototype.parseOpts = function (e) {

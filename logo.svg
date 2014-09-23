@@ -65,25 +65,37 @@
      id="layer1"
      transform="translate(0,-796.36218)">
     <path
-       style="fill:#222222;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
-       d="M 72,0 72,64 152,0 C -376.99109,0 128,0 72,0 z"
+       style="fill:#222222;fill-opacity:1;stroke:none"
+       d="M 96,0 96,104 176,0 C -352.99109,0 152,0 96,0 z"
        id="path2987"
        inkscape:connector-curvature="0"
        transform="translate(0,796.36218)"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:#222222;fill-opacity:1;stroke:none"
-       d="M 256,0 112,128 256,256 z"
+       d="m 256,32 -88,72 88,128 z"
        id="path2989"
        inkscape:connector-curvature="0"
        transform="translate(0,796.36218)"
        sodipodi:nodetypes="cccc" />
     <path
-       style="fill:#222222;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
-       d="m 152,256 -80,-72 0,72 z"
+       style="fill:#222222;fill-opacity:1;stroke:none"
+       d="M 176,256 120,144 72,256 z"
        id="path2991"
        inkscape:connector-curvature="0"
        transform="translate(0,796.36218)"
        sodipodi:nodetypes="cccc" />
+    <path
+       transform="translate(0,796.36218)"
+       style="fill:#222222;fill-opacity:1;stroke:none"
+       d="M 0,0 48,0 32,256 0,256 z"
+       id="rect3780"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="M 0 0 L 0 128 C 0 57.30755 57.30755 1.8947806e-14 128 0 L 0 0 z M 128 0 C 198.69245 -2.8421709e-14 256 57.30755 256 128 L 256 0 L 128 0 z M 256 128 C 256 198.69245 198.69245 256 128 256 L 256 256 L 256 128 z M 128 256 C 57.30755 256 -3.7895613e-14 198.69245 0 128 L 0 256 L 128 256 z "
+       transform="translate(0,796.36218)"
+       id="rect3785" />
   </g>
 </svg>

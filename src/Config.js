@@ -90,7 +90,7 @@ Config.prototype.parseOptions = function () {
 Config.prototype.initStatics = function () {
     this._js = [
         '/node_modules/leaflet/dist/leaflet.js',
-        '/node_modules/Leaflet.FormBuilder/Leaflet.FormBuilder.js',
+        '/node_modules/leaflet-formbuilder/Leaflet.FormBuilder.js',
         '/src/front/Core.js',
         '/config/',
         './options/',

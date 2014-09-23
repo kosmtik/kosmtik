@@ -77,6 +77,11 @@ Config.prototype.initOptions = function () {
         position: 1,
         help: 'Optional project path to load at start.'
     });
+    this.opts.option('mapnik_version', {
+        full: 'mapnik-version',
+        default: 'latest',
+        help: 'Optional mapnik reference version to be passed to Carto'
+    });
 };
 
 Config.prototype.parseOptions = function () {

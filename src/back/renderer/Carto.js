@@ -6,14 +6,17 @@ var Carto = function (project) {
 };
 
 Carto.prototype.render = function () {
-
-    return new carto.Renderer({
-        filename: this.project.filepath,
-        local_data_dir: this.project.root,
-        validation_data: { fonts: this.project.mapnik.fonts() },
-        returnErrors: true,
-        effects: []
-    }).render(this.project.mml);
+    var env = {
+            filename: this.project.filepath,
+            local_data_dir: this.project.root,
+            validation_data: { fonts: this.project.mapnik.fonts() },
+            returnErrors: true,
+            effects: []
+        },
+        options = {
+            mapnik_version: this.project.mml.mapnik_version || this.project.config.parsed_opts.mapnik_version
+        };
+    return new carto.Renderer(env, options).render(this.project.mml);
 
 };
 

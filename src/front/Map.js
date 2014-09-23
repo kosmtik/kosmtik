@@ -12,7 +12,7 @@ L.Kosmtik.Map = L.Map.extend({
         }
         this.sidebar = new L.Kosmtik.Sidebar().addTo(this);
         L.Map.prototype.initialize.call(this, 'map', options);
-        L.tileLayer('./tiles/{z}/{x}/{y}', {maxZoom: 20}).addTo(this);
+        L.tileLayer('./tiles/{z}/{x}/{y}', {tileSize: project.tileSize, noWrap: true}).addTo(this);
         L.control.scale().addTo(this);
     }
 

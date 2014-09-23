@@ -28,7 +28,7 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
     var self = this;
     this.mapPool.acquire(function (err, map) {
         if (err) throw err;
-        var tile = new Tile(z, x, y);
+        var tile = new Tile(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), scale: self.project.mml.metatile});
         return tile.render(map, function (err, im) {
             if (err) throw err;
             im.encode('png', function (err, buffer) {

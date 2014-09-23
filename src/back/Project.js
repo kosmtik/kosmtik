@@ -16,7 +16,7 @@ var Project = function (config, filepath, options) {
         fs.mkdirSync(this.dataDir);
     } catch (err) {}
     this.mapnik = require('mapnik');
-    this.mapnikPool = require('mapnik-pool')(this.mapnik);
+    this.mapnikPool = require('./MapPool.js')(this.mapnik);
     this.mapnik.register_default_fonts();
     this.mapnik.register_system_fonts();
     this.mapnik.register_default_input_plugins();
@@ -56,7 +56,8 @@ Project.prototype.render = function (force) {
 Project.prototype.createMapPool = function () {
     this.render();
     this.config.log('Loading map…');
-    this.mapPool = this.mapnikPool.fromString(this.xml, {log: true}, {base: this.root});
+    // TODO bufferSize?
+    this.mapPool = this.mapnikPool.fromString(this.xml, {size: this.tileSize()}, {base: this.root});
     return this.mapPool;
 };
 
@@ -71,10 +72,18 @@ Project.prototype.export = function (options, callback) {
 Project.prototype.toFront = function () {
     var options = {
         center: [this.mml.center[1], this.mml.center[0]],
-        zoom: this.mml.center[2]
+        zoom: this.mml.center[2],
+        minZoom: this.mml.minZoom,
+        maxZoom: this.mml.maxZoom,
+        metatile: this.mml.metatile,
+        tileSize: this.tileSize()
     };
     this.emitAndForward('tofront', {options: options});
     return options;
+};
+
+Project.prototype.tileSize = function () {
+    return 256 * this.mml.metatile;
 };
 
 Project.prototype.getUrl = function () {

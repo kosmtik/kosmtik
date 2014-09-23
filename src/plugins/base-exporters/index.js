@@ -27,6 +27,7 @@ var BaseExporters = function (config) {
     });
     config.on('command:export', this.handleCommand);
     config.registerExporter('xml', path.join(__dirname, 'XML.js'));
+    config.registerExporter('mml', path.join(__dirname, 'MML.js'));
     config.registerExporter('png', path.join(__dirname, 'PNG.js'));
     config.registerExporter('png8', path.join(__dirname, 'PNG.js'));
     config.registerExporter('png24', path.join(__dirname, 'PNG.js'));

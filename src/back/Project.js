@@ -27,13 +27,14 @@ var Project = function (config, filepath, options) {
 util.inherits(Project, ConfigEmitter);
 
 Project.prototype.load = function (force) {
-    if (this.mml && !force) return;
+    if (this.mml && !force) return this.mml;
     this.config.log('Loading project from', this.filepath);
     var ext = path.extname(this.filepath),
         Loader = this.config.getLoader(ext),
         loader = new Loader(this);
     this.mml = loader.load();
     this.changeState('loaded');
+    return this.mml;
 };
 
 Project.prototype.reload = function () {

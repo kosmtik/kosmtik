@@ -4,7 +4,7 @@ var util = require('util'),
 var StateBase = function () {
     events.EventEmitter.call(this);
     this._state_before = {};
-    this._state_processed = {};
+    this._state_to_process = {};
     this._state_after = {};
     this._state_done = {};
 };
@@ -19,6 +19,7 @@ StateBase.prototype.beforeState = function (type, listener) {
 
 StateBase.prototype.changeState = function (type, e) {
 
+    this._state_done[type] = false;
     var done = function () {
         this._state_done[type] = true;
         if (this._state_after[type]) {
@@ -29,33 +30,31 @@ StateBase.prototype.changeState = function (type, e) {
         delete this._state_after[type];
     }.bind(this);
     e = e || {};
-    e.start = function () {
-        this._state_processed[type]++;
-    }.bind(this);
-    e.end = function () {
-        this._state_processed[type]--;
-        if (!this._state_processed[type] && !to_process) done();
+    e.continue = function () {
+        if(this._state_to_process[type]) {
+            listeners[listeners.length - this._state_to_process[type]--].call(this, e);
+        } else {
+            done();
+        }
     }.bind(this);
     e[this.CLASSNAME] = this;
     var listeners = this._state_before[type] || [],
         configType = this.CLASSNAME + ':' + type;
     if (this.config && this.config._state_before[configType]) listeners = listeners.concat(this.config._state_before[configType] || []);
-    var to_process = listeners.length;  // rename me
-    if (listeners && !this._state_processed[type]) {
-        this._state_processed[type] = 0;
-        e.start();
-        for (var i = 0; i < listeners.length; i++) {
-            to_process--;
-            listeners[i].call(this, e);
-        }
-        e.end();
+    if (!this._state_to_process[type]) {
+        this._state_to_process[type] = listeners.length;
+        e.continue();
     }
-
 };
 
 StateBase.prototype.when = function (type, callback) {
     if (this._state_done[type]) callback();
-    else this._state_after[type] ? this._state_after[type].push(callback) : this._state_after[type] = [callback];
+    else this.afterState(type, callback);
+};
+
+StateBase.prototype.afterState = function (type, callback) {
+    this._state_after[type] = this._state_after[type] || [];
+    this._state_after[type].push(callback);
 };
 
 exports.StateBase = StateBase;

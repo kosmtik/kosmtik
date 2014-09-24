@@ -1,0 +1,51 @@
+.toolbar {
+    z-index: 1001;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    background-color: #444;
+    color: #efefef;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.toolbar h1 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    display: inline-block;
+    font-weight: normal;
+}
+.toolbar ul {
+    display: inline-block;
+    text-align: right;
+    float: right;
+    padding-right: 60px;
+}
+.toolbar ul li {
+    display: inline-block;
+    padding: 0 10px;
+    border-left: 1px solid #555;
+    cursor: pointer;
+}
+.toolbar ul li:hover {
+  background-color: #555;
+}
+.toolbar li.reload:hover,
+.toolbar li.reload {
+    color: #999;
+    cursor: text;
+    background-color: #444;
+}
+.dirty li.reload:hover,
+.dirty li.reload {
+    color: #efefef;
+    background-color: #c0392b;
+    cursor: pointer;
+}
+.dirty li.reload:hover {
+    background-color: #e74c3c;
+}
+.dirty li.reload:after {
+    content: ' ⚡';
+}

@@ -38,6 +38,8 @@ Project.prototype.load = function (force) {
 };
 
 Project.prototype.reload = function () {
+    // TODO Handle concurrency
+    this.xml = null;
     this.load(true);
 };
 
@@ -58,6 +60,7 @@ Project.prototype.createMapPool = function () {
     this.config.log('Loading map…');
     // TODO bufferSize?
     this.mapPool = this.mapnikPool.fromString(this.xml, {size: this.tileSize()}, {base: this.root});
+    this.config.log('Map ready');
     return this.mapPool;
 };
 

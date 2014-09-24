@@ -5,9 +5,15 @@ var fs = require('fs'),
 var ProjectServer = function (project, parent) {
     this.project = project;
     this.parent = parent;
+    this._poll_queue = [];
     var self = this;
     this.project.when('loaded', function () {
         self.mapPool = self.project.createMapPool();
+        fs.watch(self.project.root, function (type, filename) {
+            if (filename.indexOf('.') === 0) return;
+            self.addToPollQueue({isDirty: true});
+            self.project.config.log('File', filename, 'changed on disk');
+        });
     });
     this.project.load();
 };
@@ -19,7 +25,9 @@ ProjectServer.prototype.serve = function (uri, res) {
     if (!urlpath) this.parent.redirect(this.project.getUrl(), res);
     else if (urlpath === '/') this.main(res);
     else if (urlpath === '/options/') this.options(res);
+    else if (urlpath === '/poll/') this.poll(res);
     else if (urlpath === '/export/') this.export(res, uri.query);
+    else if (urlpath === '/reload/') this.reload(res);
     else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.tile(els[2], els[3], els[4], res);});
     else this.parent.notFound(urlpath, res);
 };
@@ -60,7 +68,6 @@ ProjectServer.prototype.export = function (res, options) {
     });
 };
 
-
 ProjectServer.prototype.main = function (res) {
     var js = this.project.config._js.reduce(function(a, b) {
         return a + '<script src="' + b + '"></script>\n';
@@ -77,6 +84,39 @@ ProjectServer.prototype.main = function (res) {
             "Content-Length" : data.length
         });
         res.end(data);
+    });
+};
+
+ProjectServer.prototype.addToPollQueue = function (message) {
+    if (this._poll_queue.indexOf(message) === -1) this._poll_queue.push(message);
+};
+
+ProjectServer.prototype.poll = function (res) {
+    if (this._poll_queue.length) {
+        data = JSON.stringify(this._poll_queue);
+        this._poll_queue = [];
+    } else {
+        data = '';
+    }
+    res.writeHead(data.length ? 200 : 304, {
+        "Content-Type": 'application/json',
+        "Content-Length" : data.length
+    });
+    res.end(data);
+};
+
+ProjectServer.prototype.reload = function (res) {
+    var self = this;
+    this.project.reload();
+    this.project.when('loaded', function () {
+        self.mapPool.drain(function() {
+            self.mapPool.destroyAllNow();
+        });
+        self.mapPool = self.project.createMapPool();
+        res.writeHead(200, {
+            "Content-Type": 'application/json'
+        });
+        res.end('{"reloaded": true}');
     });
 };
 

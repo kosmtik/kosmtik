@@ -100,12 +100,14 @@ Config.prototype.initStatics = function () {
         '/config/',
         './options/',
         '/src/front/Sidebar.js',
+        '/src/front/Toolbar.js',
         '/src/front/FormBuilder.js',
         '/src/front/Map.js'
     ];
     this._css = [
         '/node_modules/leaflet/dist/leaflet.css',
         '/src/front/Sidebar.css',
+        '/src/front/Toolbar.css',
         '/src/front/main.css'
     ];
 };

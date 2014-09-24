@@ -8,7 +8,11 @@ var LocalConfig = function (config) {
 };
 
 LocalConfig.prototype.patchMML = function (e) {
-    var filepath = this.config.parsed_opts.localconfig;
+    var filepath = this.config.parsed_opts.localconfig,
+        done = function () {
+            e.project.emitAndForward('localconfig:done', e);
+            e.continue();
+        };
     if (!filepath) {
         filepath = path.join(e.project.root, 'localconfig.json');
     }
@@ -17,9 +21,8 @@ LocalConfig.prototype.patchMML = function (e) {
         filepath = path.join(e.project.root, 'localconfig.js');
     }
     if (!fs.existsSync(filepath)) {
-        return;  // Nothing to do;
+        return done();  // Nothing to do;
     }
-    e.start();
     var l = new Localizer(e.project.mml),
         ext = path.extname(filepath);
     if (ext === '.js') {
@@ -29,12 +32,12 @@ LocalConfig.prototype.patchMML = function (e) {
         } catch (err) {
             console.warn('[Local Config] Unable to load local config from', filepath);
         }
-        e.end();
+        done();
     } else {
         fs.readFile(filepath, 'utf-8', function (err, data) {
             l.fromString(data);
             console.warn('[Local Config]', 'Patched config from', filepath);
-            e.end();
+            done();
         });
     }
 };

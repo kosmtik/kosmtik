@@ -1,3 +1,40 @@
+/* ************************************************* */
+/* *********************** FONT ******************** */
+/* ************************************************* */
+
+
+@font-face {
+    font-family: 'fira_sansbold';
+    src: url('./fonts/FiraSans-Bold.eot');
+    src: url('./fonts/FiraSans-Bold.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/FiraSans-Bold.woff') format('woff'),
+         url('./fonts/FiraSans-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+@font-face {
+    font-family: 'fira_sansregular';
+    src: url('./fonts/FiraSans-Regular.eot');
+    src: url('./fonts/FiraSans-Regular.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/FiraSans-Regular.woff') format('woff'),
+         url('./fonts/FiraSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'fira_sanslight';
+    src: url('./fonts/FiraSans-Light.eot');
+    src: url('./fonts/FiraSans-Light.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/FiraSans-Light.woff') format('woff'),
+         url('./fonts/FiraSans-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* *********** */
 /*   generic   */
 /* *********** */

@@ -12,7 +12,9 @@ var http = require('http'),
         ".js" : "application/javascript",
         ".png" : "image/png",
         ".gif" : "image/gif",
-        ".jpg" : "image/jpeg"
+        ".jpg" : "image/jpeg",
+        ".woff" : "application/octet-stream",
+        ".ttf" : "application/octet-stream"
     };
 
 var Server = function (config, root, options) {

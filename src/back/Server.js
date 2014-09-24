@@ -14,7 +14,8 @@ var http = require('http'),
         ".gif" : "image/gif",
         ".jpg" : "image/jpeg",
         ".woff" : "application/octet-stream",
-        ".ttf" : "application/octet-stream"
+        ".ttf" : "application/octet-stream",
+        ".svg" : "image/svg+xml"
     };
 
 var Server = function (config, root, options) {

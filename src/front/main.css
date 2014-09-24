@@ -384,3 +384,6 @@ fieldset.toggle.on .more_style_options {
     border: none;
     border-radius: 0!important;
 }
+.leaflet-bar a.leaflet-disabled {
+    background-color: #777;
+}

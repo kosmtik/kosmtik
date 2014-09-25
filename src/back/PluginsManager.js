@@ -74,13 +74,14 @@ PluginsManager.prototype.install = function (name) {
             if (err) throw err.message;
             var version = Object.keys(data)[0];
             if (!version) return self.config.log('Not found', name, 'ABORTING');
-            if (!data[version].kosmtik || !semver.satisfies(pkg.version, data[version].kosmtik)) {
-                return self.config.log('Unable to install', name, 'version', data[version].kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
+            var plugin = data[version];
+            if (!plugin.kosmtik || !semver.satisfies(pkg.version, plugin.kosmtik)) {
+                return self.config.log('Unable to install', name, 'version', plugin.kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
             }
             npm.commands.install([name], function (err) {
                 if (err) self.config.log('Error when installing package', name);
                 self.config.log('Successfully installed package', name);
-                self.attach(name);
+                self.attach(plugin.name);
                 self.config.saveUserConfig();
             });
         });

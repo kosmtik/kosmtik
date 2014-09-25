@@ -46,7 +46,7 @@ L.Kosmtik.Poll = L.Class.extend({
 
     initialize: function (uri) {
         this.uri = uri;
-        this.delay = 1000;
+        this.delay = 1;
     },
 
     poll: function () {
@@ -57,8 +57,8 @@ L.Kosmtik.Poll = L.Class.extend({
     },
 
     polled: function (status, data) {
-        if (status === 304 || !data) return this.loop(1);
-        if (status !== 200) return this.onError({status: status, error: data});
+        if (status === 304) return this.loop(1);
+        if (status !== 200 || !data) return this.onError({status: status, error: data});
         try {
             data = JSON.parse(data);
         } catch (err) {
@@ -72,7 +72,7 @@ L.Kosmtik.Poll = L.Class.extend({
 
     onError: function (e) {
         this.fire('error', e);
-        this.loop(this.delay + 1);
+        this.loop(++this.delay);
     },
 
     loop: function (delay) {

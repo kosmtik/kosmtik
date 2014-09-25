@@ -24,11 +24,11 @@ var PluginsManager = function (config) {
         '../plugins/local-config/index.js'
     ].concat(this.config.userConfig.plugins || []);
     for (var i = 0; i < this._registered.length; i++) {
-        this.register(this._registered[i]);
+        this.load(this._registered[i]);
     }
 };
 
-PluginsManager.prototype.register = function (name_or_path) {
+PluginsManager.prototype.load = function (name_or_path) {
     var Plugin, plugin;
     try {
         Plugin = require(name_or_path).Plugin;

@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="logokosmtik.svg"
+   sodipodi:docname="logo.svg"
    inkscape:export-filename="/home/ybon/Code/js/kosmtik/logo.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -250,13 +250,13 @@
        d="m 80,72 a 112,112 0 1 1 -224,0 112,112 0 1 1 224,0 z"
        transform="matrix(1.1377778,0,0,1.1377778,164.40889,842.44216)" />
     <path
-       style="fill:#2c3e50;fill-opacity:1;stroke:none"
+       style="fill:#444444;fill-opacity:1;stroke:none"
        d="m 256,796.36216 -24,0 -120,128 120,128.00004 24,0 z"
        id="path2989-4-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc" />
     <path
-       style="fill:#2c3e50;fill-opacity:1;stroke:none"
+       style="fill:#444444;fill-opacity:1;stroke:none"
        d="m 0,796.36216 112,0 0,256.00004 -112,0 z"
        id="rect3780-4-1"
        inkscape:connector-curvature="0"

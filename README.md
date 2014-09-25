@@ -19,6 +19,11 @@ Only the core needs:
 - hooks everywhere to make easy to extend it with plugins
 
 
+## Screenshot
+
+![screenshot](https://raw.github.com/kosmtik/kosmtik/master/screenshot.png "Screenshot of Kosmtik")
+
+
 ## Install
 
 Clone this repository and:

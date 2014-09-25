@@ -114,7 +114,7 @@ select + .help-text {
     margin-top: 0;
 }
 .formbox {
-    border: 1px solid #777;
+    background-color: #555;
     min-height: 28px;
     line-height: 28px;
     padding-left: 14px;
@@ -196,7 +196,7 @@ input.switch:empty ~ label {
     position: relative;
     float: left;
     line-height: 1.6em;
-    text-indent: 1em;
+    text-indent: 3em;
     margin: 0.2em 0;
     cursor: pointer;
     -webkit-user-select: none;
@@ -213,7 +213,7 @@ input.switch:empty ~ label:after {
     left: 0;
     content: ' ';
     width: 3.6em;
-    background-color: #c0392b;
+    background-color: #8A4740;
     -webkit-transition: all 100ms ease-in;
     transition: all 100ms ease-in;
     color: #efefef;
@@ -231,7 +231,7 @@ input.switch:checked:empty ~ label:after {
     content: ' ';
 }
 input.switch:checked ~ label:before {
-    background-color: #27ae60;
+    background-color: #3E815A;
     content: "on";
     text-indent: 4px;
     text-align: left;

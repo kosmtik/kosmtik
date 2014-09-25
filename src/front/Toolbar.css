@@ -63,4 +63,8 @@
 }
 .toolbar ul li.autoreload .formbox {
     border: none;
+    background-color: transparent;
+}
+.toolbar ul li.autoreload label {
+    text-indent: 1em;
 }

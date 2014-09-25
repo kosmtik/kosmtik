@@ -74,7 +74,7 @@ PreviewServer.prototype.serveHome = function (uri, req, res) {
 };
 
 PreviewServer.prototype.redirect = function (newuri, res) {
-    res.writeHead(302, {"Location": newuri});
+    res.writeHead(302, {"Location": newuri, "Cache-Control": "private, no-cache, must-revalidate"});
     res.end();
 };
 

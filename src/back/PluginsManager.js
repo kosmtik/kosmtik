@@ -1,6 +1,7 @@
 var npm = require('npm'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    semver = require('semver');
 
 var PluginsManager = function (config) {
     this.config = config;
@@ -45,7 +46,7 @@ PluginsManager.prototype.isInstalled = function (name) {
 };
 
 PluginsManager.prototype.loadPackage = function () {
-    return fs.readFileSync(path.join(this.config.root, 'package.json'));
+    return JSON.parse(fs.readFileSync(path.join(this.config.root, 'package.json')));
 };
 
 PluginsManager.prototype.available = function (callback) {
@@ -66,12 +67,15 @@ PluginsManager.prototype.available = function (callback) {
 };
 
 PluginsManager.prototype.install = function (name) {
-    var self = this;
-    npm.load(this.loadPackage(), function () {
-        npm.commands.view([name, 'peerDependencies'], true, function (err, data) {
+    var self = this,
+        pkg = this.loadPackage();
+    npm.load(pkg, function () {
+        npm.commands.view([name], true, function (err, data) {
             if (err) throw err.message;
             var version = Object.keys(data)[0];
-            if (!data[version].peerDependencies.kosmtik) return self.config.log('Missing peerDependencies to install', name, 'aborting');
+            if (!data[version].kosmtik || !semver.satisfies(pkg.version, data[version].kosmtik)) {
+                return self.config.log('Unable to install', name, 'version', data[version].kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
+            }
             npm.commands.install([name], function (err) {
                 if (err) self.config.log('Error when installing package', name);
                 self.config.log('Successfully installed package', name);

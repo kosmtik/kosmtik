@@ -378,12 +378,34 @@ fieldset.toggle.on .more_style_options {
 /* *********************** */
 /*   Override third party  */
 /* *********************** */
-.leaflet-bar a, .leaflet-bar a:hover {
+.leaflet-control a, .leaflet-control a:hover {
     background-color: #444;
     color: #ecf0f1;
     border: none;
     border-radius: 0!important;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+}
+.leaflet-control a:hover {
+    background-color: #555;
 }
 .leaflet-bar a.leaflet-disabled {
     background-color: #777;
+}
+.leaflet-control {
+    border: 1px solid #222;
+    border-radius: 2px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    width: 54px;
+}
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    float: left;
+}
+.leaflet-control-zoom-in {
+    border-right: 1px solid #222;
+}
+.leaflet-control-scale {
+    width: auto;
+    border: none;
 }

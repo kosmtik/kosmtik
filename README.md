@@ -96,7 +96,7 @@ See the examples below to get it working right now.
 
 ### Example of a js module
 ```
-exports.LocalConfig = function (localizer) {
+exports.LocalConfig = function (localizer, project) {
     localizer.where('center').then([29.9377, -3.4216, 9]);
     localizer.where('Layer').if({'Datasource.type': 'postgis'}).then({
         "Datasource.dbname": "burundi",
@@ -104,6 +104,8 @@ exports.LocalConfig = function (localizer) {
         "Datasource.user": "ybon",
         "Datasource.host": ""
     });
+    // You can also do it in pure JS
+    project.mml.bounds = [1, 2, 3, 4];
 };
 
 ```

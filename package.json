@@ -25,7 +25,7 @@
     "leaflet": "^0.7.3",
     "leaflet-formbuilder": "0.0.3",
     "leaflet-hash": "^0.2.1",
-    "mapnik": "^1.4.15",
+    "mapnik": "^1.4.16",
     "mapnik-pool": "0.0.0",
     "nomnom": "^1.8.0"
   }

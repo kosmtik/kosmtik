@@ -18,7 +18,7 @@ var http = require('http'),
         ".svg" : "image/svg+xml"
     };
 
-var Server = function (config, root, options) {
+var PreviewServer = function (config, root, options) {
     this.CLASSNAME = 'server';
     ConfigEmitter.call(this, config);
     this.initRoutes();
@@ -33,23 +33,23 @@ var Server = function (config, root, options) {
     this.config.on('command:serve', this.listen.bind(this));
 };
 
-util.inherits(Server, ConfigEmitter);
+util.inherits(PreviewServer, ConfigEmitter);
 
-Server.prototype.listen = function () {
+PreviewServer.prototype.listen = function () {
     if (this.config.parsed_opts.path) {
         var project = new Project(this.config, this.config.parsed_opts.path);
         this.registerProject(project);
     }
     this.server.listen(this.port);
-    this.config.log('Server started, you can browse http://127.0.0.1:' + this.port);
+    this.config.log('PreviewServer started, you can browse http://127.0.0.1:' + this.port);
     this.emitAndForward('listen');
 };
 
-Server.prototype.registerProject = function (project) {
+PreviewServer.prototype.registerProject = function (project) {
     this.projects[project.id] = new ProjectServer(project, this);  // TODO avoid cross ref
 };
 
-Server.prototype.serve = function (req, res) {
+PreviewServer.prototype.serve = function (req, res) {
     res.on('finish', function () {
         console.warn('[httpserver]', req.url, this.statusCode);
     });
@@ -62,23 +62,23 @@ Server.prototype.serve = function (req, res) {
     else this.serveFile(path.join(this.root, urlpath), res);
 };
 
-Server.prototype.forwardToProject = function (uri, id, res) {
+PreviewServer.prototype.forwardToProject = function (uri, id, res) {
     uri.pathname = uri.pathname.replace('/' + id, '');
     this.projects[id].serve(uri, res);
 };
 
-Server.prototype.serveHome = function (uri, req, res) {
+PreviewServer.prototype.serveHome = function (uri, req, res) {
     // Go to project for now
     if (Object.keys(this.projects).length) return this.redirect(Object.keys(this.projects)[0], res);
     return this.serveFile('src/front/index.html', res);
 };
 
-Server.prototype.redirect = function (newuri, res) {
+PreviewServer.prototype.redirect = function (newuri, res) {
     res.writeHead(302, {"Location": newuri});
     res.end();
 };
 
-Server.prototype.serveFile = function (filepath, res) {
+PreviewServer.prototype.serveFile = function (filepath, res) {
     var self = this,
         ext = path.extname(filepath);
     if (!MIMES[ext]) return this.notFound(filepath, res);
@@ -99,24 +99,24 @@ Server.prototype.serveFile = function (filepath, res) {
     });
 };
 
-Server.prototype.notFound = function (filepath, res) {
+PreviewServer.prototype.notFound = function (filepath, res) {
     res.writeHead(404);
     res.end('Not Found: ' + filepath);
 };
 
-Server.prototype.initRoutes = function () {
+PreviewServer.prototype.initRoutes = function () {
     this._routes = {};
 };
 
-Server.prototype.addRoute = function (path, callback) {
+PreviewServer.prototype.addRoute = function (path, callback) {
     this._routes[path] = callback;
 };
 
-Server.prototype.hasRoute = function (path) {
+PreviewServer.prototype.hasRoute = function (path) {
     return !!this._routes[path];
 };
 
-Server.prototype.pushToFront = function (res, anonymous) {
+PreviewServer.prototype.pushToFront = function (res, anonymous) {
     // Ugly but GOOD
     if (anonymous.name) throw 'Cannot use bridge helper with named function:' + anonymous.name;
     res.writeHead(200, {
@@ -126,4 +126,4 @@ Server.prototype.pushToFront = function (res, anonymous) {
     res.end();
 };
 
-exports.Server = Server;
+exports.PreviewServer = PreviewServer;

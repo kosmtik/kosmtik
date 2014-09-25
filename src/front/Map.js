@@ -23,17 +23,14 @@ L.Kosmtik.Map = L.Map.extend({
         }, this);
         L.control.scale().addTo(this);
         this.poll = new L.K.Poll('./poll/').start();
-        var reload = L.DomUtil.create('li', 'reload');
-        reload.innerHTML = '⟳ Reload';
-        L.DomEvent.on(reload, 'click', function () {
-            if (this.checkState('dirty')) {
-                this.reload();
-            }
-        }, this);
-        this.toolbar.addTool(reload);
         this.poll.on('message', function (e) {
             if (e.isDirty) this.setState('dirty');
         }, this);
+        this.createReloadButton();
+        this.createAutoReloadButton();
+        this.on('dirty:on', function () {
+            if (L.K.Config.autoReload) this.reload();
+        });
     },
 
     setState: function (state) {
@@ -64,6 +61,26 @@ L.Kosmtik.Map = L.Map.extend({
             },
             context: this
         });
+    },
+
+    createReloadButton: function () {
+        var reload = L.DomUtil.create('li', 'reload');
+        reload.innerHTML = '⟳ Reload';
+        L.DomEvent.on(reload, 'click', function () {
+            if (this.checkState('dirty')) {
+                this.reload();
+            }
+        }, this);
+        this.toolbar.addTool(reload);
+    },
+
+    createAutoReloadButton: function () {
+        var autoreload = L.DomUtil.create('li', 'autoreload');
+        var builder = new L.K.FormBuilder(L.K.Config, [
+            ['autoReload', {handler: L.K.Switch, label: 'Autoreload'}]
+        ]);
+        autoreload.appendChild(builder.build());
+        this.toolbar.addTool(autoreload);
     }
 
 });

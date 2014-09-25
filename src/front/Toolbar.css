@@ -31,6 +31,8 @@
     padding: 0 10px;
     border-left: 1px solid #555;
     cursor: pointer;
+    vertical-align: middle;
+    height: 100%;
 }
 .toolbar ul li:hover {
   background-color: #555;
@@ -38,7 +40,7 @@
 .toolbar li.reload:hover,
 .toolbar li.reload {
     color: #999;
-    cursor: text;
+    cursor: not-allowed;
     background-color: #444;
 }
 .dirty li.reload:hover,
@@ -52,4 +54,13 @@
 }
 .dirty li.reload:after {
     content: ' ⚡';
+}
+.toolbar ul li.autoreload {
+    height: 40px;
+    line-height: 40px;
+    padding-right: 20px;
+    padding-top: 5px;
+}
+.toolbar ul li.autoreload .formbox {
+    border: none;
 }

@@ -45,6 +45,10 @@ Config.prototype.saveUserConfig = function () {
     });
 };
 
+Config.prototype.getFromUserConfig = function (key, fallback) {
+    return typeof this.userConfig[key] !== 'undefined' ? this.userConfig[key] : fallback;
+};
+
 Config.prototype.initExporters = function () {
     this.exporters = {};
 };
@@ -122,7 +126,8 @@ Config.prototype.addCSS = function (path) {
 
 Config.prototype.toFront = function () {
     var options = {
-        exportFormats: Object.keys(this.exporters)
+        exportFormats: Object.keys(this.exporters),
+        autoReload: this.getFromUserConfig('autoReload', true)
     };
     this.emit('tofront', {options: options});
     return options;

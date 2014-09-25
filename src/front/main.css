@@ -41,8 +41,8 @@
 body, div, ul, li, a, section, nav,
 h1, h2, h3, h4, h5, h6,
 hr, input, textarea {
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -187,6 +187,60 @@ fieldset.toggle.on > * {
 fieldset.toggle.on .more_style_options {
     display: none;
 }
+
+/* Switch */
+input.switch:empty {
+    display: none;
+}
+input.switch:empty ~ label {
+    position: relative;
+    float: left;
+    line-height: 1.6em;
+    text-indent: 1em;
+    margin: 0.2em 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input.switch:empty ~ label:before,
+input.switch:empty ~ label:after {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: ' ';
+    width: 3.6em;
+    background-color: #c0392b;
+    -webkit-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+    color: #efefef;
+}
+input.switch:empty ~ label:after {
+    width: 1.4em;
+    top: 0.1em;
+    bottom: 0.1em;
+    margin-left: 0.1em;
+    background-color: #efefef;
+    content: "off";
+    text-indent: 26px;
+}
+input.switch:checked:empty ~ label:after {
+    content: ' ';
+}
+input.switch:checked ~ label:before {
+    background-color: #27ae60;
+    content: "on";
+    text-indent: 4px;
+    text-align: left;
+}
+input.switch:checked ~ label:after {
+    margin-left: 2.1em;
+}
+
+
 
 
 /* *********** */

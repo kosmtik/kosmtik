@@ -101,9 +101,10 @@ L.Kosmtik.Switch = L.FormBuilder.CheckBox.extend({
         L.FormBuilder.CheckBox.prototype.build.apply(this);
         this.input.parentNode.appendChild(this.label);
         L.DomUtil.addClass(this.input.parentNode, 'switcher');
-        this.label.setAttribute('for', this.name);
+        var id = (this.formBuilder.options.id || Date.now()) + '.' + this.name;
+        this.label.setAttribute('for', id);
         L.DomUtil.addClass(this.input, 'switch');
-        this.input.id = this.name;
+        this.input.id = id;
     }
 
 });

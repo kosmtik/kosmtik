@@ -106,6 +106,7 @@ Config.prototype.initStatics = function () {
         '/src/front/Sidebar.js',
         '/src/front/Toolbar.js',
         '/src/front/FormBuilder.js',
+        '/src/front/Settings.js',
         '/src/front/Map.js'
     ];
     this._css = [

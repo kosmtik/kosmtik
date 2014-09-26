@@ -48,6 +48,11 @@ hr, input, textarea {
     padding: 0;
     font-family: 'fira_sanslight', sans-serif;
 }
+ul {
+    list-style-image:none;
+    list-style-position:inside;
+    list-style-type:none;
+}
 
 /* *********** */
 /*    forms    */
@@ -123,9 +128,12 @@ select + .help-text {
 .formbox select {
     width: calc(100% - 14px);
 }
+.formbox.with-switch {
+    padding-top: 2px;
+}
 label {
     display: block;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 21px;
     width: 100%;
 }
@@ -225,7 +233,7 @@ input.switch:empty ~ label:after {
     margin-left: 0.1em;
     background-color: #efefef;
     content: "off";
-    text-indent: 26px;
+    text-indent: 22px;
 }
 input.switch:checked:empty ~ label:after {
     content: ' ';
@@ -462,4 +470,12 @@ input.switch:checked ~ label:after {
 .leaflet-control-scale {
     width: auto;
     border: none;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: none repeat scroll 0 0 #444;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4);
+    color: #efefef;
+}
+.leaflet-popup-content-wrapper {
+    border-radius: 4px;
 }

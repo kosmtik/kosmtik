@@ -33,6 +33,7 @@
     cursor: pointer;
     vertical-align: middle;
     height: 100%;
+    font-size: 12px;
 }
 .toolbar ul li:hover {
   background-color: #555;
@@ -55,16 +56,16 @@
 .dirty li.reload:after {
     content: ' ⚡';
 }
-.toolbar ul li.autoreload {
+.toolbar ul li.with-switch {
     height: 40px;
     line-height: 40px;
     padding-right: 20px;
-    padding-top: 5px;
+    padding-top: 7px;
 }
-.toolbar ul li.autoreload .formbox {
+.toolbar ul li.with-switch .formbox {
     border: none;
     background-color: transparent;
 }
-.toolbar ul li.autoreload label {
+.toolbar ul li.with-switch label {
     text-indent: 1em;
 }

@@ -12,6 +12,8 @@ L.Kosmtik.Map = L.Map.extend({
         }
         this.sidebar = new L.Kosmtik.Sidebar().addTo(this);
         this.toolbar = new L.Kosmtik.Toolbar().addTo(this);
+        this.settingsForm = new L.K.SettingsForm(this);
+        this.settingsForm.addElement(['autoReload', {handler: L.K.Switch, label: 'Autoreload', helpText: 'Reload map as soon as a project file is changed on the server.'}]);
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
         this.tilelayer = new L.Kosmtik.TileLayer('./tiles/{z}/{x}/{y}?t={version}', {tileSize: project.tileSize, noWrap: true, version: Date.now()}).addTo(this);
@@ -27,7 +29,6 @@ L.Kosmtik.Map = L.Map.extend({
             if (e.isDirty) this.setState('dirty');
         }, this);
         this.createReloadButton();
-        this.createAutoReloadButton();
         this.on('dirty:on', function () {
             if (L.K.Config.autoReload) this.reload();
         });
@@ -72,15 +73,6 @@ L.Kosmtik.Map = L.Map.extend({
             }
         }, this);
         this.toolbar.addTool(reload);
-    },
-
-    createAutoReloadButton: function () {
-        var autoreload = L.DomUtil.create('li', 'autoreload');
-        var builder = new L.K.FormBuilder(L.K.Config, [
-            ['autoReload', {handler: L.K.Switch, label: 'Autoreload'}]
-        ]);
-        autoreload.appendChild(builder.build());
-        this.toolbar.addTool(autoreload);
     }
 
 });

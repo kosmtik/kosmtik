@@ -117,6 +117,7 @@ exports.LocalConfig = function (localizer, project) {
 - [kosmtik-place-search](https://github.com/kosmtik/kosmtik-place-search): search places control
 - [kosmtik-overlay](https://github.com/kosmtik/kosmtik-overlay): add an overlay above the map
 - [kosmtik-open-in-josm](https://github.com/kosmtik/kosmtik-open-in-josm): open JOSM with current view
-- [kosmtik-map-compare](https://github.com/kosmtik/kosmtik-open-in-josm): display a map side-by-side with your work
+- [kosmtik-map-compare](https://github.com/kosmtik/kosmtik-map-compare): display a map side-by-side with your work
+- [kosmtik-osm-data-overlay](https://github.com/kosmtik/kosmtik-osm-data-overlay): display OSM data on top of your map
 
 Run `node index.js plugins --available` to get an up to date list.

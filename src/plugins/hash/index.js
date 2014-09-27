@@ -10,7 +10,7 @@ Hash.prototype.extendMap = function (req, res) {
         L.K.Map.addInitHook(function () {
             this.hash = new L.Hash(this);
             if (!this.hash.parseHash(location.hash)) {
-                if (project) this.setView(project.center, project.zoom);
+                if (L.K.Config.project) this.setView(L.K.Config.project.center, L.K.Config.project.zoom);
                 else console.error('Missing center and zoom in project config');
             }
         });

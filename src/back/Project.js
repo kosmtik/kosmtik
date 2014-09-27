@@ -33,6 +33,7 @@ Project.prototype.load = function (force) {
         Loader = this.config.getLoader(ext),
         loader = new Loader(this);
     this.mml = loader.load();
+    this.loadTime = Date.now();
     this.changeState('loaded');
     return this.mml;
 };
@@ -80,7 +81,8 @@ Project.prototype.toFront = function () {
         minZoom: this.mml.minZoom,
         maxZoom: this.mml.maxZoom,
         metatile: this.mml.metatile,
-        tileSize: this.tileSize()
+        tileSize: this.tileSize(),
+        loadTime: this.loadTime
     };
     this.emitAndForward('tofront', {options: options});
     return options;

@@ -102,7 +102,7 @@ Config.prototype.initStatics = function () {
         '/node_modules/leaflet-formbuilder/Leaflet.FormBuilder.js',
         '/src/front/Core.js',
         '/config/',
-        './options/',
+        './config/',
         '/src/front/VectorTileLayer.js',
         '/src/front/Sidebar.js',
         '/src/front/Toolbar.js',

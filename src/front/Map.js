@@ -11,7 +11,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.settingsForm.addElement(['autoReload', {handler: L.K.Switch, label: 'Autoreload', helpText: 'Reload map as soon as a project file is changed on the server.'}]);
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
-        this.tilelayer = new L.Kosmtik.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', {tileSize: project.tileSize, noWrap: true, version: Date.now()}).addTo(this);
+        this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', {tileSize: L.K.Config.project.tileSize, noWrap: true, version: L.K.Config.project.loadTime}).addTo(this);
         this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {version: Date.now()});
         this.tilelayer.on('loading', function () {
             this.setState('loading');
@@ -53,8 +53,12 @@ L.Kosmtik.Map = L.Map.extend({
         this.unsetState('dirty');
         this.setState('loading');
         L.K.Xhr.post('./reload/', {
-            callback: function () {
-                this.tilelayer.redraw();
+            callback: function (status, data) {
+                if (status === 200 && data) {
+                    L.K.Config.project = JSON.parse(data);
+                    this.tilelayer.options.version = L.K.Config.project.loadTime;
+                    this.tilelayer.redraw();
+                }
                 this.unsetState('loading');
             },
             context: this
@@ -85,16 +89,6 @@ L.Kosmtik.Map = L.Map.extend({
     toggleInspectorLayer: function () {
         if (L.K.Config.dataInspector) this.dataInspectorLayer.addTo(this);
         else this.removeLayer(this.dataInspectorLayer);
-    }
-
-});
-
-
-L.Kosmtik.TileLayer = L.TileLayer.extend({
-
-    redraw: function () {
-        this.options.version = Date.now();
-        L.TileLayer.prototype.redraw.apply(this);
     }
 
 });

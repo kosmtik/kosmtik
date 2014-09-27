@@ -26,7 +26,7 @@ ProjectServer.prototype.serve = function (uri, res) {
         self = this;
     if (!urlpath) this.parent.redirect(this.project.getUrl(), res);
     else if (urlpath === '/') this.main(res);
-    else if (urlpath === '/options/') this.options(res);
+    else if (urlpath === '/config/') this.config(res);
     else if (urlpath === '/poll/') this.poll(res);
     else if (urlpath === '/export/') this.export(res, uri.query);
     else if (urlpath === '/reload/') this.reload(res);
@@ -76,11 +76,11 @@ ProjectServer.prototype.vectortile = function (z, x, y, res) {
     });
 };
 
-ProjectServer.prototype.options = function (res) {
+ProjectServer.prototype.config = function (res) {
     res.writeHead(200, {
         "Content-Type": "application/javascript",
     });
-    var tpl = "var project = %;";
+    var tpl = "L.K.Config.project = %;";
     res.write(tpl.replace('%', JSON.stringify(this.project.toFront())));
     res.end();
 };
@@ -143,7 +143,7 @@ ProjectServer.prototype.reload = function (res) {
         res.writeHead(200, {
             "Content-Type": 'application/json'
         });
-        res.end('{"reloaded": true}');
+        res.end(JSON.stringify(self.project.toFront()));
     });
 };
 

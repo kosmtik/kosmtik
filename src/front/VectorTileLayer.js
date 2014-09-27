@@ -73,7 +73,6 @@ L.TileLayer.Vector = L.TileLayer.extend({
             this.fire('vectorloadinit');
         }
         // Register that this tile is not yet loaded
-        // TODO abort
         this._geojsonTilesToLoad++;
         var req = L.K.Xhr.get(dataUrl, {
             callback: function (status, data) {

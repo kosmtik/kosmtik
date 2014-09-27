@@ -23,7 +23,8 @@ L.Kosmtik.Xhr = {
                 settings.callback.call(settings.context || xhr, xhr.status, xhr.responseText, xhr);
             }
         };
-        return xhr.send(settings.data);
+        xhr.send(settings.data);
+        return xhr;
     },
 
     get: function(uri, options) {

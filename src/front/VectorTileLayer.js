@@ -33,6 +33,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
     onAdd: function (map) {
         this._map = map;
         this.initVectorLayer(map);
+        this._loading = [];
         // Delete the clusters to prevent from having several times
         // the same data
         map.on('zoomstart', this.initVectorLayer, this);
@@ -41,10 +42,17 @@ L.TileLayer.Vector = L.TileLayer.extend({
     },
 
     onRemove: function (map) {
+        this.abordLoading();
         this.off('vectorloadend', this.commitLayer);
         map.off('zoomstart', this.initVectorLayer, this);
         this.removeVectorLayer();
         L.TileLayer.prototype.onRemove.call(this, map);
+    },
+
+    abordLoading: function () {
+        for (var i = 0; i < this._loading.length; i++) {
+            this._loading[i].abort();
+        }
     },
 
     _addTile: function (tilePoint, container) {
@@ -67,12 +75,14 @@ L.TileLayer.Vector = L.TileLayer.extend({
         // Register that this tile is not yet loaded
         // TODO abort
         this._geojsonTilesToLoad++;
-        L.K.Xhr.get(dataUrl, {
+        var req = L.K.Xhr.get(dataUrl, {
             callback: function (status, data) {
                 if (status === 200 && data) {
                     self.addData(JSON.parse(data), tilePoint);
                     // Tile loaded
                     self._geojsonTilesToLoad--;
+                    var index = this._loading.indexOf(req);
+                    if (index !== -1) this._loading.splice(index, 1);
                     if(!self._geojsonTilesToLoad) {
                         // No more tiles to load
                         self.fire('vectorloadend');
@@ -81,6 +91,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
             },
             context: this
         });
+        this._loading.push(req);
     },
 
     addData: function (data, tilePoint) {

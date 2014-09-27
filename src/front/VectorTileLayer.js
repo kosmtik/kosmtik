@@ -6,7 +6,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
             this._map.removeLayer(this.vectorlayer);
         }
         var pointToLayer = function (feature, latlng) {
-                return L.circleMarker(latlng);
+                return L.circleMarker(latlng, {radius: 5});
             },
             onEachFeature = function (feature, layer) {
                 layer.bindPopup(L.K.Util.renderPropertiesTable(feature.properties));

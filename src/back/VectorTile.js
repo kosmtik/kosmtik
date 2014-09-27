@@ -12,7 +12,7 @@ VectorTile.prototype.render = function (map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var surface = new mapnik.VectorTile(this.z, this.x, this.y);
-    return map.render(surface, cb);
+    return map.render(surface, {buffer_size: 0}, cb);
 };
 
 exports.Tile = VectorTile;

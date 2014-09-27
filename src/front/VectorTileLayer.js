@@ -10,14 +10,8 @@ L.TileLayer.Vector = L.TileLayer.extend({
             },
             onEachFeature = function (feature, layer) {
                 layer.bindPopup(L.K.Util.renderPropertiesTable(feature.properties));
-            },
-            style = function (feature) {
-                return {
-                    fill: feature.geometry.type === 'Point',
-                    weight: 3
-                };
             };
-        this.vectorlayer = new L.GeoJSON(null, {pointToLayer: pointToLayer, onEachFeature: onEachFeature, style: style});
+        this.vectorlayer = new L.GeoJSON(null, {pointToLayer: pointToLayer, onEachFeature: onEachFeature});
     },
 
     commitLayer: function (e) {
@@ -96,37 +90,30 @@ L.TileLayer.Vector = L.TileLayer.extend({
             nwPoint = tilePoint.multiplyBy(tileSize),
             swPoint = nwPoint.add([0, tileSize]),
             nePoint = nwPoint.add([tileSize, 0]),
-            sePoint = nwPoint.add([tileSize, tileSize]),
-            tilePoints = [
-                this._map.latLngToContainerPoint(this._map.unproject(nwPoint)),
-                this._map.latLngToContainerPoint(this._map.unproject(swPoint)),
-                this._map.latLngToContainerPoint(this._map.unproject(sePoint)),
-                this._map.latLngToContainerPoint(this._map.unproject(nePoint))
-            ].map(function (p) {return [p.x, p.y];}),
-            contained = function (shouldBe, inArray) {
-                return shouldBe.every(function (p) {
-                    return inArray.some(function (c) {
-                        return c[0] === p[0] && c[1] === p[1];
-                    });
-                });
-            };
+            sw = this._map.unproject(swPoint),
+            ne = this._map.unproject(nePoint),
+            tileBounds = L.latLngBounds(sw, ne);
+
         for (var i = 0; i < data.features.length; i++) {
             feature = data.features[i];
-            if (feature.geometry.type === "Polygon") {
-                // Try to skip polygons that have the exact size of the tile, which are generally bigger
-                // polygons, and we only want their original path.
-                if (feature.geometry.coordinates.length === 1 && feature.geometry.coordinates[0].length === 5) {
-                    coords = feature.geometry.coordinates[0].map(toPoint, this);
-                    if (contained(tilePoints, coords)) continue;
-                }
-            }
             try {
-                this.vectorlayer.addData(feature);
+                layer = L.GeoJSON.geometryToLayer(feature, this.vectorlayer.options.pointToLayer);
             } catch (err) {
                 // Mapnik seems to be outputing some invalid features in some cases.
                 // Let's digg this later.
                 console.log(err);
+                continue;
             }
+            layer.feature = L.GeoJSON.asFeature(feature);
+            var style = {
+                fill: feature.geometry.type !== 'LineString',
+                weight: 3,
+                color: '#d35400'
+            };
+            if (layer.getBounds && layer.getBounds().equals(tileBounds)) style = L.extend(style, {weight: 1, fill: false});
+            layer.setStyle(style);
+            this.vectorlayer.options.onEachFeature(feature, layer);
+            this.vectorlayer.addLayer(layer);
         }
 
     }

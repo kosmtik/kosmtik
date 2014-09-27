@@ -61,20 +61,13 @@ L.TileLayer.Vector = L.TileLayer.extend({
             x = tilePoint.x,
             y = tilePoint.y;
 
-        var dataUrl = L.Util.template(this._url, {
-            s: this._getSubdomain(tilePoint),
-            z: z,
-            x: x,
-            y: y,
-            version: this.options.version
-        });
         var self = this;
         if(!this._geojsonTilesToLoad) {
             this.fire('vectorloadinit');
         }
         // Register that this tile is not yet loaded
         this._geojsonTilesToLoad++;
-        var req = L.K.Xhr.get(dataUrl, {
+        var req = L.K.Xhr.get(this.getTileUrl(tilePoint), {
             callback: function (status, data) {
                 if (status === 200 && data) {
                     self.addData(JSON.parse(data), tilePoint);

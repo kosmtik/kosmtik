@@ -5,11 +5,6 @@ L.Kosmtik.Map = L.Map.extend({
     },
 
     initialize: function (options) {
-        options = options || {};
-        if (project) {
-            if (project.center) options.center = project.center;
-            if (project.zoom) options.zoom = project.zoom;
-        }
         this.sidebar = new L.Kosmtik.Sidebar().addTo(this);
         this.toolbar = new L.Kosmtik.Toolbar().addTo(this);
         this.settingsForm = new L.K.SettingsForm(this);

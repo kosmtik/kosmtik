@@ -8,9 +8,11 @@ Hash.prototype.extendMap = function (req, res) {
 
     var front = function () {
         L.K.Map.addInitHook(function () {
-            this.whenReady(function () {
-                this.hash = new L.Hash(this);
-            });
+            this.hash = new L.Hash(this);
+            if (!this.hash.parseHash(location.hash)) {
+                if (project) this.setView(project.center, project.zoom);
+                else console.error('Missing center and zoom in project config');
+            }
         });
     };
     this.pushToFront(res, front);

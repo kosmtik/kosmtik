@@ -1,6 +1,7 @@
 var fs = require('fs'),
     Tile = require('./Tile.js').Tile,
-    TILEPREFIX = 'tiles';
+    VectorTile = require('./VectorTile.js').Tile,
+    TILEPREFIX = 'tile';
 
 var ProjectServer = function (project, parent) {
     this.project = project;
@@ -9,6 +10,7 @@ var ProjectServer = function (project, parent) {
     var self = this;
     this.project.when('loaded', function () {
         self.mapPool = self.project.createMapPool();
+        self.vectorMapPool = self.project.createMapPool({size: 256});
         fs.watch(self.project.root, function (type, filename) {
             if (filename.indexOf('.') === 0) return;
             self.addToPollQueue({isDirty: true});
@@ -28,8 +30,17 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (urlpath === '/poll/') this.poll(res);
     else if (urlpath === '/export/') this.export(res, uri.query);
     else if (urlpath === '/reload/') this.reload(res);
-    else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.tile(els[2], els[3], els[4], res);});
+    else if (this.parent.hasProjectRoute(urlpath)) this.parent._project_routes[urlpath].call(this, req, res, this.projects[els[1]]);
+    else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res);});
     else this.parent.notFound(urlpath, res);
+};
+
+ProjectServer.prototype.serveTile = function (z, x, y, res) {
+    y = y.split('.');
+    var ext = y[1];
+    y = y[0];
+    if (ext === 'json') this.vectortile(z, x, y, res);
+    else this.tile(z, x, y, res);
 };
 
 ProjectServer.prototype.tile = function (z, x, y, res) {
@@ -45,7 +56,23 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
                 res.end();
                 self.mapPool.release(map);
             });
-        });        
+        });
+    });
+};
+
+ProjectServer.prototype.vectortile = function (z, x, y, res) {
+    var self = this;
+    this.vectorMapPool.acquire(function (err, map) {
+        if (err) throw err;
+        var tile = new VectorTile(+z, +x, +y);
+        return tile.render(map, function (err, tile) {
+            if (err) throw err;
+            var content = JSON.stringify(tile.toGeoJSON('__all__'));
+            res.writeHead(200, {'Content-Type': 'application/javascript'});
+            res.write(content);
+            res.end();
+            self.vectorMapPool.release(map);
+        });
     });
 };
 

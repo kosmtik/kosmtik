@@ -23,19 +23,19 @@ L.Kosmtik.Xhr = {
                 settings.callback.call(settings.context || xhr, xhr.status, xhr.responseText, xhr);
             }
         };
-        xhr.send(settings.data);
+        return xhr.send(settings.data);
     },
 
     get: function(uri, options) {
         options.verb = 'GET';
         options.uri = uri;
-        L.K.Xhr._ajax(options);
+        return L.K.Xhr._ajax(options);
     },
 
     post: function(uri, options) {
         options.verb = 'POST';
         options.uri = uri;
-        L.K.Xhr._ajax(options);
+        return L.K.Xhr._ajax(options);
     }
 
 };
@@ -108,3 +108,20 @@ L.Kosmtik.Switch = L.FormBuilder.CheckBox.extend({
     }
 
 });
+
+L.Kosmtik.Util = {};
+
+L.Kosmtik.Util.renderPropertiesTable = function (properties) {
+    var renderRow = function (container, key, value) {
+        if (!key || ! value) return;
+        var tr = L.DomUtil.create('tr', '', container);
+        L.DomUtil.create('th', '', tr).innerHTML = key;
+        L.DomUtil.create('td', '', tr).innerHTML = value;
+    };
+    var table = L.DomUtil.create('table');
+
+    for (var key in properties) {
+        renderRow(table, key, properties[key]);
+    }
+    return table;
+};

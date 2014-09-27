@@ -106,6 +106,7 @@ PreviewServer.prototype.notFound = function (filepath, res) {
 
 PreviewServer.prototype.initRoutes = function () {
     this._routes = {};
+    this._project_routes = {};
 };
 
 PreviewServer.prototype.addRoute = function (path, callback) {
@@ -114,6 +115,18 @@ PreviewServer.prototype.addRoute = function (path, callback) {
 
 PreviewServer.prototype.hasRoute = function (path) {
     return !!this._routes[path];
+};
+
+PreviewServer.prototype.addProjectRoute = function (path, callback) {
+    this._project_routes[path] = callback;
+};
+
+PreviewServer.prototype.hasProjectRoute = function (path) {
+    return !!this._project_routes[path];
+};
+
+PreviewServer.prototype.serveProjectRoute = function (id, path, req, res) {
+
 };
 
 PreviewServer.prototype.pushToFront = function (res, anonymous) {

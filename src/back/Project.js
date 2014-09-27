@@ -55,11 +55,12 @@ Project.prototype.render = function (force) {
     return this.xml;
 };
 
-Project.prototype.createMapPool = function () {
+Project.prototype.createMapPool = function (options) {
+    options = options || {};
     this.render();
     this.config.log('Loading map…');
     // TODO bufferSize?
-    this.mapPool = this.mapnikPool.fromString(this.xml, {size: this.tileSize()}, {base: this.root});
+    this.mapPool = this.mapnikPool.fromString(this.xml, {size: options.size || this.tileSize()}, {base: this.root});
     this.config.log('Map ready');
     return this.mapPool;
 };

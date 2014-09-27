@@ -16,7 +16,8 @@ L.Kosmtik.Map = L.Map.extend({
         this.settingsForm.addElement(['autoReload', {handler: L.K.Switch, label: 'Autoreload', helpText: 'Reload map as soon as a project file is changed on the server.'}]);
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
-        this.tilelayer = new L.Kosmtik.TileLayer('./tiles/{z}/{x}/{y}?t={version}', {tileSize: project.tileSize, noWrap: true, version: Date.now()}).addTo(this);
+        this.tilelayer = new L.Kosmtik.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', {tileSize: project.tileSize, noWrap: true, version: Date.now()}).addTo(this);
+        this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {version: Date.now()});
         this.tilelayer.on('loading', function () {
             this.setState('loading');
         }, this);
@@ -28,6 +29,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.poll.on('message', function (e) {
             if (e.isDirty) this.setState('dirty');
         }, this);
+        this.createDataInspectorButton();
         this.createReloadButton();
         this.on('dirty:on', function () {
             if (L.K.Config.autoReload) this.reload();
@@ -73,6 +75,21 @@ L.Kosmtik.Map = L.Map.extend({
             }
         }, this);
         this.toolbar.addTool(reload);
+    },
+
+    createDataInspectorButton: function () {
+        var button = L.DomUtil.create('li', 'autoreload with-switch');
+        var builder = new L.K.FormBuilder(L.K.Config, [
+            ['dataInspector', {handler: L.K.Switch, label: 'Data Inspector'}]
+        ]);
+        button.appendChild(builder.build());
+        builder.on('synced', this.toggleInspectorLayer, this);
+        this.toolbar.addTool(button);
+    },
+
+    toggleInspectorLayer: function () {
+        if (L.K.Config.dataInspector) this.dataInspectorLayer.addTo(this);
+        else this.removeLayer(this.dataInspectorLayer);
     }
 
 });

@@ -103,6 +103,7 @@ Config.prototype.initStatics = function () {
         '/src/front/Core.js',
         '/config/',
         './options/',
+        '/src/front/VectorTileLayer.js',
         '/src/front/Sidebar.js',
         '/src/front/Toolbar.js',
         '/src/front/FormBuilder.js',

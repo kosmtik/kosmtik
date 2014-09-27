@@ -34,6 +34,7 @@
     vertical-align: middle;
     height: 100%;
     font-size: 12px;
+    float: right;
 }
 .toolbar ul li:hover {
   background-color: #555;

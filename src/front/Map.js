@@ -24,8 +24,8 @@ L.Kosmtik.Map = L.Map.extend({
         this.poll.on('message', function (e) {
             if (e.isDirty) this.setState('dirty');
         }, this);
-        this.createDataInspectorButton();
         this.createReloadButton();
+        this.createDataInspectorButton();
         this.on('dirty:on', function () {
             if (L.K.Config.autoReload) this.reload();
         });

@@ -1,4 +1,4 @@
-L.Kosmtik.ExportFormatChooser = L.FormBuilder.SelectAbstract.extend({
+L.Kosmtik.ExportFormatChooser = L.FormBuilder.Select.extend({
 
     getOptions: function () {
         return L.K.Config.exportFormats.map(function (item) {

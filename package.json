@@ -23,7 +23,7 @@
     "js-yaml": "^3.2.2",
     "json-localizer": "0.0.2",
     "leaflet": "^0.7.3",
-    "leaflet-formbuilder": "0.0.4",
+    "leaflet-formbuilder": "0.0.5",
     "leaflet-hash": "^0.2.1",
     "mapnik": "^1.4.16",
     "mapnik-pool": "0.0.0",

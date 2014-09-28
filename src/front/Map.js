@@ -12,8 +12,14 @@ L.Kosmtik.Map = L.Map.extend({
         this.settingsForm.addElement(['backendPolling', {handler: L.K.Switch, label: '(Advanced) Poll backend for project updates'}]);
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
-        this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', {tileSize: L.K.Config.project.tileSize, noWrap: true, version: L.K.Config.project.loadTime}).addTo(this);
-        this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {version: Date.now()});
+        var tilelayerOptions = {
+            tileSize: L.K.Config.project.tileSize,
+            version: L.K.Config.project.loadTime,
+            minZoom: this.options.minZoom,
+            maxZoom: this.options.maxZoom
+        };
+        this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', tilelayerOptions).addTo(this);
+        this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {version: Date.now(), minZoom: this.options.minZoom, maxZoom: this.options.maxZoom});
         this.tilelayer.on('loading', function () {
             this.setState('loading');
         }, this);

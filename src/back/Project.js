@@ -78,8 +78,8 @@ Project.prototype.toFront = function () {
     var options = {
         center: [this.mml.center[1], this.mml.center[0]],
         zoom: this.mml.center[2],
-        minZoom: this.mml.minZoom,
-        maxZoom: this.mml.maxZoom,
+        minZoom: this.mml.minzoom,
+        maxZoom: this.mml.maxzoom,
         metatile: this.mml.metatile,
         tileSize: this.tileSize(),
         loadTime: this.loadTime

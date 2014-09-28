@@ -40,17 +40,9 @@
 .toolbar ul li:hover {
   background-color: #555;
 }
-.toolbar li.reload:hover,
-.toolbar li.reload {
-    color: #999;
-    cursor: not-allowed;
-    background-color: #444;
-}
 .dirty li.reload:hover,
 .dirty li.reload {
-    color: #efefef;
     background-color: #d35400;
-    cursor: pointer;
 }
 .dirty li.reload:hover {
     background-color: #e67e22;

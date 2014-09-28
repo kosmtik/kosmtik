@@ -102,9 +102,7 @@ L.Kosmtik.Map = L.Map.extend({
         var reload = L.DomUtil.create('li', 'reload');
         reload.innerHTML = '⟳ Reload';
         L.DomEvent.on(reload, 'click', function () {
-            if (this.checkState('dirty')) {
-                this.reload();
-            }
+            this.reload();
         }, this);
         this.toolbar.addTool(reload);
     },

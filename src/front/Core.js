@@ -58,6 +58,7 @@ L.Kosmtik.Poll = L.Class.extend({
     },
 
     polled: function (status, data) {
+        if (status === 304 || status === 200) this.fire('polled');
         if (status === 304) return this.loop(1);
         if (status !== 200 || !data) return this.onError({status: status, error: data});
         try {
@@ -82,7 +83,8 @@ L.Kosmtik.Poll = L.Class.extend({
     },
 
     start: function () {
-        this.loop(1);
+        if (!this._id) this.loop(1);
+        this.fire('start');
         return this;
     },
 
@@ -91,6 +93,7 @@ L.Kosmtik.Poll = L.Class.extend({
             window.clearTimeout(this._id);
             this._id = null;
         }
+        this.fire('stop');
         return this;
     }
 

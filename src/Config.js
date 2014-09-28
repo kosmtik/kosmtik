@@ -129,7 +129,8 @@ Config.prototype.addCSS = function (path) {
 Config.prototype.toFront = function () {
     var options = {
         exportFormats: Object.keys(this.exporters),
-        autoReload: this.getFromUserConfig('autoReload', true)
+        autoReload: this.getFromUserConfig('autoReload', true),
+        backendPolling: true
     };
     this.emit('tofront', {options: options});
     return options;

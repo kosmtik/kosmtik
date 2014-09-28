@@ -24,7 +24,8 @@
     display: inline-block;
     text-align: right;
     float: right;
-    padding-right: 60px;
+    margin-right: 60px;
+    border-right: 1px solid #555;
 }
 .toolbar ul li {
     display: inline-block;
@@ -48,11 +49,11 @@
 .dirty li.reload:hover,
 .dirty li.reload {
     color: #efefef;
-    background-color: #c0392b;
+    background-color: #d35400;
     cursor: pointer;
 }
 .dirty li.reload:hover {
-    background-color: #e74c3c;
+    background-color: #e67e22;
 }
 .dirty li.reload:after {
     content: ' ⚡';
@@ -69,4 +70,18 @@
 }
 .toolbar ul li.with-switch label {
     text-indent: 1em;
+}
+.toolbar .poll-indicator {
+    font-size: 16px;
+    cursor: default;
+    text-decoration: line-through;
+}
+.toolbar .poll-indicator:hover {
+    background-color: #444;
+}
+.polling .toolbar .poll-indicator {
+    text-decoration: none;
+}
+.polling-error .toolbar .poll-indicator {
+    background-color: #d35400;
 }

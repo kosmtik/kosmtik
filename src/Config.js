@@ -20,9 +20,13 @@ var Config = function (root) {
 
 util.inherits(Config, StateBase);
 
-Config.prototype.getUserConfigPath = function () {
+Config.prototype.getUserConfigDir = function () {
     var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-    return path.join(home, '.config', 'kosmtik', 'config.yml');
+    return path.join(home, '.config', 'kosmtik');
+};
+
+Config.prototype.getUserConfigPath = function () {
+    return path.join(this.getUserConfigDir(), 'config.yml');
 };
 
 Config.prototype.loadUserConfig = function () {
@@ -31,6 +35,7 @@ Config.prototype.loadUserConfig = function () {
     try {
         config = fs.readFileSync(configpath, 'utf-8');
         config = yaml.safeLoad(config);
+        this.log('Loading config from', configpath);
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
@@ -40,8 +45,11 @@ Config.prototype.loadUserConfig = function () {
 Config.prototype.saveUserConfig = function () {
     var configpath = this.getUserConfigPath(),
         self = this;
-    fs.writeFile(configpath, yaml.safeDump(this.userConfig), function (err) {
-        self.log('Saved env conf to', configpath);
+    fs.mkdir(this.getUserConfigDir(), function (err) {
+        if (err && err.code !== 'EEXIST') throw err;
+        fs.writeFile(configpath, yaml.safeDump(self.userConfig), function (err) {
+            self.log('Saved env conf to', configpath);
+        });
     });
 };
 

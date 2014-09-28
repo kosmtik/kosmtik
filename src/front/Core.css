@@ -435,6 +435,9 @@ input.switch:checked ~ label:after {
         transform:translateX(100%);
     }
 }
+/* *********************** */
+/*        Crosshairs       */
+/* *********************** */
 .crosshairs {
     left: calc(50% - 5px);
     position: absolute;
@@ -444,7 +447,32 @@ input.switch:checked ~ label:after {
 .crosshairs:before {
     content: '✚';
 }
-
+/* *********************** */
+/*          Alert          */
+/* *********************** */
+.kosmtik-alert {
+    height: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 60px;
+    transition: height 500ms ease-in;
+    background-color: #444;
+    color: #efefef;
+    z-index: 10000;
+    font-size: 12px;
+    display: none;
+}
+.kosmtik-alert .close {
+    display: block;
+    text-align: right;
+    color: #efefef;
+}
+.alert .kosmtik-alert {
+    padding: 10px;
+    height: auto;
+    display: block;
+}
 /* *********************** */
 /*   Override third party  */
 /* *********************** */

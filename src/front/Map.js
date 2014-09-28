@@ -12,6 +12,8 @@ L.Kosmtik.Map = L.Map.extend({
         this.settingsForm.addElement(['backendPolling', {handler: L.K.Switch, label: '(Advanced) Poll backend for project updates'}]);
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
+        this.crosshairs = new L.K.Crosshairs(this);
+        this.alert = new L.K.Alert(this);
         var tilelayerOptions = {
             tileSize: L.K.Config.project.tileSize,
             version: L.K.Config.project.loadTime,
@@ -26,10 +28,17 @@ L.Kosmtik.Map = L.Map.extend({
         this.tilelayer.on('load', function () {
             this.unsetState('loading');
         }, this);
+        this.dataInspectorLayer.on('loading', function () {
+            this.setState('loading');
+        }, this);
+        this.dataInspectorLayer.on('load', function () {
+            this.unsetState('loading');
+        }, this);
         L.control.scale().addTo(this);
         this.poll = new L.K.Poll('./poll/');
         this.poll.on('message', function (e) {
             if (e.isDirty) this.setState('dirty');
+            if (e.error) this.alert.show({content: e.error, level: 'error'});
         }, this);
         this.poll.on('error', function (e) {
             this.setState('polling-error');
@@ -53,7 +62,6 @@ L.Kosmtik.Map = L.Map.extend({
         this.on('settings:synced', function (e) {
             if (e.field === 'backendPolling') this.togglePoll();
         });
-        this.crosshairs = new L.K.Crosshairs(this);
     },
 
     setState: function (state) {

@@ -46,15 +46,16 @@ ProjectServer.prototype.serveTile = function (z, x, y, res) {
 ProjectServer.prototype.tile = function (z, x, y, res) {
     var self = this;
     this.mapPool.acquire(function (err, map) {
-        if (err) throw err;
+        var release = function () {self.mapPool.release(map);};
+        if (err) return self.raise(err.message, res);
         var tile = new Tile(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), scale: self.project.mml.metatile});
         return tile.render(map, function (err, im) {
-            if (err) throw err;
+            if (err) return self.raise(err.message, res, release);
             im.encode('png', function (err, buffer) {
                 res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
                 res.write(buffer);
                 res.end();
-                self.mapPool.release(map);
+                release();
             });
         });
     });
@@ -63,15 +64,16 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
 ProjectServer.prototype.vectortile = function (z, x, y, res) {
     var self = this;
     this.vectorMapPool.acquire(function (err, map) {
-        if (err) throw err;
+        var release = function () {self.vectorMapPool.release(map);};
+        if (err) return self.raise(err.message, res);
         var tile = new VectorTile(+z, +x, +y);
         return tile.render(map, function (err, tile) {
-            if (err) throw err;
+            if (err) return self.raise(err.message, res, release);
             var content = JSON.stringify(tile.toGeoJSON('__all__'));
             res.writeHead(200, {'Content-Type': 'application/javascript'});
             res.write(content);
             res.end();
-            self.vectorMapPool.release(map);
+            release();
         });
     });
 };
@@ -118,6 +120,14 @@ ProjectServer.prototype.addToPollQueue = function (message) {
     if (this._poll_queue.indexOf(message) === -1) this._poll_queue.push(message);
 };
 
+ProjectServer.prototype.raise = function (message, res, cb) {
+    console.log(message);
+    this.addToPollQueue({error: message});
+    res.writeHead(500);
+    res.end();
+    if (cb) cb();
+};
+
 ProjectServer.prototype.poll = function (res) {
     if (this._poll_queue.length) {
         data = JSON.stringify(this._poll_queue);
@@ -134,12 +144,20 @@ ProjectServer.prototype.poll = function (res) {
 
 ProjectServer.prototype.reload = function (res) {
     var self = this;
-    this.project.reload();
+    try {
+        this.project.reload();
+    } catch (err) {
+        return this.raise(err.message, res);
+    }
     this.project.when('loaded', function () {
         self.mapPool.drain(function() {
             self.mapPool.destroyAllNow();
         });
-        self.mapPool = self.project.createMapPool();
+        try {
+            self.mapPool = self.project.createMapPool();
+        } catch (err) {
+            return self.raise(err.message, res);
+        }
         res.writeHead(200, {
             "Content-Type": 'application/json'
         });

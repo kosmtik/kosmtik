@@ -166,3 +166,29 @@ L.K.Crosshairs = L.Class.extend({
     }
 
 });
+
+L.Kosmtik.Alert = L.Class.extend({
+
+    initialize: function (map, options) {
+        this._map = map;
+        L.setOptions(this, options);
+        this.container = L.DomUtil.create('div', 'kosmtik-alert', document.body);
+        this.closeButton = L.DomUtil.create('a', 'close', this.container);
+        this.content = L.DomUtil.create('div', 'content', this.container);
+        this.closeButton.href = '#';
+        this.closeButton.innerHTML = '❌ Close';
+        L.DomEvent
+            .on(this.closeButton, 'click', L.DomEvent.stop)
+            .on(this.closeButton, 'click', this.hide, this);
+    },
+
+    show: function (options) {
+        this.content.innerHTML = options.content;
+        this._map.setState('alert');
+    },
+
+    hide: function () {
+        this._map.unsetState('alert');
+    }
+
+});

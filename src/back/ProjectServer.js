@@ -9,8 +9,7 @@ var ProjectServer = function (project, parent) {
     this._poll_queue = [];
     var self = this;
     this.project.when('loaded', function () {
-        self.mapPool = self.project.createMapPool();
-        self.vectorMapPool = self.project.createMapPool({size: 256});
+        self.initMapPools();
         fs.watch(self.project.root, function (type, filename) {
             if (filename.indexOf('.') === 0) return;
             self.addToPollQueue({isDirty: true});
@@ -153,8 +152,11 @@ ProjectServer.prototype.reload = function (res) {
         self.mapPool.drain(function() {
             self.mapPool.destroyAllNow();
         });
+        self.vectorMapPool.drain(function() {
+            self.vectorMapPool.destroyAllNow();
+        });
         try {
-            self.mapPool = self.project.createMapPool();
+            self.initMapPools();
         } catch (err) {
             return self.raise(err.message, res);
         }
@@ -163,6 +165,11 @@ ProjectServer.prototype.reload = function (res) {
         });
         res.end(JSON.stringify(self.project.toFront()));
     });
+};
+
+ProjectServer.prototype.initMapPools = function () {
+    this.mapPool = this.project.createMapPool();
+    this.vectorMapPool = this.project.createMapPool({size: 256});
 };
 
 exports.ProjectServer = ProjectServer;

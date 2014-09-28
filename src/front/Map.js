@@ -10,6 +10,9 @@ L.Kosmtik.Map = L.Map.extend({
         this.settingsForm = new L.K.SettingsForm(this);
         this.settingsForm.addElement(['autoReload', {handler: L.K.Switch, label: 'Autoreload', helpText: 'Reload map as soon as a project file is changed on the server.'}]);
         this.settingsForm.addElement(['backendPolling', {handler: L.K.Switch, label: '(Advanced) Poll backend for project updates'}]);
+        this.createPollIndicator();
+        this.createReloadButton();
+        this.createDataInspectorButton();
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
         this.crosshairs = new L.K.Crosshairs(this);
@@ -53,9 +56,6 @@ L.Kosmtik.Map = L.Map.extend({
             this.unsetState('polling');
         }, this);
         this.togglePoll();
-        this.createPollIndicator();
-        this.createReloadButton();
-        this.createDataInspectorButton();
         this.on('dirty:on', function () {
             if (L.K.Config.autoReload) this.reload();
         });

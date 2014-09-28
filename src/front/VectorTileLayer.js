@@ -57,7 +57,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
 
         var self = this;
         if(!this._geojsonTilesToLoad) {
-            this.fire('loading');
+            this.fire('vectorloadinit');
         }
         // Register that this tile is not yet loaded
         this._geojsonTilesToLoad++;
@@ -71,7 +71,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
                     if (index !== -1) this._loading.splice(index, 1);
                     if(!self._geojsonTilesToLoad) {
                         // No more tiles to load
-                        self.fire('load');
+                        self.fire('vectorloadend');
                     }
                 }
             },

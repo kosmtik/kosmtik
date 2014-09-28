@@ -435,7 +435,15 @@ input.switch:checked ~ label:after {
         transform:translateX(100%);
     }
 }
-
+.crosshairs {
+    left: calc(50% - 5px);
+    position: absolute;
+    top: calc(50% - 9px);
+    text-align: center;
+}
+.crosshairs:before {
+    content: '✚';
+}
 
 /* *********************** */
 /*   Override third party  */

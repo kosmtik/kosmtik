@@ -114,7 +114,7 @@ Config.prototype.initStatics = function () {
         '/node_modules/leaflet/dist/leaflet.css',
         '/src/front/Sidebar.css',
         '/src/front/Toolbar.css',
-        '/src/front/main.css'
+        '/src/front/Core.css'
     ];
 };
 
@@ -130,7 +130,8 @@ Config.prototype.toFront = function () {
     var options = {
         exportFormats: Object.keys(this.exporters),
         autoReload: this.getFromUserConfig('autoReload', true),
-        backendPolling: true
+        backendPolling: true,
+        showCrosshairs: true
     };
     this.emit('tofront', {options: options});
     return options;

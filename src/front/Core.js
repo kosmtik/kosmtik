@@ -129,3 +129,40 @@ L.Kosmtik.Util.renderPropertiesTable = function (properties) {
     }
     return table;
 };
+
+L.K.Crosshairs = L.Class.extend({
+
+    initialize: function (map) {
+        this.icon = L.DomUtil.create('div', 'crosshairs', map._container);
+        map.settingsForm.addElement(['showCrosshairs', {handler: L.K.Switch, label: 'Show crosshairs in the center of the map'}]);
+        map.on('settings:synced', this.toggle, this);
+        this.toggle();
+    },
+
+    addTo: function (map) {
+        map.addLayer(this);
+        return this;
+    },
+
+    onAdd: function (map) {
+        this.show();
+    },
+
+    onRemove: function (map) {
+        this.hide();
+    },
+
+    show: function () {
+        L.DomUtil.setOpacity(this.icon, 0.8);
+    },
+
+    hide: function () {
+        L.DomUtil.setOpacity(this.icon, 0);
+    },
+
+    toggle: function () {
+        if (L.K.Config.showCrosshairs) this.show();
+        else this.hide();
+    }
+
+});

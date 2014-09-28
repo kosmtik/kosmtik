@@ -47,6 +47,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.on('settings:synced', function (e) {
             if (e.field === 'backendPolling') this.togglePoll();
         });
+        this.crosshairs = new L.K.Crosshairs(this);
     },
 
     setState: function (state) {

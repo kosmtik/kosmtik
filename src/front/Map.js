@@ -21,7 +21,7 @@ L.Kosmtik.Map = L.Map.extend({
             maxZoom: this.options.maxZoom
         };
         this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', tilelayerOptions).addTo(this);
-        this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {version: Date.now(), minZoom: this.options.minZoom, maxZoom: this.options.maxZoom});
+        this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {minZoom: this.options.minZoom, maxZoom: this.options.maxZoom});
         this.tilelayer.on('loading', function () {
             this.setState('loading');
         }, this);

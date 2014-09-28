@@ -26,6 +26,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
 
     onAdd: function (map) {
         this._map = map;
+        this.options.version = Date.now();
         this.initVectorLayer(map);
         this._loading = [];
         // Delete the clusters to prevent from having several times

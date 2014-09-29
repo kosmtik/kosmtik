@@ -2,3 +2,4 @@ node_modules/*
 notes.txt
 npm-debug.log
 logo.png
+v8.log

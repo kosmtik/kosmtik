@@ -49,6 +49,23 @@ node index.js serve <path/to/your/project.mml>
 Then open your browser at http://127.0.0.1:6789/.
 
 
+You may also want to install plugins. To see the list of available ones, type:
+
+```
+node index.js plugins --available
+```
+
+And then pick one and install it like this:
+```
+node index.js plugins --install pluginname
+```
+
+For example:
+```
+node index.js plugins --install kosmtik-map-compare
+```
+
+
 ## Local config
 
 Because you often need to change the project config to match your

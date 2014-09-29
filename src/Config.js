@@ -5,8 +5,9 @@ var util = require('util'),
     StateBase = require('./back/StateBase.js').StateBase,
     PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
-var Config = function (root) {
+var Config = function (root, configpath) {
     StateBase.call(this);
+    this.configpath = configpath;
     this.root = root;
     this.initOptions();
     this.initExporters();
@@ -16,17 +17,18 @@ var Config = function (root) {
     this.pluginsManager = new PluginsManager(this);  // Do we need back ref?
     this.emit('loaded');
     this.on('server:init', this.attachRoutes.bind(this));
+    this.parsed_opts = {};  // Default. TODO better option management.
 };
 
 util.inherits(Config, StateBase);
 
 Config.prototype.getUserConfigDir = function () {
     var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-    return path.join(home, '.config', 'kosmtik');
+    return path.join(home, '.config');
 };
 
 Config.prototype.getUserConfigPath = function () {
-    return path.join(this.getUserConfigDir(), 'config.yml');
+    return this.configpath || path.join(this.getUserConfigDir(), 'kosmtik.yml');
 };
 
 Config.prototype.loadUserConfig = function () {
@@ -45,11 +47,8 @@ Config.prototype.loadUserConfig = function () {
 Config.prototype.saveUserConfig = function () {
     var configpath = this.getUserConfigPath(),
         self = this;
-    fs.mkdir(this.getUserConfigDir(), function (err) {
-        if (err && err.code !== 'EEXIST') throw err;
-        fs.writeFile(configpath, yaml.safeDump(self.userConfig), function (err) {
-            self.log('Saved env conf to', configpath);
-        });
+    fs.writeFile(configpath, yaml.safeDump(this.userConfig), function (err) {
+        self.log('Saved env conf to', configpath);
     });
 };
 

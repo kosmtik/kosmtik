@@ -6,6 +6,6 @@ var Config = require('./src/Config.js').Config,
     fs = require('fs'),
     npm = require('npm');
 
-var config = new Config(__dirname);
+var config = new Config(__dirname, process.env.KOSMTIK_CONFIGPATH);
 var server = new Server(config, __dirname);
 config.parseOptions();

@@ -4,7 +4,7 @@
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node node_modules/.bin/mocha"
   },
   "keywords": [
     "openstreetmap",
@@ -29,5 +29,8 @@
     "mapnik-pool": "0.0.0",
     "nomnom": "^1.8.0",
     "semver": "^4.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4"
   }
 }

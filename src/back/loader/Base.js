@@ -9,7 +9,7 @@ BaseLoader.prototype.postprocess = function () {
 	var self = this;
     this.mml.Stylesheet = this.mml.Stylesheet.map(function(x) {
         if (typeof x !== 'string') {
-            return { id: x, data: x.data };
+            return { id: x.id, data: x.data };
         }
         return { id: x, data: fs.readFileSync(path.join(self.project.root, x), 'utf8') };
     });

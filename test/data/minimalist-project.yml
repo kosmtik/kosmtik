@@ -1,0 +1,31 @@
+bounds:
+  - 1.2219
+  - 43.0923
+  - 1.3057
+  - 43.1517
+center:
+  - 1.256
+  - 43.1249
+  - 16
+minzoom: 6
+maxzoom: 20
+srs: "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over"
+Stylesheet: []
+Layer:
+  - Datasource:
+      - file: land-low.shp
+      - type: shape
+    class: shp
+    geometry: polygon
+    extent:
+      - -179.99999692067183
+      - -84.96651228427099
+      - 179.99999692067183
+      - 84.96651228427098
+    id: land-low
+    name: land-low
+    srs: "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over"
+    srs-name: 900913
+scale: 1
+metatile: 2
+name: ProjectName

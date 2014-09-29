@@ -20,8 +20,8 @@ L.K.Map.addInitHook(function () {
             height: 1000
         };
         var elementDefinitions = {
-            width: ['width', {handler: 'IntInput'}],
-            height: ['height', {handler: 'IntInput'}]
+            width: ['width', {handler: 'IntInput', helpText: 'Width of the export, in px.'}],
+            height: ['height', {handler: 'IntInput', helpText: 'Height of the export, in px.'}]
         };
         var editableParams = {
             'xml': [],

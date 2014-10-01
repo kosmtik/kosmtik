@@ -27,7 +27,6 @@ var PreviewServer = function (config, root, options) {
     this.server = http.createServer();
     this.server.on('request', this.serve.bind(this));
     this.server.timeout = 0;
-    this.port = options.port || 6789;
     this.root = root;
     this.emitAndForward('init');
     this.config.on('command:serve', this.listen.bind(this));
@@ -40,8 +39,8 @@ PreviewServer.prototype.listen = function () {
         var project = new Project(this.config, this.config.parsed_opts.path);
         this.registerProject(project);
     }
-    this.server.listen(this.port);
-    this.config.log('PreviewServer started, you can browse http://127.0.0.1:' + this.port);
+    this.server.listen(this.config.parsed_opts.port, this.config.parsed_opts.host);
+    this.config.log('PreviewServer started, you can browse http://' + this.config.parsed_opts.host + ':' + this.config.parsed_opts.port);
     this.emitAndForward('listen');
 };
 

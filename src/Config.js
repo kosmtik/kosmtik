@@ -88,6 +88,14 @@ Config.prototype.initOptions = function () {
         position: 1,
         help: 'Optional project path to load at start.'
     });
+    this.commands.serve.option('port', {
+        default: 6789,
+        help: 'Port to listen on.'
+    });
+    this.commands.serve.option('host', {
+        default: '127.0.0.1',
+        help: 'Host to listen on.'
+    });
     this.opts.option('mapnik_version', {
         full: 'mapnik-version',
         default: 'latest',

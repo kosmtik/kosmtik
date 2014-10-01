@@ -32,6 +32,14 @@ Clone this repository and:
 npm install
 ```
 
+## Update
+
+Obtain changes from repository (e.g. ```git pull upstream master```) 
+
+```
+rm -rf node modules && npm install 
+```
+
 ## Usage
 
 To get command line help, run:
@@ -74,11 +82,16 @@ kosmtik comes with an internal plugin to manage that. You have two
 options: with a json file named `localconfig.json`, or with a js module
 name `localconfig.js`.
 
+Place your localconfig.js or localconfig.json file in the same directory as your 
+carto project (or `.yml`, `.yaml`).
+
 In both cases, the behaviour is the same, you create some rules to target
 the configuration and changes the values. Those rules are started by the
 keyword `where`, and you define which changes to apply using `then`
 keyword. You can also filter the targeted objects by using the `if` clause.
 See the examples below to get it working right now.
+
+
 
 ### Example of a json file
 ```

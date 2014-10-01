@@ -37,7 +37,7 @@ npm install
 Obtain changes from repository (e.g. ```git pull upstream master```) 
 
 ```
-rm -rf node modules && npm install 
+rm -rf node_modules && npm install 
 ```
 
 ## Usage

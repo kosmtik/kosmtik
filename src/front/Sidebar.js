@@ -33,6 +33,7 @@ L.Kosmtik.Sidebar = L.Control.extend({
 
     addTo: function (map) {
         this._map = map;
+        L.DomEvent.on(document, 'keyup', this._onKeyUp, this);
         for (var i = this._tabitems.length - 1; i >= 0; i--) {
             L.DomEvent.on(this._tabitems[i], 'click', this._onClick, this);
         }
@@ -41,7 +42,7 @@ L.Kosmtik.Sidebar = L.Control.extend({
 
     removeFrom: function (map) {
         this._map = null;
-
+        L.DomEvent.off(document, 'keyup', this._onKeyUp, this);
         for (var i = this._tabitems.length - 1; i >= 0; i--) {
             L.DomEvent.off(this._tabitems[i], 'click', this._onClick, this);
         }
@@ -77,5 +78,11 @@ L.Kosmtik.Sidebar = L.Control.extend({
     _onClick: function(e) {
         if (L.DomUtil.hasClass(e.target, 'active')) this.close();
         else this.open(e.target);
+    },
+
+    _onKeyUp: function (e) {
+        if (e.keyCode == L.K.Keys.ESC) {
+            this.close();
+        }
     }
 });

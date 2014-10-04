@@ -10,6 +10,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.settingsForm = new L.K.SettingsForm(this);
         this.settingsForm.addElement(['autoReload', {handler: L.K.Switch, label: 'Autoreload', helpText: 'Reload map as soon as a project file is changed on the server.'}]);
         this.settingsForm.addElement(['backendPolling', {handler: L.K.Switch, label: '(Advanced) Poll backend for project updates'}]);
+        this.shortcuts = new L.K.Shortcuts(this);
         this.createPollIndicator();
         this.createReloadButton();
         this.createDataInspectorButton();
@@ -62,6 +63,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.on('settings:synced', function (e) {
             if (e.field === 'backendPolling') this.togglePoll();
         });
+        this.help = new L.Kosmtik.Help(this);
     },
 
     setState: function (state) {
@@ -105,16 +107,37 @@ L.Kosmtik.Map = L.Map.extend({
             this.reload();
         }, this);
         this.toolbar.addTool(reload);
+        this.shortcuts.add({
+            keyCode: L.K.Keys.R,
+            shiftKey: true,
+            ctrlKey: true,
+            callback: this.reload,
+            context: this,
+            description: 'Reload map'
+        });
     },
 
     createDataInspectorButton: function () {
         var button = L.DomUtil.create('li', 'autoreload with-switch');
-        var builder = new L.K.FormBuilder(L.K.Config, [
+        var form = new L.K.FormBuilder(L.K.Config, [
             ['dataInspector', {handler: L.K.Switch, label: 'Data Inspector'}]
         ]);
-        button.appendChild(builder.build());
-        builder.on('synced', this.toggleInspectorLayer, this);
+        button.appendChild(form.build());
+        form.on('synced', this.toggleInspectorLayer, this);
         this.toolbar.addTool(button);
+        var shortcutCallback = function () {
+            L.K.Config.dataInspector = !L.K.Config.dataInspector;
+            this.toggleInspectorLayer();
+            form.fetchAll();
+        };
+        this.shortcuts.add({
+            keyCode: L.K.Keys.I,
+            shiftKey: true,
+            ctrlKey: true,
+            callback: shortcutCallback,
+            context: this,
+            description: 'Toggle data inspector'
+        });
     },
 
     createPollIndicator: function () {

@@ -192,3 +192,135 @@ L.Kosmtik.Alert = L.Class.extend({
     }
 
 });
+
+L.K.Keys = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    TAB: 9,
+    ENTER: 13,
+    ESC: 27,
+    APPLE: 91,
+    SHIFT: 16,
+    ALT: 17,
+    CTRL: 18,
+    A: 65,
+    B: 66,
+    C: 67,
+    D: 68,
+    E: 69,
+    F: 70,
+    G: 71,
+    H: 72,
+    I: 73,
+    J: 74,
+    K: 75,
+    L: 76,
+    M: 77,
+    N: 78,
+    O: 79,
+    P: 80,
+    Q: 81,
+    R: 82,
+    S: 83,
+    T: 84,
+    U: 85,
+    V: 86,
+    W: 87,
+    X: 88,
+    Y: 89,
+    Z: 90
+};
+L.K.KeysLabel = {};
+for (var k in L.K.Keys) L.K.KeysLabel[L.K.Keys[k]] = k;
+
+L.Kosmtik.Shortcuts = L.Class.extend({
+
+    initialize: function (map, options) {
+        this._map = map;
+        L.setOptions(this, options);
+        L.DomEvent.addListener(document, 'keydown', this.onKeyDown, this);
+        this._listeners = {};
+    },
+
+    _makeKey: function (e) {
+        var els = [e.keyCode];
+        if (e.altKey) els.push('alt');
+        if (e.ctrlKey) els.push('ctrl');
+        if (e.shiftKey) els.push('shift');
+        return els.join('.');
+    },
+
+    add: function (specs) {
+        if (typeof specs.keyCode === 'string') specs.keyCode = L.K[specs.keyCode.upper()];
+        if (!specs.keyCode) return console.error('Unkown keyCode of event specs', specs);
+        if (!specs.callback) return console.error('Missing callback in event specs', specs);
+        var key = this._makeKey(specs);
+        this._listeners[key] = specs;
+    },
+
+    remove: function (specs) {
+        var key = this._makeKey(specs);
+        delete this._listeners[key];
+    },
+
+    onKeyDown: function (e) {
+        var key = this._makeKey(e),
+            specs = this._listeners[key];
+        if (specs) {
+            if(specs.stop !== false) L.DomEvent.stop(e);
+            specs.callback.apply(specs.context || this._map);
+        }
+    },
+
+    each: function (method, context) {
+        for (var i in this._listeners) {
+            method.call(context, this._listeners[i]);
+        }
+        return this;
+    }
+
+});
+
+L.Kosmtik.Shortcuts.makeLabel = function (e) {
+    var els = [];
+    if (e.altKey) els.push('alt');
+    if (e.ctrlKey) els.push('ctrl');
+    if (e.shiftKey) els.push('shift');
+    els.push(L.K.KeysLabel[e.keyCode]);
+    return els.join('+');
+};
+
+L.Kosmtik.Help = L.Class.extend({
+
+    initialize: function (map) {
+        this.map = map;
+        this.buildSidebar();
+    },
+
+    buildSidebar: function () {
+        var container = L.DomUtil.create('div', 'help-panel'),
+            title = L.DomUtil.create('h3', '', container);
+        title.innerHTML = 'Help';
+        this.buildShortcuts(container);
+        this.map.sidebar.addTab({
+            label: 'Help',
+            content: container
+        });
+        this.map.sidebar.rebuild();
+    },
+
+    buildShortcuts: function (container) {
+        var title = L.DomUtil.create('h4', '', container),
+            shortcuts = L.DomUtil.create('table', 'shortcuts', container);
+        title.innerHTML = 'Keyboard shortcuts';
+        this.map.shortcuts.each(function (specs) {
+            if (!specs.description) return;
+            var row = L.DomUtil.create('tr', '', shortcuts);
+            L.DomUtil.create('th', '', row).innerHTML = L.Kosmtik.Shortcuts.makeLabel(specs);
+            L.DomUtil.create('td', '', row).innerHTML = specs.description;
+        }, this);
+    }
+
+});

@@ -473,6 +473,21 @@ input.switch:checked ~ label:after {
     height: auto;
     display: block;
 }
+
+/* *********************** */
+/*        Help panel       */
+/* *********************** */
+.help-panel .shortcuts {
+    width: 100%;
+    font-size: 0.8em;
+}
+.help-panel .shortcuts th {
+    text-align: left;
+}
+.help-panel .shortcuts td {
+    text-align: right;
+}
+
 /* *********************** */
 /*   Override third party  */
 /* *********************** */

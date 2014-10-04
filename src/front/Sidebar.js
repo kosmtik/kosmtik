@@ -19,6 +19,8 @@ L.Kosmtik.Sidebar = L.Control.extend({
         var tab = L.DomUtil.create('li', options.className || '', this._tabs);
         tab.innerHTML = options.label;
         tab._sidebar = this;
+        tab._callback = options.callback;
+        tab._callbackContext = options.context;
         var pane = L.DomUtil.create('li', 'sidebar-pane ' + (options.className || ''), this._container);
         if (options.content.nodeType && options.content.nodeType === 1) {
             pane.appendChild(options.content);
@@ -61,6 +63,7 @@ L.Kosmtik.Sidebar = L.Control.extend({
 
     open: function (el) {
         this.closeAll();
+        this.fire('opening', {el: el});
         L.DomUtil.addClass(el, 'active');
         L.DomUtil.addClass(el._pane, 'active');
         L.DomUtil.removeClass(this._sidebar, 'collapsed');
@@ -76,6 +79,8 @@ L.Kosmtik.Sidebar = L.Control.extend({
     },
 
     _onClick: function(e) {
+        this.fire('tab:click', {el: e.target});
+        if (e.target._callback) e.target._callback.apply(e.target._callbackContext || this);
         if (L.DomUtil.hasClass(e.target, 'active')) this.close();
         else this.open(e.target);
     },

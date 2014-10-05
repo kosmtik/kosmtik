@@ -84,7 +84,10 @@ L.K.Exporter = L.Class.extend({
     },
 
     initExtentLayer: function () {
-        var center = this.map.getCenter();
+        var center = this.map.getCenter(),
+            size = this.map.getSize();
+        this.params.width = size.x - 50;
+        this.params.height = size.y - 50;
         this.extentLayer = L.featureGroup();
         this.shape = L.polygon([], this.shapeOptions).addTo(this.extentLayer);
         this.leftTop = L.marker(center, this.vertexOptions).addTo(this.extentLayer);
@@ -116,6 +119,7 @@ L.K.Exporter = L.Class.extend({
         this.builder.on('synced', function (e) {
             if (e.field === 'showExtent') this.toggleExtent();
         }, this);
+        this.drawFromCenter();
     },
 
     drawFromCenter: function () {

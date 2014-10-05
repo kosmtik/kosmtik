@@ -53,7 +53,8 @@ L.Kosmtik.Sidebar = L.Control.extend({
     },
 
     rebuild: function () {
-        this.removeFrom(this._map).addTo(this._map);
+        var map = this._map;
+        this.removeFrom(map).addTo(map);
     },
 
     closeAll: function () {
@@ -75,6 +76,7 @@ L.Kosmtik.Sidebar = L.Control.extend({
             this.closeAll();
             this.fire('closing');
             L.DomUtil.addClass(this._sidebar, 'collapsed');
+            this._map.invalidateSize();
         }
     },
 

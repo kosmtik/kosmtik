@@ -8,7 +8,7 @@
   z-index: 2000; 
   width: 460px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
-  transition: width 500ms;
+  /*transition: width 500ms;  Creates problem on FF when export extent is displayed */
   background-color: #444;
   color: #efefef;
 }

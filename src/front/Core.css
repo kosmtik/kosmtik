@@ -487,6 +487,19 @@ input.switch:checked ~ label:after {
 .help-panel .shortcuts td {
     text-align: right;
 }
+/* *********************** */
+/*      Export panel       */
+/* *********************** */
+.extent-caption {
+    background-color: #444;
+    color: #efefef;
+    min-width: 100px;
+    padding: 5px;
+    display: none;
+}
+.extent-caption.show {
+    display: block;
+}
 
 /* *********************** */
 /*   Override third party  */

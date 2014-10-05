@@ -8,6 +8,14 @@ L.Kosmtik.ExportFormatChooser = L.FormBuilder.Select.extend({
 
 });
 
+L.Kosmtik.ScaleChooser = L.FormBuilder.IntSelect.extend({
+
+    getOptions: function () {
+        return [1, 2, 3, 4, 5].map(function (item) {return [item, item];});
+    }
+
+});
+
 L.K.Exporter = L.Class.extend({
 
     shapeOptions: {
@@ -29,7 +37,8 @@ L.K.Exporter = L.Class.extend({
         showExtent: false,
         format: 'png',
         width: 500,
-        height: 500
+        height: 500,
+        scale: 1
     },
 
     editableParams: {
@@ -38,15 +47,16 @@ L.K.Exporter = L.Class.extend({
     },
 
     elementDefinitions: {
-        showExtent: ['showExtent', {handler: L.K.Switch, label: 'Show export extent on the map.'}],
-        width: ['width', {handler: 'IntInput', helpText: 'Width of the export, in px.'}],
-        height: ['height', {handler: 'IntInput', helpText: 'Height of the export, in px.'}]
+        showExtent: {handler: L.K.Switch, label: 'Show export extent on the map.'},
+        width: {handler: 'IntInput', helpText: 'Width of the export, in px.'},
+        height: {handler: 'IntInput', helpText: 'Height of the export, in px.'},
+        scale: {handler: L.Kosmtik.ScaleChooser, helpText: 'Scale the rendered image.'}
     },
 
     initialize: function (map, options) {
         L.setOptions(this, options);
         this.map = map;
-        this.elementDefinitions.format = ['format', {handler: L.K.ExportFormatChooser, helpText: 'Choose the export format', callback: this.buildForm, callbackContext: this}];
+        this.elementDefinitions.format = {handler: L.K.ExportFormatChooser, helpText: 'Choose the export format', callback: this.buildForm, callbackContext: this};
         this.initSidebar();
         this.initExtentLayer();
     },
@@ -74,10 +84,10 @@ L.K.Exporter = L.Class.extend({
     },
 
     buildForm: function () {
-        var elements = [this.elementDefinitions.format];
-        var extraElements = this.editableParams[this.params.format] || ['showExtent'];
+        var elements = [['format', this.elementDefinitions.format]];
+        var extraElements = this.editableParams[this.params.format] || ['scale', 'showExtent'];
         for (var i = 0; i < extraElements.length; i++) {
-            elements.push(this.elementDefinitions[extraElements[i]]);
+            elements.push([extraElements[i], this.elementDefinitions[extraElements[i]]]);
         }
         this.builder.setFields(elements);
         this.builder.build();
@@ -206,9 +216,12 @@ L.K.Exporter = L.Class.extend({
     },
 
     getQueryString: function () {
-        var qs = L.K.buildQueryString(this.params);
-        qs = qs + '&bounds=' + this.toBBoxString();
-        return qs;
+        var params = L.extend({}, this.params);
+        console.log(params)
+        params.bounds = this.toBBoxString();
+        params.width = params.width * +params.scale;
+        params.height = params.height * +params.scale;
+        return L.K.buildQueryString(params);
     },
 
     _zoomAnimation: function (e) {

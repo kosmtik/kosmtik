@@ -25,6 +25,11 @@ var BaseExporters = function (config) {
         help: 'BBox to use [Default: project extent]',
         metavar: 'minX,minY,maxX,maxY'
     });
+    config.commands.export.option('scale', {
+        help: 'Scale the exported image',
+        metavar: 'INT',
+        default: 1
+    });
     config.on('command:export', this.handleCommand);
     config.registerExporter('xml', path.join(__dirname, 'XML.js'));
     config.registerExporter('mml', path.join(__dirname, 'MML.js'));

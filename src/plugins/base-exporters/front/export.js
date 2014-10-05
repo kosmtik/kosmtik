@@ -142,6 +142,7 @@ L.K.Exporter = L.Class.extend({
         }, this);
         this.builder.on('synced', function (e) {
             if (e.field === 'showExtent') this.toggleExtent();
+            else if (e.field === 'zoom' || e.field === 'scale') this.setExtentCaptionContent();
         }, this);
         this.drawFromCenter();
     },
@@ -206,7 +207,8 @@ L.K.Exporter = L.Class.extend({
         var size = this.getExtentSize();
         this.params.width = size.x;
         this.params.height = size.y;
-        this.extentCaption.innerHTML = size.x + "px / " + size.y + "px";
+        var params = this.computeParams();
+        this.extentCaption.innerHTML = params.width + "px / " + params.height + "px";
     },
 
     getExtentSize: function () {
@@ -229,7 +231,7 @@ L.K.Exporter = L.Class.extend({
         ]
     },
 
-    getQueryString: function () {
+    computeParams: function () {
         var params = L.extend({}, this.params),
             factor;
         params.bounds = this.toBBoxString();
@@ -241,7 +243,13 @@ L.K.Exporter = L.Class.extend({
             params.width = params.width * factor;
             params.height = params.height * factor;
         }
-        return L.K.buildQueryString(params);
+        params.width = Math.round(params.width);
+        params.height = Math.round(params.height);
+        return params;
+    },
+
+    getQueryString: function () {
+        return L.K.buildQueryString(this.computeParams());
     },
 
     _zoomAnimation: function (e) {

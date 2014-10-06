@@ -6,7 +6,7 @@ OpenStreetMap data (and more).
 For now, only Carto based projects are supported (with .mml or .yml config),
 but in the future we hope to plug in MapCSS too.
 
-**Very very alpha, do not use it unless you like climbing in the ice!**
+**Alpha version, installable only from source**
 
 ## Lite
 

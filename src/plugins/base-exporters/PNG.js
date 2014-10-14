@@ -4,21 +4,22 @@ var util = require('util'),
 
 var PNGExporter = function (project, options) {
     BaseExporter.call(this, project, options);
-    if (options.bounds) this.bounds = options.bounds.split(',').map(function (x) {return +x;})
-    else this.bounds = this.project.mml.bounds;
-    this.scale = options.scale ? +options.scale : 2;
 };
 
 util.inherits(PNGExporter, BaseExporter);
 
 PNGExporter.prototype.export = function (callback) {
+    var bounds,
+        scale = this.options.scale ? +this.options.scale : 2;
+    if (this.options.bounds) bounds = this.options.bounds.split(',').map(function (x) {return +x;})
+    else bounds = this.project.mml.bounds;
     var self = this;
     var map = new mapnik.Map(+this.options.width, +this.options.height);
     map.fromString(this.project.render(), {base: this.project.root}, function render (err, map) {
         var projection = new mapnik.Projection(map.srs),
             im = new mapnik.Image(+self.options.width, +self.options.height);
-        map.zoomToBox(projection.forward(self.bounds));
-        map.render(im, {scale: self.scale}, function toImage (err, im) {
+        map.zoomToBox(projection.forward(bounds));
+        map.render(im, {scale: scale}, function toImage (err, im) {
             if (err) throw err;
             im.encode(self.options.format, callback);
         });

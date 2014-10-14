@@ -68,12 +68,11 @@ BaseExporters.prototype.handleCommand = function () {
         }
         var Project = require(path.join(this.root, 'src/back/Project.js')).Project,
             project = new Project(this, this.parsed_opts.project),
-            options = {
-                format: this.parsed_opts.format,
-                width: this.parsed_opts.width,
-                height: this.parsed_opts.height
-            };
-        project.export(options, callback);
+            options = this.parsed_opts;
+        project.when('loaded', function () {
+            project.export(options, callback);
+        });
+        project.load();
     }
 };
 

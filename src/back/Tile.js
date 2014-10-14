@@ -1,9 +1,5 @@
-var mapnik = require('mapnik');
-
-function sinh(x){
-    var y = Math.exp(x);
-    return (y - 1/y) / 2;
-}
+var mapnik = require('mapnik'),
+    zoomXYToLatLng = require('./GeoUtils.js').zoomXYToLatLng;
 
 var Tile = function (z, x, y, options) {
     // 900913
@@ -21,19 +17,12 @@ var Tile = function (z, x, y, options) {
     this.setupBounds();
 };
 Tile.prototype.setupBounds = function () {
-    var xy = this.zoom_x_y_to_lat_lng(this.x * this.scale, this.y * this.scale);
+    var xy = zoomXYToLatLng(this.z, this.x * this.scale, this.y * this.scale);
     this.maxX = xy[0];
     this.minY = xy[1];
-    xy = this.zoom_x_y_to_lat_lng(this.x * this.scale + this.scale, this.y * this.scale + this.scale);
+    xy = zoomXYToLatLng(this.z, this.x * this.scale + this.scale, this.y * this.scale + this.scale);
     this.minX = xy[0];
     this.maxY = xy[1];
-};
-Tile.prototype.zoom_x_y_to_lat_lng = function (x, y) {
-    var n = Math.pow(2.0, this.z),
-        lon_deg = x / n * 360.0 - 180.0,
-        lat_rad = Math.atan(sinh(Math.PI * (1 - 2 * y / n))),
-        lat_deg = lat_rad * 180.0 / Math.PI;
-    return [lon_deg, lat_deg];
 };
 Tile.prototype.render = function (map, cb) {
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));

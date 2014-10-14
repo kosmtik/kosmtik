@@ -5,6 +5,9 @@ var util = require('util'),
     StateBase = require('./back/StateBase.js').StateBase,
     PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
+GLOBAL.kosmtik = {};
+kosmtik.src = __dirname;
+
 var Config = function (root, configpath) {
     StateBase.call(this);
     this.configpath = configpath;

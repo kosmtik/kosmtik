@@ -140,7 +140,7 @@ exports.LocalConfig = function (localizer, project) {
 
 ```
 
-## Kown plugins
+## Known plugins
 
 - [kosmtik-overpass-layer](https://github.com/kosmtik/kosmtik-overpass-layer): add Overpass Layer in your carto project
 - [kosmtik-fetch-remote](https://github.com/kosmtik/kosmtik-fetch-remote): automagically fetch remote files in your layers

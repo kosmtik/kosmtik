@@ -3,6 +3,7 @@ var util = require('util'),
     fs = require('fs'),
     yaml = require('js-yaml'),
     StateBase = require('./back/StateBase.js').StateBase,
+    Helpers = require('./back/Helpers.js').Helpers,
     PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
 GLOBAL.kosmtik = {};
@@ -12,6 +13,7 @@ var Config = function (root, configpath) {
     StateBase.call(this);
     this.configpath = configpath;
     this.root = root;
+    this.helpers = new Helpers(this);
     this.initOptions();
     this.initExporters();
     this.initLoaders();
@@ -103,6 +105,9 @@ Config.prototype.initOptions = function () {
         full: 'mapnik-version',
         default: 'latest',
         help: 'Optional mapnik reference version to be passed to Carto'
+    });
+    this.opts.option('proxy', {
+        help: 'Optional proxy to use when doing http requests'
     });
 };
 

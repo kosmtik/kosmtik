@@ -1,6 +1,6 @@
 {
   "name": "kosmtik",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "mapnik-pool": "0.0.0",
     "nomnom": "^1.8.0",
     "npm": "^2.0.2",
+    "request": "^2.45.0",
     "semver": "^4.0.0"
   },
   "devDependencies": {

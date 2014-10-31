@@ -20,7 +20,7 @@ var Project = function (config, filepath, options) {
     this.mapnik.register_default_fonts();
     this.mapnik.register_system_fonts();
     this.mapnik.register_default_input_plugins();
-    this.mapnik.register_fonts(path.join(path.dirname(filepath), 'fonts'));
+    this.mapnik.register_fonts(path.join(path.dirname(filepath), 'fonts'), {recurse: true});
     this.changeState('init');
 };
 

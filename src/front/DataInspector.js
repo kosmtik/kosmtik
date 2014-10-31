@@ -29,6 +29,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
         this.options.version = Date.now();
         this.initVectorLayer(map);
         this._loading = [];
+        this._tileCache = {};
         // Delete the clusters to prevent from having several times
         // the same data
         map.on('zoomstart', this.initVectorLayer, this);
@@ -62,23 +63,34 @@ L.TileLayer.Vector = L.TileLayer.extend({
         }
         // Register that this tile is not yet loaded
         this._geojsonTilesToLoad++;
-        var req = L.K.Xhr.get(this.getTileUrl(tilePoint), {
-            callback: function (status, data) {
-                if (status === 200 && data) {
-                    self.addData(JSON.parse(data), tilePoint);
-                    // Tile loaded
-                    self._geojsonTilesToLoad--;
-                    var index = this._loading.indexOf(req);
-                    if (index !== -1) this._loading.splice(index, 1);
-                    if(!self._geojsonTilesToLoad) {
-                        // No more tiles to load
-                        self.fire('vectorloadend');
+        var processTile = function (data) {
+            self.addData(JSON.parse(data), tilePoint);
+            // Tile loaded
+            self._geojsonTilesToLoad--;
+            var index = self._loading.indexOf(req);
+            if (index !== -1) self._loading.splice(index, 1);
+            if(!self._geojsonTilesToLoad) {
+                // No more tiles to load
+                self.fire('vectorloadend');
+            }
+        };
+        var url = this.getTileUrl(tilePoint);
+        if (this._tileCache[url]) {
+            processTile(this._tileCache[url]);
+        } else {
+            var req = L.K.Xhr.get(url, {
+                callback: function (status, data) {
+                    if (status === 200 && data) {
+                        this._tileCache[url] = data;
+                        processTile(data);
+                        var index = this._loading.indexOf(req);
+                        if (index !== -1) this._loading.splice(index, 1);
                     }
-                }
-            },
-            context: this
-        });
-        this._loading.push(req);
+                },
+                context: this
+            });
+            this._loading.push(req);
+        }
     },
 
     addData: function (data, tilePoint) {
@@ -97,6 +109,10 @@ L.TileLayer.Vector = L.TileLayer.extend({
 
         for (var i = 0; i < data.features.length; i++) {
             feature = data.features[i];
+            if (this.options.filter) {
+                var filter = this.options.filter.toLowerCase();
+                if (!this.filter(feature, filter)) continue;
+            }
             try {
                 layer = L.GeoJSON.geometryToLayer(feature, this.vectorlayer.options.pointToLayer);
             } catch (err) {
@@ -119,9 +135,19 @@ L.TileLayer.Vector = L.TileLayer.extend({
 
     },
 
-    redraw: function (e) {
+    redraw: function (force) {
+        if (force) this._tileCache = {};
         if (this.vectorlayer) this.vectorlayer.clearLayers();
-        L.TileLayer.prototype.redraw.call(this, e);
+        L.TileLayer.prototype.redraw.call(this);
+    },
+
+    filter: function (feature, filter) {
+        if (!feature.properties) return false;
+        for (key in feature.properties) {
+            if (key.toLowerCase().indexOf(filter) !== -1) return true;
+            if ((feature.properties[key].toString() || '').toLowerCase().indexOf(filter) !== -1) return true;
+        }
+        return false;
     }
 
 });
@@ -153,12 +179,14 @@ L.Kosmtik.DataInspector = L.Class.extend({
         var layers = [['__all__', 'all']].concat(L.K.Config.project.layers.map(function (l) {return [l.name, l.name];}));
         this.sidebarForm = new L.K.FormBuilder(L.K.Config, [
             ['dataInspector', {handler: L.K.Switch, label: 'Active'}],
-            ['dataInspectorLayer', {handler: L.FormBuilder.Select, helpText: 'Choose which layer to show', selectOptions: layers}]
+            ['dataInspectorLayer', {handler: L.FormBuilder.Select, helpText: 'Choose which layer to show', selectOptions: layers}],
+            ['dataInspectorFilter', {placeholder: 'Filter data…'}]
         ]);
         this.formContainer.appendChild(this.sidebarForm.build());
         this.sidebarForm.on('synced', function (e) {
             if (e.field === 'dataInspector') this.toggle();
             else if (e.field === 'dataInspectorLayer') this.redraw();
+            else if (e.field === 'dataInspectorFilter') this.filter();
         }, this);
         this.map.sidebar.addTab({
             label: 'Inspect',
@@ -203,6 +231,11 @@ L.Kosmtik.DataInspector = L.Class.extend({
 
     redraw: function () {
         this.tilelayer.options.showLayer = L.K.Config.dataInspectorLayer;
+        this.tilelayer.redraw(true);
+    },
+
+    filter: function () {
+        this.tilelayer.options.filter = L.K.Config.dataInspectorFilter;
         this.tilelayer.redraw();
     }
 

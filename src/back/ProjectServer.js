@@ -30,19 +30,19 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (urlpath === '/export/') this.export(res, uri.query);
     else if (urlpath === '/reload/') this.reload(res);
     else if (this.parent.hasProjectRoute(urlpath)) this.parent._project_routes[urlpath].call(this, req, res, this.projects[els[1]]);
-    else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res);});
+    else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
     else this.parent.notFound(urlpath, res);
 };
 
-ProjectServer.prototype.serveTile = function (z, x, y, res) {
+ProjectServer.prototype.serveTile = function (z, x, y, res, query) {
     y = y.split('.');
     var ext = y[1];
     y = y[0];
-    if (ext === 'json') this.vectortile(z, x, y, res);
+    if (ext === 'json') this.vectortile(z, x, y, res, query);
     else this.tile(z, x, y, res);
 };
 
-ProjectServer.prototype.tile = function (z, x, y, res) {
+ProjectServer.prototype.tile = function (z, x, y, res, query) {
     var self = this;
     this.mapPool.acquire(function (err, map) {
         var release = function () {self.mapPool.release(map);};
@@ -60,7 +60,7 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
     });
 };
 
-ProjectServer.prototype.vectortile = function (z, x, y, res) {
+ProjectServer.prototype.vectortile = function (z, x, y, res, query) {
     var self = this;
     this.vectorMapPool.acquire(function (err, map) {
         var release = function () {self.vectorMapPool.release(map);};
@@ -68,7 +68,14 @@ ProjectServer.prototype.vectortile = function (z, x, y, res) {
         var tile = new VectorTile(+z, +x, +y);
         return tile.render(map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
-            var content = JSON.stringify(tile.toGeoJSON('__all__'));
+            var content;
+            try {
+                content = JSON.stringify(tile.toGeoJSON(query.layer || '__all__'));
+            } catch (err) {
+                // This layer is not visible in this tile,
+                // return an empty geojson;
+                content = '{"type": "FeatureCollection", "features": []}';
+            }
             res.writeHead(200, {'Content-Type': 'application/javascript'});
             res.write(content);
             res.end();

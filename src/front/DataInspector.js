@@ -117,6 +117,93 @@ L.TileLayer.Vector = L.TileLayer.extend({
             this.vectorlayer.addLayer(layer);
         }
 
+    },
+
+    redraw: function (e) {
+        if (this.vectorlayer) this.vectorlayer.clearLayers();
+        L.TileLayer.prototype.redraw.call(this, e);
+    }
+
+});
+
+L.Kosmtik.DataInspector = L.Class.extend({
+
+    includes: [L.Mixin.Events],
+
+    initialize: function (map) {
+        this.map = map;
+        var options = {
+            minZoom: this.map.options.minZoom,
+            maxZoom: this.map.options.maxZoom,
+            showLayer: '__all__'
+        };
+        this.tilelayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}&layer={showLayer}', options);
+        this.tilelayer.on('loading', function () {this.setState('loading');}, this.map);
+        this.tilelayer.on('load', function () {this.unsetState('loading');}, this.map);
+        this.createSidebarPanel();
+        this.createToolbarButton();
+        this.addShortcut();
+    },
+
+    createSidebarPanel: function () {
+        this.container = L.DomUtil.create('div', 'data-inspector-form');
+        this.title = L.DomUtil.create('h3', '', this.container);
+        this.formContainer = L.DomUtil.create('div', '', this.container);
+        this.title.innerHTML = 'Data Inspector';
+        var layers = [['__all__', 'all']].concat(L.K.Config.project.layers.map(function (l) {return [l.name, l.name];}));
+        this.sidebarForm = new L.K.FormBuilder(L.K.Config, [
+            ['dataInspector', {handler: L.K.Switch, label: 'Active'}],
+            ['dataInspectorLayer', {handler: L.FormBuilder.Select, label: 'Layer to show', selectOptions: layers}]
+        ]);
+        this.formContainer.appendChild(this.sidebarForm.build());
+        this.sidebarForm.on('synced', function (e) {
+            if (e.field === 'dataInspector') this.toggle();
+            else if (e.field === 'dataInspectorLayer') this.redraw();
+        }, this);
+        this.map.sidebar.addTab({
+            label: 'Inspect',
+            content: this.container,
+            callback: this.sidebarForm.build,
+            context: this.sidebarForm
+        });
+        this.map.sidebar.rebuild();
+    },
+
+    createToolbarButton: function () {
+        var button = L.DomUtil.create('li', 'autoreload with-switch');
+        this.toolbarForm = new L.K.FormBuilder(L.K.Config, [
+            ['dataInspector', {handler: L.K.Switch, label: 'Data Inspector'}]
+        ]);
+        button.appendChild(this.toolbarForm.build());
+        this.toolbarForm.on('synced', this.toggle, this);
+        this.map.toolbar.addTool(button);
+    },
+
+    addShortcut: function () {
+        var shortcutCallback = function () {
+            L.K.Config.dataInspector = !L.K.Config.dataInspector;
+            this.toggle();
+        };
+        this.map.shortcuts.add({
+            keyCode: L.K.Keys.I,
+            shiftKey: true,
+            ctrlKey: true,
+            callback: shortcutCallback,
+            context: this,
+            description: 'Toggle data inspector'
+        });
+    },
+
+    toggle: function () {
+        this.toolbarForm.fetchAll();
+        this.sidebarForm.fetchAll();
+        if (L.K.Config.dataInspector) this.tilelayer.addTo(this.map);
+        else this.map.removeLayer(this.tilelayer);
+    },
+
+    redraw: function () {
+        this.tilelayer.options.showLayer = L.K.Config.dataInspectorLayer;
+        this.tilelayer.redraw();
     }
 
 });

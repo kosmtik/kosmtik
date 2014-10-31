@@ -82,7 +82,8 @@ Project.prototype.toFront = function () {
         maxZoom: this.mml.maxzoom,
         metatile: this.mml.metatile,
         tileSize: this.tileSize(),
-        loadTime: this.loadTime
+        loadTime: this.loadTime,
+        layers: this.mml.Layer
     };
     this.emitAndForward('tofront', {options: options});
     return options;

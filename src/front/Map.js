@@ -13,7 +13,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.shortcuts = new L.K.Shortcuts(this);
         this.createPollIndicator();
         this.createReloadButton();
-        this.createDataInspectorButton();
+        this.dataInspector = new L.K.DataInspector(this);
         L.Map.prototype.initialize.call(this, 'map', options);
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
         this.crosshairs = new L.K.Crosshairs(this);
@@ -25,17 +25,10 @@ L.Kosmtik.Map = L.Map.extend({
             maxZoom: this.options.maxZoom
         };
         this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', tilelayerOptions).addTo(this);
-        this.dataInspectorLayer = new L.TileLayer.Vector('./tile/{z}/{x}/{y}.json?t={version}', {minZoom: this.options.minZoom, maxZoom: this.options.maxZoom});
         this.tilelayer.on('loading', function () {
             this.setState('loading');
         }, this);
         this.tilelayer.on('load', function () {
-            this.unsetState('loading');
-        }, this);
-        this.dataInspectorLayer.on('loading', function () {
-            this.setState('loading');
-        }, this);
-        this.dataInspectorLayer.on('load', function () {
             this.unsetState('loading');
         }, this);
         L.control.scale().addTo(this);
@@ -117,38 +110,10 @@ L.Kosmtik.Map = L.Map.extend({
         });
     },
 
-    createDataInspectorButton: function () {
-        var button = L.DomUtil.create('li', 'autoreload with-switch');
-        var form = new L.K.FormBuilder(L.K.Config, [
-            ['dataInspector', {handler: L.K.Switch, label: 'Data Inspector'}]
-        ]);
-        button.appendChild(form.build());
-        form.on('synced', this.toggleInspectorLayer, this);
-        this.toolbar.addTool(button);
-        var shortcutCallback = function () {
-            L.K.Config.dataInspector = !L.K.Config.dataInspector;
-            this.toggleInspectorLayer();
-            form.fetchAll();
-        };
-        this.shortcuts.add({
-            keyCode: L.K.Keys.I,
-            shiftKey: true,
-            ctrlKey: true,
-            callback: shortcutCallback,
-            context: this,
-            description: 'Toggle data inspector'
-        });
-    },
-
     createPollIndicator: function () {
         var button = L.DomUtil.create('li', 'poll-indicator');
         button.innerHTML = '⇵';
         this.toolbar.addTool(button);
-    },
-
-    toggleInspectorLayer: function () {
-        if (L.K.Config.dataInspector) this.dataInspectorLayer.addTo(this);
-        else this.removeLayer(this.dataInspectorLayer);
     },
 
     togglePoll: function () {

@@ -153,7 +153,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
         var layers = [['__all__', 'all']].concat(L.K.Config.project.layers.map(function (l) {return [l.name, l.name];}));
         this.sidebarForm = new L.K.FormBuilder(L.K.Config, [
             ['dataInspector', {handler: L.K.Switch, label: 'Active'}],
-            ['dataInspectorLayer', {handler: L.FormBuilder.Select, label: 'Layer to show', selectOptions: layers}]
+            ['dataInspectorLayer', {handler: L.FormBuilder.Select, helpText: 'Choose which layer to show', selectOptions: layers}]
         ]);
         this.formContainer.appendChild(this.sidebarForm.build());
         this.sidebarForm.on('synced', function (e) {

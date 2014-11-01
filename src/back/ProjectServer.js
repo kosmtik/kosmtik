@@ -86,9 +86,9 @@ ProjectServer.prototype.vectortile = function (z, x, y, res, query) {
 
 ProjectServer.prototype.config = function (res) {
     res.writeHead(200, {
-        "Content-Type": "application/javascript",
+        'Content-Type': 'application/javascript',
     });
-    var tpl = "L.K.Config.project = %;";
+    var tpl = 'L.K.Config.project = %;';
     res.write(tpl.replace('%', JSON.stringify(this.project.toFront())));
     res.end();
 };
@@ -115,8 +115,8 @@ ProjectServer.prototype.main = function (res) {
         data = data.replace('%%JS%%', js);
         data = data.replace('%%CSS%%', css);
         res.writeHead(200, {
-            "Content-Type": 'text/html',
-            "Content-Length" : data.length
+            'Content-Type': 'text/html',
+            'Content-Length' : data.length
         });
         res.end(data);
     });
@@ -142,8 +142,9 @@ ProjectServer.prototype.poll = function (res) {
         data = '';
     }
     res.writeHead(data.length ? 200 : 304, {
-        "Content-Type": 'application/json',
-        "Content-Length" : data.length
+        'Content-Type': 'application/json',
+        'Content-Length' : data.length,
+        'Cache-Control': 'private, no-cache, must-revalidate'
     });
     res.end(data);
 };
@@ -168,7 +169,7 @@ ProjectServer.prototype.reload = function (res) {
             return self.raise(err.message, res);
         }
         res.writeHead(200, {
-            "Content-Type": 'application/json'
+            'Content-Type': 'application/json'
         });
         res.end(JSON.stringify(self.project.toFront()));
     });

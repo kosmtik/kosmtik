@@ -81,12 +81,12 @@ Config.prototype.registerLoader = function (ext, name_or_path) {
 };
 
 Config.prototype.getLoader = function (ext) {
-    if (!this.loaders[ext]) throw "Unkown project config type: " + ext;
+    if (!this.loaders[ext]) throw 'Unkown project config type: ' + ext;
     return require(this.loaders[ext]).Loader;
 };
 
 Config.prototype.initOptions = function () {
-    this.opts = require("nomnom");
+    this.opts = require('nomnom');
     this.commands = {};
     this.commands.serve = this.opts.command('serve').help('Run the server');
     this.commands.serve.option('path', {
@@ -121,7 +121,7 @@ Config.prototype.parseOptions = function () {
 
 Config.prototype.initStatics = function () {
     this._js = [
-        '/node_modules/leaflet/dist/leaflet.js',
+        '/node_modules/leaflet/dist/leaflet-src.js',
         '/node_modules/leaflet-formbuilder/Leaflet.FormBuilder.js',
         '/src/front/Core.js',
         '/config/',
@@ -166,9 +166,9 @@ Config.prototype.attachRoutes = function (e) {
 
 Config.prototype.serveForFront = function (req, res) {
     res.writeHead(200, {
-        "Content-Type": "application/javascript",
+        'Content-Type': 'application/javascript',
     });
-    var tpl = "L.K.Config = %;";
+    var tpl = 'L.K.Config = %;';
     res.write(tpl.replace('%', JSON.stringify(this.toFront())));
     res.end();
 };

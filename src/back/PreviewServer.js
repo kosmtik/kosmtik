@@ -7,15 +7,15 @@ var http = require('http'),
     Project = require('./Project.js').Project,
     ProjectServer = require('./ProjectServer.js').ProjectServer,
     MIMES = {
-        ".html" : "text/html",
-        ".css" : "text/css",
-        ".js" : "application/javascript",
-        ".png" : "image/png",
-        ".gif" : "image/gif",
-        ".jpg" : "image/jpeg",
-        ".woff" : "application/octet-stream",
-        ".ttf" : "application/octet-stream",
-        ".svg" : "image/svg+xml"
+        '.html' : 'text/html',
+        '.css' : 'text/css',
+        '.js' : 'application/javascript',
+        '.png' : 'image/png',
+        '.gif' : 'image/gif',
+        '.jpg' : 'image/jpeg',
+        '.woff' : 'application/octet-stream',
+        '.ttf' : 'application/octet-stream',
+        '.svg' : 'image/svg+xml'
     };
 
 var PreviewServer = function (config, root, options) {
@@ -73,7 +73,7 @@ PreviewServer.prototype.serveHome = function (uri, req, res) {
 };
 
 PreviewServer.prototype.redirect = function (newuri, res) {
-    res.writeHead(302, {"Location": newuri, "Cache-Control": "private, no-cache, must-revalidate"});
+    res.writeHead(302, {'Location': newuri, 'Cache-Control': 'private, no-cache, must-revalidate'});
     res.end();
 };
 
@@ -86,8 +86,8 @@ PreviewServer.prototype.serveFile = function (filepath, res) {
             fs.readFile(filepath, function(err, contents) {
                 if(!err) {
                     res.writeHead(200, {
-                        "Content-Type": MIMES[ext],
-                        "Content-Length" : contents.length
+                        'Content-Type': MIMES[ext],
+                        'Content-Length' : contents.length
                     });
                     res.end(contents);
                 }
@@ -132,7 +132,7 @@ PreviewServer.prototype.pushToFront = function (res, anonymous) {
     // Ugly but GOOD
     if (anonymous.name) throw 'Cannot use bridge helper with named function:' + anonymous.name;
     res.writeHead(200, {
-        "Content-Type": "application/javascript",
+        'Content-Type': 'application/javascript',
     });
     res.write(anonymous.toString().substring(13, anonymous.toString().length - 1));
     res.end();

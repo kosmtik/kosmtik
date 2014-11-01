@@ -7,14 +7,18 @@ var BaseLoader = function (project) {
 
 BaseLoader.prototype.postprocess = function () {
 	var self = this;
-    this.mml.Stylesheet = this.mml.Stylesheet.map(function(x) {
-        if (typeof x !== 'string') {
-            return { id: x.id, data: x.data };
+    if (this.mml.Stylesheet) {
+        this.mml.Stylesheet = this.mml.Stylesheet.map(function(x) {
+            if (typeof x !== 'string') {
+                return { id: x.id, data: x.data };
+            }
+            return { id: x, data: fs.readFileSync(path.join(self.project.root, x), 'utf8') };
+        });
+    }
+    if (this.mml.Layer) {
+        for (var i = 0; i < this.mml.Layer.length; i++) {
+            this.ensureSrs(this.mml.Layer[i]);
         }
-        return { id: x, data: fs.readFileSync(path.join(self.project.root, x), 'utf8') };
-    });
-    for (var i = 0; i < this.mml.Layer.length; i++) {
-        this.ensureSrs(this.mml.Layer[i]);
     }
 };
 

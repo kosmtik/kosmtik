@@ -1,7 +1,6 @@
-var util = require("util"),
+var util = require('util'),
     path = require('path'),
     fs = require('fs'),
-    carto = require('carto'),
     ConfigEmitter = require('./ConfigEmitter.js').ConfigEmitter;
 
 var Project = function (config, filepath, options) {
@@ -49,7 +48,7 @@ Project.prototype.render = function (force) {
     this.load(force);
     var renderer, Renderer;
     if (this.mml) Renderer = require('./renderer/Carto.js').Carto;
-    else throw "Oops, unkown renderer";
+    else throw 'Oops, unkown renderer';
     renderer = new Renderer(this);
     this.config.log('Generating Mapnik XML…');
     this.xml = renderer.render();
@@ -68,7 +67,7 @@ Project.prototype.createMapPool = function (options) {
 
 Project.prototype.export = function (options, callback) {
     var format = options.format;
-    if (!this.config.exporters[format]) throw "Unkown format " + format;
+    if (!this.config.exporters[format]) throw 'Unkown format ' + format;
     var Exporter = require(this.config.exporters[format]).Exporter,
         exporter = new Exporter(this, options);
     exporter.export(callback);

@@ -58,7 +58,6 @@ DataSourceLoader.prototype.attachSourceUrl = function (source, project) {
 
 DataSourceLoader.prototype.processTileJSON = function (source, tilejson) {
     source.url = tilejson.tiles[0];
-    console.log(source);
 };
 
 exports.Plugin = DataSourceLoader;

@@ -40,7 +40,7 @@ ProjectServer.prototype.serveTile = function (z, x, y, res, query) {
     var ext = y[1];
     y = y[0];
     if (ext === 'json') this.jsontile(z, x, y, res, query);
-    if (ext === 'pbf') this.pbftile(z, x, y, res);
+    else if (ext === 'pbf') this.pbftile(z, x, y, res);
     else this.tile(z, x, y, res);
 };
 

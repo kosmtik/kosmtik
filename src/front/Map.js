@@ -95,7 +95,7 @@ L.Kosmtik.Map = L.Map.extend({
 
     createReloadButton: function () {
         var reload = L.DomUtil.create('li', 'reload');
-        reload.innerHTML = '⟳ Reload';
+        reload.innerHTML = 'Reload';
         L.DomEvent.on(reload, 'click', function () {
             this.reload();
         }, this);

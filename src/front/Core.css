@@ -35,6 +35,18 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'dejavu_sansbook';
+    src: url('./fonts/DejaVuSans-webfont.eot');
+    src: url('./fonts/DejaVuSans-webfont.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/DejaVuSans-webfont.woff') format('woff'),
+         url('./fonts/DejaVuSans-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
 /* *********** */
 /*   generic   */
 /* *********** */

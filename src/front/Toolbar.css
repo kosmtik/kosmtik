@@ -47,8 +47,13 @@
 .dirty li.reload:hover {
     background-color: #e67e22;
 }
+li.reload:before {
+    content: '⟳ ';
+    font-family: 'dejavu_sansbook';
+}
 .dirty li.reload:after {
     content: ' ⚡';
+    font-family: 'dejavu_sansbook';
 }
 .toolbar ul li.with-switch {
     height: 40px;
@@ -67,6 +72,7 @@
     font-size: 16px;
     cursor: default;
     text-decoration: line-through;
+    font-family: 'dejavu_sansbook';
 }
 .toolbar .poll-indicator:hover {
     background-color: #444;

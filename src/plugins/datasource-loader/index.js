@@ -12,11 +12,26 @@ var DataSourceLoader = function (config) {
 
 DataSourceLoader.prototype.patchMML = function (e) {
     if (!e.project.mml) return e.continue();
-    var sources = e.project.mml.source;
+    var processed = 0, self = this,
+        sources = e.project.mml.source,
+        commit = function () {if (++processed === sources.length) e.continue();},
+        requestTileJSON = function (source) {
+            e.project.config.helpers.request({uri: source.tilejson}, function (err, resp, body) {
+                if (err) throw err;
+                console.log(body)
+                var json = JSON.parse(body);
+                self.processTileJSON(source, json);
+                commit();
+            });
+        };
     if (sources && sources.length) {
         for (var i = 0; i < sources.length; i++) {
+            console.log('source', sources[i])
             if (sources[i].protocol === 'tmsource:') {
                 this.loadLocalSource.bind(this)(sources[i], e.project.config);
+                commit();
+            } else if (sources[i].tilejson) {
+                requestTileJSON(sources[i]);
             }
         }
     }
@@ -41,6 +56,11 @@ DataSourceLoader.prototype.attachSourceUrl = function (source, project) {
         id: project.id
     };
     source.url = Utils.template('http://{host}:{port}/{id}/{path}', params);
+};
+
+DataSourceLoader.prototype.processTileJSON = function (source, tilejson) {
+    source.url = tilejson.tiles[0];
+    console.log(source);
 };
 
 exports.Plugin = DataSourceLoader;

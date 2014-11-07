@@ -18,7 +18,6 @@ DataSourceLoader.prototype.patchMML = function (e) {
         requestTileJSON = function (source) {
             e.project.config.helpers.request({uri: source.tilejson}, function (err, resp, body) {
                 if (err) throw err;
-                console.log(body)
                 var json = JSON.parse(body);
                 self.processTileJSON(source, json);
                 commit();
@@ -26,7 +25,6 @@ DataSourceLoader.prototype.patchMML = function (e) {
         };
     if (sources && sources.length) {
         for (var i = 0; i < sources.length; i++) {
-            console.log('source', sources[i])
             if (sources[i].protocol === 'tmsource:') {
                 this.loadLocalSource.bind(this)(sources[i], e.project.config);
                 commit();

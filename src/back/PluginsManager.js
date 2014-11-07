@@ -22,7 +22,8 @@ var PluginsManager = function (config) {
     this._registered = [
         '../plugins/base-exporters/index.js',
         '../plugins/hash/index.js',
-        '../plugins/local-config/index.js'
+        '../plugins/local-config/index.js',
+        '../plugins/local-datasource-loader/index.js',
     ].concat(this.config.userConfig.plugins || []);
     for (var i = 0; i < this._registered.length; i++) {
         this.load(this._registered[i]);
@@ -30,7 +31,7 @@ var PluginsManager = function (config) {
 };
 
 PluginsManager.prototype.load = function (name_or_path) {
-    var Plugin, plugin;
+    var Plugin;
     try {
         Plugin = require(name_or_path).Plugin;
     } catch (err) {
@@ -50,11 +51,10 @@ PluginsManager.prototype.loadPackage = function () {
 };
 
 PluginsManager.prototype.available = function (callback) {
-    var self = this;
     npm.load(this.loadPackage(), function () {
         npm.commands.search(['kosmtik'], true, function (err, results) {
             if (err) return callback(err);
-            var plugin, installed, plugins = [];
+            var plugin, plugins = [];
             for (var name in results) {
                 plugin = results[name];
                 if (plugin.keywords.indexOf('kosmtik') === -1) continue;

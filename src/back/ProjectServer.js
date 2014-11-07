@@ -1,6 +1,7 @@
 var fs = require('fs'),
     Tile = require('./Tile.js').Tile,
     VectorTile = require('./VectorTile.js').Tile,
+    VectorBasedTile = require('./VectorBasedTile.js').Tile,
     TILEPREFIX = 'tile';
 
 var ProjectServer = function (project, parent) {
@@ -29,7 +30,7 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (urlpath === '/poll/') this.poll(res);
     else if (urlpath === '/export/') this.export(res, uri.query);
     else if (urlpath === '/reload/') this.reload(res);
-    else if (this.parent.hasProjectRoute(urlpath)) this.parent._project_routes[urlpath].call(this, req, res, this.projects[els[1]]);
+    else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(req, res, this.projects[els[1]]);
     else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
     else this.parent.notFound(urlpath, res);
 };
@@ -38,17 +39,19 @@ ProjectServer.prototype.serveTile = function (z, x, y, res, query) {
     y = y.split('.');
     var ext = y[1];
     y = y[0];
-    if (ext === 'json') this.vectortile(z, x, y, res, query);
+    if (ext === 'json') this.jsontile(z, x, y, res, query);
+    if (ext === 'pbf') this.pbftile(z, x, y, res);
     else this.tile(z, x, y, res);
 };
 
-ProjectServer.prototype.tile = function (z, x, y, res, query) {
+ProjectServer.prototype.tile = function (z, x, y, res) {
     var self = this;
     this.mapPool.acquire(function (err, map) {
         var release = function () {self.mapPool.release(map);};
         if (err) return self.raise(err.message, res);
-        var tile = new Tile(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), scale: self.project.mml.metatile});
-        return tile.render(map, function (err, im) {
+        var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+        var tile = new tileClass(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), scale: self.project.mml.metatile});
+        return tile.render(self.project, map, function (err, im) {
             if (err) return self.raise(err.message, res, release);
             im.encode('png', function (err, buffer) {
                 res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
@@ -60,13 +63,13 @@ ProjectServer.prototype.tile = function (z, x, y, res, query) {
     });
 };
 
-ProjectServer.prototype.vectortile = function (z, x, y, res, query) {
+ProjectServer.prototype.jsontile = function (z, x, y, res, query) {
     var self = this;
     this.vectorMapPool.acquire(function (err, map) {
         var release = function () {self.vectorMapPool.release(map);};
         if (err) return self.raise(err.message, res);
         var tile = new VectorTile(+z, +x, +y);
-        return tile.render(map, function (err, tile) {
+        return tile.render(self.project, map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
             var content;
             try {
@@ -77,6 +80,23 @@ ProjectServer.prototype.vectortile = function (z, x, y, res, query) {
                 content = '{"type": "FeatureCollection", "features": []}';
             }
             res.writeHead(200, {'Content-Type': 'application/javascript'});
+            res.write(content);
+            res.end();
+            release();
+        });
+    });
+};
+
+ProjectServer.prototype.pbftile = function (z, x, y, res) {
+    var self = this;
+    this.vectorMapPool.acquire(function (err, map) {
+        var release = function () {self.vectorMapPool.release(map);};
+        if (err) return self.raise(err.message, res);
+        var tile = new VectorTile(+z, +x, +y);
+        return tile.render(self.project, map, function (err, tile) {
+            if (err) return self.raise(err.message, res, release);
+            var content = tile.getData();
+            res.writeHead(200, {'Content-Type': 'application/x-protobuf'});
             res.write(content);
             res.end();
             release();

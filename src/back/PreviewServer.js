@@ -21,6 +21,7 @@ var http = require('http'),
 var PreviewServer = function (config, root, options) {
     this.CLASSNAME = 'server';
     ConfigEmitter.call(this, config);
+    this.config.server = this;
     this.initRoutes();
     options = options || {};
     this.projects = {};
@@ -38,6 +39,7 @@ PreviewServer.prototype.listen = function () {
     if (this.config.parsed_opts.path) {
         var project = new Project(this.config, this.config.parsed_opts.path);
         this.registerProject(project);
+        this.setDefaultProject(project);
     }
     this.server.listen(this.config.parsed_opts.port, this.config.parsed_opts.host);
     this.config.log('PreviewServer started, you can browse http://' + this.config.parsed_opts.host + ':' + this.config.parsed_opts.port);
@@ -46,6 +48,10 @@ PreviewServer.prototype.listen = function () {
 
 PreviewServer.prototype.registerProject = function (project) {
     this.projects[project.id] = new ProjectServer(project, this);  // TODO avoid cross ref
+};
+
+PreviewServer.prototype.setDefaultProject = function (project) {
+    this.defaultProject = project;
 };
 
 PreviewServer.prototype.serve = function (req, res) {
@@ -68,7 +74,7 @@ PreviewServer.prototype.forwardToProject = function (uri, id, res) {
 
 PreviewServer.prototype.serveHome = function (uri, req, res) {
     // Go to project for now
-    if (Object.keys(this.projects).length) return this.redirect(Object.keys(this.projects)[0], res);
+    if (this.defaultProject) return this.redirect(this.defaultProject.id, res);
     return this.serveFile('src/front/index.html', res);
 };
 
@@ -124,8 +130,8 @@ PreviewServer.prototype.hasProjectRoute = function (path) {
     return !!this._project_routes[path];
 };
 
-PreviewServer.prototype.serveProjectRoute = function (id, path, req, res) {
-
+PreviewServer.prototype.serveProjectRoute = function (path, req, res, project) {
+    return this._project_routes[urlpath].call(this, req, res, project);
 };
 
 PreviewServer.prototype.pushToFront = function (res, anonymous) {

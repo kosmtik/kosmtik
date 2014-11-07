@@ -8,7 +8,7 @@ var VectorTile = function (z, x, y, options) {
 
 util.inherits(VectorTile, Tile);
 
-VectorTile.prototype.render = function (map, cb) {
+VectorTile.prototype.render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var surface = new mapnik.VectorTile(this.z, this.x, this.y);

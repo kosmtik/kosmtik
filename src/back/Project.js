@@ -82,14 +82,14 @@ Project.prototype.toFront = function () {
         metatile: this.mml.metatile,
         tileSize: this.tileSize(),
         loadTime: this.loadTime,
-        layers: this.mml.Layer
+        layers: this.mml.Layer || []
     };
     this.emitAndForward('tofront', {options: options});
     return options;
 };
 
 Project.prototype.tileSize = function () {
-    return 256 * this.mml.metatile;
+    return 256 * (this.mml.metatile || 2);
 };
 
 Project.prototype.getUrl = function () {

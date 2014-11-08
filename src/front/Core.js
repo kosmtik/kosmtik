@@ -58,8 +58,8 @@ L.Kosmtik.Poll = L.Class.extend({
     },
 
     polled: function (status, data) {
-        if (status === 304 || status === 200) this.fire('polled');
-        if (status === 304) return this.loop(1);
+        if (status === 204 || status === 200) this.fire('polled');
+        if (status === 204) return this.loop(1);
         if (status !== 200 || !data) return this.onError({status: status, error: data});
         try {
             data = JSON.parse(data);

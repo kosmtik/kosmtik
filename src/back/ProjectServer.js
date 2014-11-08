@@ -161,7 +161,7 @@ ProjectServer.prototype.poll = function (res) {
     } else {
         data = '';
     }
-    res.writeHead(data.length ? 200 : 304, {
+    res.writeHead(data.length ? 200 : 204, {
         'Content-Type': 'application/json',
         'Content-Length' : data.length,
         'Cache-Control': 'private, no-cache, must-revalidate'

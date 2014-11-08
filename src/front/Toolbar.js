@@ -7,8 +7,9 @@ L.Kosmtik.Toolbar = L.Control.extend({
 
         this.container = L.DomUtil.create('div', 'toolbar');
         document.body.insertBefore(this.container, document.body.firstChild);
-        var h1 = L.DomUtil.create('h1', 'brand', this.container);
-        h1.innerHTML = 'kosmtik';
+        var a = L.DomUtil.create('a', 'brand', this.container);
+        a.innerHTML = 'kosmtik';
+        a.href = '/';
         this.toolsContainer = L.DomUtil.create('ul', 'tools', this.container);
     },
 

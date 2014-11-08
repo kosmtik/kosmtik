@@ -10,7 +10,7 @@
     left: 0;
     right: 0;
 }
-.toolbar h1 {
+.toolbar a.brand {
     font-size: 1.2em;
     display: inline-block;
     font-weight: normal;
@@ -19,6 +19,8 @@
     background-repeat: no-repeat;
     background-size: 30px;
     background-position: 5px center;
+    color: #efefef;
+    text-decoration: none;
 }
 .toolbar ul {
     display: inline-block;

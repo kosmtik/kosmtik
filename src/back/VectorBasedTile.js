@@ -15,8 +15,14 @@ VectorBasedTile.prototype.render = function (project, map, cb) {
     var vtile = new mapnik.VectorTile(this.z, this.x, this.y),
         processed = 0,
         onResponse = function (err, resp, body) {
-            vtile.setData(body);
-            vtile.parse();
+            if (err) return cb(err);
+            try {
+                vtile.setData(body);
+                vtile.parse();
+            } catch (error) {
+                console.log(error.message);
+                cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
+            }
             if (++processed === project.mml.source.length) vtile.render(map, new mapnik.Image(vtile.width(),vtile.height()), cb);
         },
         params = {

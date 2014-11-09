@@ -56,7 +56,8 @@ PreviewServer.prototype.setDefaultProject = function (project) {
 
 PreviewServer.prototype.serve = function (req, res) {
     res.on('finish', function () {
-        console.warn('[httpserver]', req.url, this.statusCode);
+        // 204 are empty responses from poller, do not pollute
+        if (this.statusCode !== 204) console.warn('[httpserver]', req.url, this.statusCode);
     });
     var uri = url.parse(req.url, true),
         urlpath = uri.pathname,

@@ -28,4 +28,16 @@ module.exports = {
         });
     },
 
+    tree: function(dir) {
+        var results = [];
+        var list = fs.readdirSync(dir);
+        list.forEach(function(file) {
+            file = path.join(dir, file);
+            var stat = fs.statSync(file);
+            results.push({path: file, stat: stat});
+            if (stat && stat.isDirectory()) results = results.concat(module.exports.tree(file));
+        });
+        return results;
+    }
+
 };

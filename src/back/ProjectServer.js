@@ -73,12 +73,13 @@ ProjectServer.prototype.jsontile = function (z, x, y, res, query) {
             if (err) return self.raise(err.message, res, release);
             var content;
             try {
-                content = JSON.stringify(tile.toGeoJSON(query.layer || '__all__'));
+                content = tile.toGeoJSON(query.layer || '__all__');
             } catch (err) {
                 // This layer is not visible in this tile,
                 // return an empty geojson;
                 content = '{"type": "FeatureCollection", "features": []}';
             }
+            if (typeof content !== 'string') content = JSON.stringify(content);  // Mapnik 3.1.0 now returns a string
             res.writeHead(200, {'Content-Type': 'application/javascript'});
             res.write(content);
             res.end();

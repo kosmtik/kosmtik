@@ -4,6 +4,7 @@ var util = require('util'),
     yaml = require('js-yaml'),
     StateBase = require('./back/StateBase.js').StateBase,
     Helpers = require('./back/Helpers.js').Helpers,
+    mapnik = require('mapnik'),
     PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
 GLOBAL.kosmtik = {};
@@ -103,7 +104,7 @@ Config.prototype.initOptions = function () {
     });
     this.opts.option('mapnik_version', {
         full: 'mapnik-version',
-        default: 'latest',
+        default: mapnik.versions.mapnik,
         help: 'Optional mapnik reference version to be passed to Carto'
     });
     this.opts.option('proxy', {

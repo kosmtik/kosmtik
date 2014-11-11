@@ -80,6 +80,7 @@ L.Kosmtik.Map = L.Map.extend({
     reload: function () {
         this.unsetState('dirty');
         this.setState('loading');
+        this.fire('reload');
         L.K.Xhr.post('./reload/', {
             callback: function (status, data) {
                 if (status === 200 && data) {

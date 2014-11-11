@@ -180,6 +180,7 @@ L.Kosmtik.Alert = L.Class.extend({
         L.DomEvent
             .on(this.closeButton, 'click', L.DomEvent.stop)
             .on(this.closeButton, 'click', this.hide, this);
+        this._map.on('reload', this.hide, this);
     },
 
     show: function (options) {

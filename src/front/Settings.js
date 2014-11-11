@@ -35,6 +35,16 @@ L.Kosmtik.SettingsForm = L.Class.extend({
 
     fetchAll: function () {
         this.builder.fetchAll();
+    },
+
+    set: function (key, value) {
+        L.K.Config[key] = value;
+        this.builder.helpers[key].fetch();
+        this.builder.helpers[key].sync();
+    },
+
+    toggle: function (key) {
+        this.set(key, !L.K.Config[key]);
     }
 
 });

@@ -127,6 +127,7 @@ Config.prototype.initStatics = function () {
         '/config/',
         './config/',
         '/src/front/DataInspector.js',
+        '/src/front/MetatilesBounds.js',
         '/src/front/Sidebar.js',
         '/src/front/Toolbar.js',
         '/src/front/FormBuilder.js',

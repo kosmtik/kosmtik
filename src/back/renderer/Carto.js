@@ -16,6 +16,7 @@ Carto.prototype.render = function () {
         options = {
             mapnik_version: this.project.mml.mapnik_version || this.project.config.parsed_opts.mapnik_version
         };
+    this.project.config.log('Using mapnik version', options.mapnik_version);
     return new carto.Renderer(env, options).render(this.project.mml);
 
 };

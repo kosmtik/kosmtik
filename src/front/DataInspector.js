@@ -96,11 +96,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
     },
 
     addData: function (data, tilePoint) {
-        var layer, feature, point, coord, coords, points,
-            toPoint = function(coord) {
-               var p = this._map.latLngToContainerPoint([coord[1], coord[0]]);
-               return [p.x, p.y];
-            },
+        var layer, feature,
             tileSize = this.options.tileSize,
             nwPoint = tilePoint.multiplyBy(tileSize),
             swPoint = nwPoint.add([0, tileSize]),
@@ -145,7 +141,7 @@ L.TileLayer.Vector = L.TileLayer.extend({
 
     filter: function (feature, filter) {
         if (!feature.properties) return false;
-        for (key in feature.properties) {
+        for (var key in feature.properties) {
             if (key.toLowerCase().indexOf(filter) !== -1) return true;
             if ((feature.properties[key].toString() || '').toLowerCase().indexOf(filter) !== -1) return true;
         }

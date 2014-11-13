@@ -53,9 +53,6 @@ L.TileLayer.Vector = L.TileLayer.extend({
 
     _addTile: function (tilePoint, container) {
         L.TileLayer.prototype._addTile.call(this, tilePoint, container);
-        var z = this._getZoomForUrl(),
-            x = tilePoint.x,
-            y = tilePoint.y;
 
         var self = this;
         if(!this._geojsonTilesToLoad) {
@@ -64,7 +61,12 @@ L.TileLayer.Vector = L.TileLayer.extend({
         // Register that this tile is not yet loaded
         this._geojsonTilesToLoad++;
         var processTile = function (data) {
-            self.addData(JSON.parse(data), tilePoint);
+            try {
+                self.addData(JSON.parse(data), tilePoint);
+            } catch (err) {  // Sometimes Mapnik gives invalid geojson
+                console.error(err);
+                console.log(data);
+            }
             // Tile loaded
             self._geojsonTilesToLoad--;
             var index = self._loading.indexOf(req);

@@ -1,7 +1,8 @@
 var util = require('util'),
     path = require('path'),
     fs = require('fs'),
-    ConfigEmitter = require('./ConfigEmitter.js').ConfigEmitter;
+    ConfigEmitter = require('./ConfigEmitter.js').ConfigEmitter,
+    Utils = require('./Utils.js');
 
 var Project = function (config, filepath, options) {
     options = options || {};
@@ -21,6 +22,8 @@ var Project = function (config, filepath, options) {
     this.mapnik.register_default_input_plugins();
     this.mapnik.register_fonts(path.join(path.dirname(filepath), 'fonts'), {recurse: true});
     this.changeState('init');
+    this.cachePath = path.join('tmp', this.id);
+    this.beforeState('loaded', this.initCache);
 };
 
 util.inherits(Project, ConfigEmitter);
@@ -94,6 +97,22 @@ Project.prototype.tileSize = function () {
 
 Project.prototype.getUrl = function () {
     return '/' + this.id + '/';
+};
+
+Project.prototype.initCache = function (e) {
+    var self = this, cacheFiles = [];
+    Utils.mkdirs(self.cachePath, function (err) {
+        if (err) throw err;
+        try {
+            cacheFiles = Utils.tree(self.cachePath);
+        } catch (err2) {
+            if (err2 && err2.code !== 'ENOENT') throw err2;
+        }
+        for (var i = 0; i < cacheFiles.length; i++) {
+            if (cacheFiles[i].stat.isFile()) fs.unlink(cacheFiles[i].path);
+        }
+        e.continue();
+    });
 };
 
 exports.Project = Project;

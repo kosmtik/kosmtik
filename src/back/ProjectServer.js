@@ -2,6 +2,7 @@ var fs = require('fs'),
     Tile = require('./Tile.js').Tile,
     VectorTile = require('./VectorTile.js').Tile,
     VectorBasedTile = require('./VectorBasedTile.js').Tile,
+    MetatileBasedTile = require('./MetatileBasedTile.js').Tile,
     TILEPREFIX = 'tile';
 
 var ProjectServer = function (project, parent) {
@@ -49,8 +50,8 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
     this.mapPool.acquire(function (err, map) {
         var release = function () {self.mapPool.release(map);};
         if (err) return self.raise(err.message, res);
-        var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
-        var tile = new tileClass(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), scale: self.project.mml.metatile});
+        var tileClass = self.project.mml.source ? VectorBasedTile : self.project.mml.metatile === 1 ? Tile : MetatileBasedTile;
+        var tile = new tileClass(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), size: self.project.mml.metatile});
         return tile.render(self.project, map, function (err, im) {
             if (err) return self.raise(err.message, res, release);
             im.encode('png', function (err, buffer) {

@@ -12,8 +12,8 @@ var Tile = function (z, x, y, options) {
     this.y = +y;
     this.projection = new mapnik.Projection(options.projection || DEFAULT_OUTPUT_PROJECTION);
     this.scale = options.scale || 1;
-    this.height = options.height || DEFAULT_HEIGHT;
-    this.width = options.width || DEFAULT_WIDTH;
+    this.height = options.height || options.size || DEFAULT_HEIGHT;
+    this.width = options.width || options.size || DEFAULT_WIDTH;
 };
 Tile.prototype.setupBounds = function () {
     var xy = zoomXYToLatLng(this.z, this.x * this.scale, this.y * this.scale);
@@ -27,6 +27,6 @@ Tile.prototype.render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var im = new mapnik.Image(this.height, this.width);
-    return map.render(im, cb);
+    map.render(im, cb);
 };
 exports.Tile = Tile;

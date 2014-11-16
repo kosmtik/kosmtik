@@ -9,7 +9,7 @@ var Project = function (config, filepath, options) {
     this.CLASSNAME = 'project';
     ConfigEmitter.call(this, config);
     this.filepath = filepath;
-    this.id = options.id || path.basename(path.dirname(this.filepath));
+    this.id = options.id || path.basename(path.dirname(fs.realpathSync(this.filepath)));
     this.root = path.dirname(this.filepath);
     this.dataDir = path.join(this.root, 'data');
     try {

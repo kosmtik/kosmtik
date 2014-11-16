@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    path = require('path'),
     Tile = require('./Tile.js').Tile,
     VectorTile = require('./VectorTile.js').Tile,
     VectorBasedTile = require('./VectorBasedTile.js').Tile,
@@ -132,7 +133,7 @@ ProjectServer.prototype.main = function (res) {
     var css = this.project.config._css.reduce(function(a, b) {
         return a + '<link rel="stylesheet" href="' + b + '" />\n';
     }, '');
-    fs.readFile('src/front/project.html', {encoding: 'utf8'}, function(err, data) {
+    fs.readFile(path.join(kosmtik.src, 'front/project.html'), {encoding: 'utf8'}, function(err, data) {
         if(err) throw err;
         data = data.replace('%%JS%%', js);
         data = data.replace('%%CSS%%', css);

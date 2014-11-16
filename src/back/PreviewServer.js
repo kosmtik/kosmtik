@@ -76,7 +76,7 @@ PreviewServer.prototype.forwardToProject = function (uri, id, res) {
 PreviewServer.prototype.serveHome = function (uri, req, res) {
     // Go to project for now
     if (this.defaultProject) return this.redirect(this.defaultProject.id, res);
-    return this.serveFile('src/front/index.html', res);
+    return this.serveFile(path.join(kosmtik.src, 'front/index.html'), res);
 };
 
 PreviewServer.prototype.redirect = function (newuri, res) {

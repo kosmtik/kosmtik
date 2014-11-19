@@ -1,7 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
     Tile = require('./Tile.js').Tile,
-    VectorTile = require('./VectorTile.js').Tile,
     VectorBasedTile = require('./VectorBasedTile.js').Tile,
     MetatileBasedTile = require('./MetatileBasedTile.js').Tile,
     TILEPREFIX = 'tile';
@@ -52,7 +51,7 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
         var release = function () {self.mapPool.release(map);};
         if (err) return self.raise(err.message, res);
         var tileClass = self.project.mml.source ? VectorBasedTile : self.project.mml.metatile === 1 ? Tile : MetatileBasedTile;
-        var tile = new tileClass(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), size: self.project.mml.metatile});
+        var tile = new tileClass(z, x, y, {width: self.project.tileSize(), height: self.project.tileSize(), metatile: self.project.mml.metatile});
         return tile.render(self.project, map, function (err, im) {
             if (err) return self.raise(err.message, res, release);
             im.encode('png', function (err, buffer) {
@@ -70,8 +69,9 @@ ProjectServer.prototype.jsontile = function (z, x, y, res, query) {
     this.vectorMapPool.acquire(function (err, map) {
         var release = function () {self.vectorMapPool.release(map);};
         if (err) return self.raise(err.message, res);
-        var tile = new VectorTile(+z, +x, +y);
-        return tile.render(self.project, map, function (err, tile) {
+        var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+        var tile = new tileClass(z, x, y, {metatile: 1});
+        return tile.renderToVector(self.project, map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
             var content;
             try {
@@ -95,7 +95,8 @@ ProjectServer.prototype.pbftile = function (z, x, y, res) {
     this.vectorMapPool.acquire(function (err, map) {
         var release = function () {self.vectorMapPool.release(map);};
         if (err) return self.raise(err.message, res);
-        var tile = new VectorTile(+z, +x, +y);
+        var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+        var tile = new tileClass(z, x, y, {metatile: 1});
         return tile.render(self.project, map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
             var content = tile.getData();

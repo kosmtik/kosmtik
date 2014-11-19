@@ -15,6 +15,7 @@ var Tile = function (z, x, y, options) {
     this.height = options.height || options.size || DEFAULT_HEIGHT;
     this.width = options.width || options.size || DEFAULT_WIDTH;
 };
+
 Tile.prototype.setupBounds = function () {
     var xy = zoomXYToLatLng(this.z, this.x * this.scale, this.y * this.scale);
     this.maxX = xy[0];
@@ -23,10 +24,18 @@ Tile.prototype.setupBounds = function () {
     this.minX = xy[0];
     this.maxY = xy[1];
 };
+
 Tile.prototype.render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var im = new mapnik.Image(this.height, this.width);
     map.render(im, cb);
+};
+
+Tile.prototype.renderToVector = function (project, map, cb) {
+    this.setupBounds();
+    map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
+    var surface = new mapnik.VectorTile(this.z, this.x, this.y);
+    map.render(surface, {buffer_size: 0}, cb);
 };
 exports.Tile = Tile;

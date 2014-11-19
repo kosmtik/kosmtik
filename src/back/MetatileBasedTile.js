@@ -7,9 +7,9 @@ var MetatileBasedTile = function (z, x, y, options) {
     this.z = z;
     this.x = x;
     this.y = y;
-    this.size = options.size || 1;
-    this.metaX = Math.floor(x / this.size);
-    this.metaY = Math.floor(y / this.size);
+    this.metatile = options.metatile || 1;
+    this.metaX = Math.floor(x / this.metatile);
+    this.metaY = Math.floor(y / this.metatile);
     this.options = options;
 };
 
@@ -55,7 +55,7 @@ MetatileBasedTile.prototype.extractFromBytes = function (buffer, cb) {
     var self = this;
     mapnik.Image.fromBytes(buffer, function (err, im) {
         if (err) return cb(err);
-        var view = im.view(256 * (self.x % self.size), 256 * (self.y % self.size), 256, 256);
+        var view = im.view(256 * (self.x % self.metatile), 256 * (self.y % self.metatile), 256, 256);
         cb(null, view);
     });
 
@@ -63,7 +63,7 @@ MetatileBasedTile.prototype.extractFromBytes = function (buffer, cb) {
 
 MetatileBasedTile.prototype.renderMetatile = function (metaPath, project, map, cb) {
     var self = this;
-    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.options.size * 256, scale: this.options.size});
+    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.options.metatile * 256, scale: this.options.metatile});
     tile.render(project, map, function (err, im) {
         im.encode('png', function (err, buffer) {
             if (err) return cb(err);

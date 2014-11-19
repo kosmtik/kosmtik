@@ -9,7 +9,7 @@ var VectorBasedTile = function (z, x, y, options) {
 
 util.inherits(VectorBasedTile, Tile);
 
-VectorBasedTile.prototype.render = function (project, map, cb) {
+VectorBasedTile.prototype._render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var vtile = new mapnik.VectorTile(this.z, this.x, this.y),
@@ -23,7 +23,7 @@ VectorBasedTile.prototype.render = function (project, map, cb) {
                 console.log(error.message);
                 cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
             }
-            if (++processed === project.mml.source.length) vtile.render(map, new mapnik.Image(vtile.width(),vtile.height()), cb);
+            if (++processed === project.mml.source.length) cb(null, vtile);
         },
         params = {
             z: this.z,
@@ -38,5 +38,19 @@ VectorBasedTile.prototype.render = function (project, map, cb) {
         project.config.helpers.request(options, onResponse);
     }
 };
+
+VectorBasedTile.prototype.render = function (project, map, cb) {
+    var self = this;
+    this._render(project, map, function (err, vtile) {
+        if (err) cb(err);
+        else vtile.render(map, new mapnik.Image(self.width, self.height), cb);
+    });
+};
+
+
+VectorBasedTile.prototype.renderToVector = function (project, map, cb) {
+    this._render(project, map, cb);
+};
+
 
 exports.Tile = VectorBasedTile;

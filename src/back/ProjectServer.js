@@ -97,7 +97,7 @@ ProjectServer.prototype.pbftile = function (z, x, y, res) {
         if (err) return self.raise(err.message, res);
         var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
         var tile = new tileClass(z, x, y, {metatile: 1});
-        return tile.render(self.project, map, function (err, tile) {
+        return tile.renderToVector(self.project, map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
             var content = tile.getData();
             res.writeHead(200, {'Content-Type': 'application/x-protobuf'});

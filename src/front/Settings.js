@@ -14,11 +14,17 @@ L.Kosmtik.SettingsForm = L.Class.extend({
         }, this.map);
         this.map.sidebar.addTab({
             label: 'Settings',
+            className: 'settings',
             content: this.container,
             callback: this.build,
             context: this
         });
         this.map.sidebar.rebuild();
+        this.map.commands.add({
+            callback: this.open,
+            context: this,
+            name: 'Settings: configure'
+        });
     },
 
     build: function () {
@@ -45,6 +51,10 @@ L.Kosmtik.SettingsForm = L.Class.extend({
 
     toggle: function (key) {
         this.set(key, !L.K.Config[key]);
+    },
+
+    open: function () {
+        this.map.sidebar.open('.settings');
     }
 
 });

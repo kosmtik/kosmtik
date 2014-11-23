@@ -127,12 +127,14 @@ Config.prototype.initStatics = function () {
         '/src/front/Core.js',
         '/config/',
         './config/',
+        '/src/front/Autocomplete.js',
         '/src/front/DataInspector.js',
         '/src/front/MetatilesBounds.js',
         '/src/front/Sidebar.js',
         '/src/front/Toolbar.js',
         '/src/front/FormBuilder.js',
         '/src/front/Settings.js',
+        '/src/front/Command.js',
         '/src/front/Map.js'
     ];
     this._css = [

@@ -6,13 +6,13 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
         this.map.on('settings:synced', function (e) {
             if (e.field === 'showMetatiles') this.toggle();
         }, this);
-        this.map.shortcuts.add({
+        this.map.commands.add({
             keyCode: L.K.Keys.M,
             altKey: true,
             ctrlKey: true,
             callback: function () {this.map.settingsForm.toggle('showMetatiles');},
             context: this,
-            description: 'Show/hide metatiles bounds'
+            name: 'Metatiles bounds: toggle view'
         });
         return L.TileLayer.prototype.initialize.call(this, '', options);
     },

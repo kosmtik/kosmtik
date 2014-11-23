@@ -64,6 +64,8 @@ L.Kosmtik.Sidebar = L.Control.extend({
 
     open: function (el) {
         this.closeAll();
+        if (typeof el === 'string') el = this._tabs.querySelector(el);
+        if (!el) return;
         this.fire('opening', {el: el});
         L.DomUtil.addClass(el, 'active');
         L.DomUtil.addClass(el._pane, 'active');

@@ -166,7 +166,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.tilelayer.on('load', function () {this.unsetState('loading');}, this.map);
         this.createSidebarPanel();
         this.createToolbarButton();
-        this.addShortcut();
+        this.addCommands();
     },
 
     createSidebarPanel: function () {
@@ -188,11 +188,16 @@ L.Kosmtik.DataInspector = L.Class.extend({
         }, this);
         this.map.sidebar.addTab({
             label: 'Inspect',
+            className: 'data-inspector',
             content: this.container,
             callback: this.sidebarForm.build,
             context: this.sidebarForm
         });
         this.map.sidebar.rebuild();
+    },
+
+    openSidebar: function () {
+        this.map.sidebar.open('.data-inspector');
     },
 
     createToolbarButton: function () {
@@ -205,18 +210,23 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.map.toolbar.addTool(button);
     },
 
-    addShortcut: function () {
-        var shortcutCallback = function () {
+    addCommands: function () {
+        var toggleCallback = function () {
             L.K.Config.dataInspector = !L.K.Config.dataInspector;
             this.toggle();
         };
-        this.map.shortcuts.add({
+        this.map.commands.add({
             keyCode: L.K.Keys.I,
             shiftKey: true,
             ctrlKey: true,
-            callback: shortcutCallback,
+            callback: toggleCallback,
             context: this,
-            description: 'Toggle data inspector'
+            name: 'Data inspector: toggle layer'
+        });
+        this.map.commands.add({
+            callback: this.openSidebar,
+            context: this,
+            name: 'Data inspector: configure'
         });
     },
 

@@ -92,9 +92,19 @@ L.K.Exporter = L.Class.extend({
         this.buildForm();
         this.map.sidebar.addTab({
             label: 'Export',
-            content: container
+            content: container,
+            className: 'exporter'
         });
         this.map.sidebar.rebuild();
+        this.map.commands.add({
+            callback: this.openSidebar,
+            context: this,
+            name: 'Export: configure'
+        });
+    },
+
+    openSidebar: function () {
+        this.map.sidebar.open('.exporter');
     },
 
     buildForm: function () {

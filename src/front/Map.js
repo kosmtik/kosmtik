@@ -7,10 +7,10 @@ L.Kosmtik.Map = L.Map.extend({
     initialize: function (options) {
         this.sidebar = new L.Kosmtik.Sidebar().addTo(this);
         this.toolbar = new L.Kosmtik.Toolbar().addTo(this);
+        this.commands = new L.Kosmtik.Command(this);
         this.settingsForm = new L.K.SettingsForm(this);
         this.settingsForm.addElement(['autoReload', {handler: L.K.Switch, label: 'Autoreload', helpText: 'Reload map as soon as a project file is changed on the server.'}]);
         this.settingsForm.addElement(['backendPolling', {handler: L.K.Switch, label: '(Advanced) Poll backend for project updates'}]);
-        this.shortcuts = new L.K.Shortcuts(this);
         this.createPollIndicator();
         this.createReloadButton();
         this.dataInspector = new L.K.DataInspector(this);
@@ -32,24 +32,7 @@ L.Kosmtik.Map = L.Map.extend({
             this.unsetState('loading');
         }, this);
         L.control.scale().addTo(this);
-        this.poll = new L.K.Poll('./poll/');
-        this.poll.on('message', function (e) {
-            if (e.isDirty) this.setState('dirty');
-            if (e.error) this.alert.show({content: e.error, level: 'error'});
-        }, this);
-        this.poll.on('error', function (e) {
-            this.setState('polling-error');
-        }, this);
-        this.poll.on('polled', function (e) {
-            this.unsetState('polling-error');
-        }, this);
-        this.poll.on('start', function (e) {
-            this.setState('polling');
-        }, this);
-        this.poll.on('stop', function (e) {
-            this.unsetState('polling');
-        }, this);
-        this.togglePoll();
+        this.initPoller();
         this.on('dirty:on', function () {
             if (L.K.Config.autoReload) this.reload();
         });
@@ -101,13 +84,13 @@ L.Kosmtik.Map = L.Map.extend({
             this.reload();
         }, this);
         this.toolbar.addTool(reload);
-        this.shortcuts.add({
+        this.commands.add({
             keyCode: L.K.Keys.R,
             shiftKey: true,
             ctrlKey: true,
             callback: this.reload,
             context: this,
-            description: 'Reload map'
+            name: 'Map: reload'
         });
     },
 
@@ -115,6 +98,40 @@ L.Kosmtik.Map = L.Map.extend({
         var button = L.DomUtil.create('li', 'poll-indicator');
         button.innerHTML = '⇵';
         this.toolbar.addTool(button);
+    },
+
+    initPoller: function () {
+        this.poll = new L.K.Poll('./poll/');
+        this.poll.on('message', function (e) {
+            if (e.isDirty) this.setState('dirty');
+            if (e.error) this.alert.show({content: e.error, level: 'error'});
+        }, this);
+        this.poll.on('error', function () {
+            this.setState('polling-error');
+        }, this);
+        this.poll.on('polled', function () {
+            this.unsetState('polling-error');
+        }, this);
+        this.poll.on('start', function () {
+            this.setState('polling');
+        }, this);
+        this.poll.on('stop', function () {
+            this.unsetState('polling');
+        }, this);
+        this.togglePoll();
+        var commandCallback = function () {
+            this.settingsForm.toggle('backendPolling');
+            this.togglePoll();
+        };
+        this.commands.add({
+            keyCode: L.K.Keys.P,
+            shiftKey: true,
+            ctrlKey: true,
+            altKey: true,
+            callback: commandCallback,
+            context: this,
+            name: 'Poller: toggle'
+        });
     },
 
     togglePoll: function () {

@@ -23,14 +23,18 @@ MetatileBasedTile.prototype.render = function (project, map, cb) {
             if (err.code !== 'ENOENT') return cb(err);
             fs.writeFile(lockPath, '', {flag: 'wx'}, function (err) {
                 if (err && err.code === 'EEXIST') {
-                    var watcher = fs.watch(lockPath);
-                    watcher.on('change', function (event) {  // Someone else is building the metatile, keep calm and wait.
-                        if (event === 'rename') { // lock has been deleted
-                            watcher.close();
-                            self.render(project, map, cb);  // Try again
-                        }
-                        // else just wait again
-                    });
+                    try {
+                        var watcher = fs.watch(lockPath);
+                        watcher.on('change', function (event) {  // Someone else is building the metatile, keep calm and wait.
+                            if (event === 'rename') { // lock has been deleted
+                                watcher.close();
+                                self.render(project, map, cb);  // Try again
+                            }
+                            // else just wait again
+                        });
+                    } catch (err) {
+                        if (err && err.code !== 'ENOENT') return cb(err);
+                    }
                 } else if (err && err.code !== 'EEXIST') {
                     return cb(err);
                 } else  {
@@ -65,6 +69,7 @@ MetatileBasedTile.prototype.renderMetatile = function (metaPath, project, map, c
     var self = this;
     var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.options.metatile * 256, scale: this.options.metatile});
     tile.render(project, map, function (err, im) {
+        if (err) return cb(err);
         im.encode('png', function (err, buffer) {
             if (err) return cb(err);
             fs.writeFile(metaPath, buffer, {flag: 'wx'}, function (err) {

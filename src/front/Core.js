@@ -272,6 +272,7 @@ L.Kosmtik.Help = L.Class.extend({
         this.map.commands.each(function (specs) {
             if (!specs.name || !specs.keyCode) return;
             var row = L.DomUtil.create('tr', '', shortcuts);
+            if (specs.description) row.title = specs.description;
             L.DomUtil.create('th', '', row).innerHTML = L.K.Command.makeLabel(specs);
             L.DomUtil.create('td', '', row).innerHTML = specs.name;
         }, this);

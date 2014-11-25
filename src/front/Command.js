@@ -10,6 +10,7 @@ L.Kosmtik.Command = L.Class.extend({
         var formatResult = function (spec, el) {
             var name = L.DomUtil.create('strong', '', el);
             name.innerHTML = spec.name;
+            if (spec.description) name.title = spec.description;
             if (spec.keyCode) {
                 var key = L.K.Command.makeLabel(spec),
                     shortcut = L.DomUtil.create('small', 'shortcut');
@@ -26,7 +27,8 @@ L.Kosmtik.Command = L.Class.extend({
         });
         map.toolbar.addTool(this.tool);
         this.autocomplete.on('typeahead', function (e) {
-            this.autocomplete.handleResults(this.filter(e.value));
+            var results = this.scoreAll(e.value).slice(0, 10);
+            this.autocomplete.handleResults(results);
         }, this);
         this.autocomplete.on('selected', function (e) {
             e.choice.callback.apply(e.choice.context || this._map);
@@ -71,8 +73,8 @@ L.Kosmtik.Command = L.Class.extend({
     },
 
     each: function (method, context) {
-        for (var i in this._listeners) {
-            method.call(context, this._listeners[i]);
+        for (var i = 0; i < this._specs.length; i++) {
+            method.call(context, this._specs[i]);
         }
         return this;
     },
@@ -86,6 +88,27 @@ L.Kosmtik.Command = L.Class.extend({
             if (spec.name && spec.name.toString().toLowerCase().indexOf(filter) !== -1) specs.push(spec);
         }
         return specs;
+    },
+
+    score: function (spec, query) {
+        query = query.toLowerCase();
+        var name = (spec.name || '').toString().toLowerCase(),
+            index = name.indexOf(query);
+        if (index === 0) spec.score = 5;
+        else if (index > 0) spec.score = 3;
+        else if (name.search(query.split('').join('.*')) !== -1) spec.score = 1;
+        else spec.score = 0;
+    },
+
+    scoreAll: function (query) {
+        var match = [], score;
+        this.each(function (spec) {
+            this.score(spec, query);
+            if (spec.score > 0) match.push(spec);
+        }, this)
+        return match.sort(function (a, b) {
+            return b.score - a.score;
+        });
     },
 
     focus: function () {

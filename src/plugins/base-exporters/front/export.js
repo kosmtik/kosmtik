@@ -20,7 +20,7 @@ L.Kosmtik.ExportZoomChooser = L.FormBuilder.IntSelect.extend({
 
     getOptions: function () {
         var choices = [[-1, 'Current zoom']];
-        for (var i = 0; i < (L.K.Config.project.maxZoom || 18); i++) {
+        for (var i = 0; i <= (L.K.Config.project.maxZoom || 18); i++) {
             choices.push([i, i]);
         }
         return choices;

@@ -21,7 +21,8 @@ L.Kosmtik.Command = L.Class.extend({
             minChar: 0,
             placeholder: 'Type command (ctrl-shift-R)…',
             emptyMessage: 'No matching command',
-            formatResult: formatResult
+            formatResult: formatResult,
+            submitDelay: 100
         });
         map.toolbar.addTool(this.tool);
         this.autocomplete.on('typeahead', function (e) {

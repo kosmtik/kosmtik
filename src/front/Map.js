@@ -92,6 +92,16 @@ L.Kosmtik.Map = L.Map.extend({
             context: this,
             name: 'Map: reload'
         });
+        this.commands.add({
+            keyCode: L.K.Keys.A,
+            shiftKey: true,
+            ctrlKey: true,
+            altKey: true,
+            callback: function () {this.settingsForm.toggle('autoReload');},
+            context: this,
+            name: 'Autoreload: toggle',
+            description: 'Autoreload or not when project has changed'
+        });
     },
 
     createPollIndicator: function () {

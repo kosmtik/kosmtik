@@ -18,6 +18,10 @@ var PluginsManager = function (config) {
         metavar: 'NAME',
         help: 'Install a plugin'
     });
+    this.config.commands.plugins.option('reinstall', {
+        flag: true,
+        help: 'Reinstall every installed plugin'
+    });
     this.config.on('command:plugins', this.handleCommand.bind(this));
     this._registered = [
         '../plugins/base-exporters/index.js',
@@ -42,8 +46,18 @@ PluginsManager.prototype.load = function (name_or_path) {
     new Plugin(this.config);
 };
 
+PluginsManager.prototype.each = function (method, context) {
+    for (var i = 0; i < this._registered.length; i++) {
+        method.call(context || this, this._registered[i]);
+    };
+};
+
 PluginsManager.prototype.isInstalled = function (name) {
     return this._registered.indexOf(name) !== -1;
+};
+
+PluginsManager.prototype.isLocal = function (name) {
+    return name.indexOf('/') !== -1;
 };
 
 PluginsManager.prototype.loadPackage = function () {
@@ -79,7 +93,7 @@ PluginsManager.prototype.install = function (name) {
                 return self.config.log('Unable to install', name, 'version', plugin.kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
             }
             npm.commands.install([name], function (err) {
-                if (err) self.config.log('Error when installing package', name);
+                if (err) self.config.log('Error when installing package', name, err);
                 self.config.log('Successfully installed package', name);
                 self.attach(plugin.name);
                 self.config.saveUserConfig();
@@ -87,6 +101,13 @@ PluginsManager.prototype.install = function (name) {
         });
     });
 
+};
+
+PluginsManager.prototype.reinstall = function () {
+    this.each(function (name) {
+        if (this.isLocal(name)) return;
+        this.install(name);
+    });
 };
 
 PluginsManager.prototype.attach = function (name) {
@@ -115,6 +136,8 @@ PluginsManager.prototype.handleCommand = function () {
         });
     } else if (this.config.parsed_opts.install) {
         this.install(this.config.parsed_opts.install);
+    } else if (this.config.parsed_opts.reinstall) {
+        this.reinstall();
     }
 };
 

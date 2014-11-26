@@ -5,6 +5,20 @@ var Config = require('../src/Config.js').Config,
     assert = require('assert'),
     mapnik = require('mapnik');
 
+var trunc_6 = function(key, val) {
+    return val.toFixed ? Number(val.toFixed(6)) : val;
+}
+
+function compareGeoJSON(json1, json2) {
+    if (typeof json1 === 'string') json1 = JSON.parse(json1);
+    if (typeof json2 === 'string') json2 = JSON.parse(json2);
+
+    json1 = JSON.parse(JSON.stringify(json1, trunc_6));
+    json2 = JSON.parse(JSON.stringify(json2, trunc_6));
+
+    return assert.deepEqual(json1, json2);
+}
+
 describe('#Tile()', function () {
     var config, project, map;
 
@@ -50,7 +64,7 @@ describe('#Tile()', function () {
             var tile = new Tile(6, 19, 28);
             tile.renderToVector(project, map, function (err, vtile) {
                 if (err) throw err;
-                assert.deepEqual(JSON.parse(vtile.toGeoJSON('__all__')), JSON.parse(fs.readFileSync('test/data/expected/tile.world.6.19.28.geojson')));
+                compareGeoJSON(vtile.toGeoJSON('__all__'), JSON.parse(fs.readFileSync('test/data/expected/tile.world.6.19.28.geojson')));
                 done();
             });
         });

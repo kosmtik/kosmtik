@@ -32,6 +32,6 @@
     "semver": "^4.1.0"
   },
   "devDependencies": {
-    "mocha": "^1.21.4"
+    "mocha": "^2.0.1"
   }
 }

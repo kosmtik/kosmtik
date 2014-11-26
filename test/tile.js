@@ -50,7 +50,7 @@ describe('#Tile()', function () {
             var tile = new Tile(6, 19, 28);
             tile.renderToVector(project, map, function (err, vtile) {
                 if (err) throw err;
-                assert.equal(vtile.toGeoJSON('__all__'), fs.readFileSync('test/data/expected/tile.world.6.19.28.geojson'));
+                assert.deepEqual(JSON.parse(vtile.toGeoJSON('__all__')), JSON.parse(fs.readFileSync('test/data/expected/tile.world.6.19.28.geojson')));
                 done();
             });
         });

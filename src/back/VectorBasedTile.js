@@ -30,6 +30,8 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
             var compression = false;
             if (resp.headers['content-encoding'] === 'gzip') compression = 'gunzip';
             else if (resp.headers['content-encoding'] === 'deflate') compression = 'inflate';
+            else if (body && body[0] == 0x1F && body[1] == 0x8B) compression = 'gunzip';
+            else if (body && body[0] == 0x78 && body[1] == 0x9C) compression = 'inflate';
             if (compression) {
                 zlib[compression](body, function(err, data) {
                     if (err) return cb(err);

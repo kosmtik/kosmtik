@@ -20,7 +20,7 @@ L.Kosmtik.Command = L.Class.extend({
         };
         this.autocomplete = new L.K.Autocomplete(this.tool, {
             minChar: 0,
-            placeholder: 'Type command (ctrl-shift-R)…',
+            placeholder: 'Type command (ctrl-shift-P)…',
             emptyMessage: 'No matching command',
             formatResult: formatResult,
             submitDelay: 100

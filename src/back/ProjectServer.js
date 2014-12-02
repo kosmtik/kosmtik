@@ -1,8 +1,10 @@
 var fs = require('fs'),
     path = require('path'),
     Tile = require('./Tile.js').Tile,
+    GeoUtils = require('./GeoUtils.js'),
     VectorBasedTile = require('./VectorBasedTile.js').Tile,
     MetatileBasedTile = require('./MetatileBasedTile.js').Tile,
+    XRayTile = require('./XRayTile.js').Tile,
     TILEPREFIX = 'tile';
 
 var ProjectServer = function (project, parent) {
@@ -33,6 +35,7 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (urlpath === '/reload/') this.reload(res);
     else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(req, res, this.projects[els[1]]);
     else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
+    else if (els[1] === 'query' && els.length >= 5) this.project.when('loaded', function query () {self.queryTile(els[2], els[3], els[4], res, uri.query);});
     else this.parent.notFound(urlpath, res);
 };
 
@@ -42,6 +45,7 @@ ProjectServer.prototype.serveTile = function (z, x, y, res, query) {
     y = y[0];
     if (ext === 'json') this.jsontile(z, x, y, res, query);
     else if (ext === 'pbf') this.pbftile(z, x, y, res);
+    else if (ext === 'xray') this.xraytile(z, x, y, res, query);
     else this.tile(z, x, y, res);
 };
 
@@ -102,6 +106,60 @@ ProjectServer.prototype.pbftile = function (z, x, y, res) {
             var content = tile.getData();
             res.writeHead(200, {'Content-Type': 'application/x-protobuf'});
             res.write(content);
+            res.end();
+            release();
+        });
+    });
+};
+
+ProjectServer.prototype.xraytile = function (z, x, y, res, query) {
+    var self = this;
+    this.vectorMapPool.acquire(function (err, map) {
+        var release = function () {self.vectorMapPool.release(map);};
+        if (err) return self.raise(err.message, res, release);
+        var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+        var tile = new tileClass(z, x, y, {metatile: 1, buffer_size: 1});
+        return tile.renderToVector(self.project, map, function (err, t) {
+            if (err) return self.raise(err.message, res, release);
+            var xtile = new XRayTile(z, x, y, t.getData(), {layer: query.layer, background: query.background});
+            xtile.render(self.project, map, function (err, im) {
+                if (err) return self.raise(err.message, res, release);
+                im.encode('png', function (err, buffer) {
+                    res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
+                    res.write(buffer);
+                    res.end();
+                    release();
+                });
+            });
+        });
+    });
+};
+
+ProjectServer.prototype.queryTile = function (z, lat, lon, res, query) {
+    var self = this;
+    lat = parseFloat(lat);
+    lon = parseFloat(lon);
+    this.vectorMapPool.acquire(function (err, map) {
+        var release = function () {self.vectorMapPool.release(map);};
+        var xy = GeoUtils.zoomLatLngToXY(z, lat, lon),
+            x = xy[0], y = xy[1];
+        if (err) return self.raise(err.message, res, release);
+        var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
+        var tile = new tileClass(z, x, y, {metatile: 1});
+        return tile.renderToVector(self.project, map, function (err, t) {
+            if (err) return self.raise(err.message, res, release);
+            var options = {tolerance: query.tolerance || 100};
+            if (query.layer && query.layer !== '__all__') options.layer = query.layer;
+            var features = t.query(lon, lat, options), results = [];
+            for (var i = 0; i < features.length; i++) {
+                results.push({
+                    distance: features[i].distance,
+                    layer: features[i].layer,
+                    attributes: features[i].attributes()
+                });
+            }
+            res.writeHead(200, {'Content-Type': 'application/javascript'});
+            res.write(JSON.stringify(results));
             res.end();
             release();
         });

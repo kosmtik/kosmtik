@@ -567,6 +567,17 @@ ul.k-autocomplete-results {
 }
 
 /* *********************** */
+/*   Data inspector popup  */
+/* *********************** */
+.leaflet-popup-content .data-inspector table {
+    width: 100%;
+}
+.leaflet-popup-content .data-inspector table + table {
+    border-top: 1px solid #666;
+}
+
+
+/* *********************** */
 /*   Override third party  */
 /* *********************** */
 .leaflet-control a, .leaflet-control a:hover {

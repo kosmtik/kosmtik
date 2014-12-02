@@ -1,0 +1,24 @@
+<Style name="{id}" filter-mode="first" comp-op="screen">
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 3)</Filter>
+    <LineSymbolizer stroke-width="0.5" stroke="rgba({rgb},0.5)" />
+    <PolygonSymbolizer fill="rgba({rgb},0.05)" />
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 2)</Filter>
+    <LineSymbolizer stroke-width="1" stroke="rgba({rgb},0.5)" />
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 1)</Filter>
+    <MarkersSymbolizer allow-overlap="true" width="4" height="4" stroke-width="0" stroke="#ffffff" fill="rgba({rgb},0.5)" />
+    <TextSymbolizer allow-overlap="true" justify-alignment="left" face-name="DejaVu Sans Book" fill="rgba({rgb},0.75)" size="12" dy="6" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <ElseFilter></ElseFilter>
+    <RasterSymbolizer opacity="1" />
+  </Rule>
+</Style>
+
+<Layer name="{id}" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>{id}</StyleName>
+</Layer>

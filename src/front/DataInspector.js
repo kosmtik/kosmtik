@@ -48,6 +48,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
                 context: this
             });
         }, this);
+        this.map.on('reload', this.redraw, this);
     },
 
     createSidebarPanel: function () {

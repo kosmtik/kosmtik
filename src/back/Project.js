@@ -10,7 +10,7 @@ var Project = function (config, filepath, options) {
     ConfigEmitter.call(this, config);
     this.filepath = filepath;
     this.id = options.id || path.basename(path.dirname(fs.realpathSync(this.filepath)));
-    this.root = path.dirname(this.filepath);
+    this.root = path.dirname(path.resolve(this.filepath));
     this.dataDir = path.join(this.root, 'data');
     try {
         fs.mkdirSync(this.dataDir);

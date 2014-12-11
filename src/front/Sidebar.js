@@ -84,9 +84,9 @@ L.Kosmtik.Sidebar = L.Control.extend({
 
     _onClick: function(e) {
         this.fire('tab:click', {el: e.target});
-        if (e.target._callback) e.target._callback.apply(e.target._callbackContext || this);
         if (L.DomUtil.hasClass(e.target, 'active')) this.close();
         else this.open(e.target);
+        if (e.target._callback) e.target._callback.apply(e.target._callbackContext || this);
     },
 
     _onKeyUp: function (e) {

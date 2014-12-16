@@ -110,6 +110,11 @@ Config.prototype.initOptions = function () {
     this.opts.option('proxy', {
         help: 'Optional proxy to use when doing http requests'
     });
+    this.opts.option('keepcache', {
+        full: 'keep-cache',
+        flag: true,
+        help: 'Do not flush cached metatiles on project load'
+    });
 };
 
 Config.prototype.parseOptions = function () {

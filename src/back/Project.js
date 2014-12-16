@@ -103,6 +103,7 @@ Project.prototype.initCache = function (e) {
     var self = this, cacheFiles = [];
     Utils.mkdirs(self.cachePath, function (err) {
         if (err) throw err;
+        if (self.config.parsed_opts.keepcache) return e.continue();
         try {
             cacheFiles = Utils.tree(self.cachePath);
         } catch (err2) {

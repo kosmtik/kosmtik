@@ -13,8 +13,8 @@ module.exports = {
     zoomLatLngToXY: function (z, lat, lng) {
         var n = Math.pow(2.0, z),
             lat_rad = lat / 180.0 * Math.PI,
-            y = (1.0 - Math.log(Math.tan(lat_rad) + (1 / Math.cos(lat_rad))) / Math.PI) / 2.0 * n,
-            x = ((lng + 180.0) / 360.0) * n;
+            y = Math.floor((1.0 - Math.log(Math.tan(lat_rad) + (1 / Math.cos(lat_rad))) / Math.PI) / 2.0 * n),
+            x = Math.floor(((lng + 180.0) / 360.0) * n);
         return [parseInt(x, 10), parseInt(y, 10)];
     }
 

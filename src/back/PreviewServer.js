@@ -131,8 +131,8 @@ PreviewServer.prototype.hasProjectRoute = function (path) {
     return !!this._project_routes[path];
 };
 
-PreviewServer.prototype.serveProjectRoute = function (path, req, res, project) {
-    return this._project_routes[urlpath].call(this, req, res, project);
+PreviewServer.prototype.serveProjectRoute = function (path, uri, res, project) {
+    return this._project_routes[path].call(this, uri, res, project);
 };
 
 PreviewServer.prototype.pushToFront = function (res, anonymous) {

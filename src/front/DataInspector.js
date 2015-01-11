@@ -2,7 +2,18 @@ L.TileLayer.XRay = L.TileLayer.extend({
 
     getTileUrl: function (tilePoint) {
         this.options.version = Date.now();
-        this.options.showLayer = L.K.Config.dataInspectorLayer || '';
+        var keys = Object.keys(L.K.Config);
+        if (L.K.Config['dataInspectorLayer___all__'] === true) {
+          this.options.showLayer = '';
+        } else {
+          var showLayers = [];
+          for(var k = 0; k < keys.length; k++) {
+            if (keys[k].indexOf("dataInspectorLayer_") === 0 && L.K.Config[keys[k]] === true) {
+              showLayers.push(keys[k].split("dataInspectorLayer_")[1]);
+            }
+          }
+          this.options.showLayer = showLayers.join(",");
+        }
         this.options.background = L.K.Config.dataInspectorBackground || '';
         return L.TileLayer.prototype.getTileUrl.call(this, tilePoint);
     }
@@ -58,15 +69,21 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.title.innerHTML = 'Data Inspector';
         var layers = [['__all__', 'all']].concat(L.K.Config.project.layers.map(function (l) {return [l.name, l.name];}));
         var backgrounds = [['black', 'black'], ['transparent', 'transparent']];
+        var checkLayers = [];
+        for (var i = 0; i < layers.length; i++) {
+          var checkboxID = 'dataInspectorLayer_' + layers[i][0];
+          var checkThis = L.K.Config[checkboxID] || (i === 0);
+          var checkbox = [checkboxID, {handler: L.FormBuilder.LabeledCheckBox, text: 'Show ' + layers[i][1], checked: checkThis }];
+          checkLayers.push(checkbox);
+        }
         this.sidebarForm = new L.K.FormBuilder(L.K.Config, [
             ['dataInspector', {handler: L.K.Switch, label: 'Active'}],
-            ['dataInspectorLayer', {handler: L.FormBuilder.Select, helpText: 'Choose which layer to show', selectOptions: layers}],
             ['dataInspectorBackground', {handler: L.FormBuilder.Select, helpText: 'Choose inspector background', selectOptions: backgrounds}]
-        ]);
+        ].concat(checkLayers));
         this.formContainer.appendChild(this.sidebarForm.build());
         this.sidebarForm.on('synced', function (e) {
             if (e.field === 'dataInspector') this.toggle();
-            else if (e.field === 'dataInspectorLayer' || e.field === 'dataInspectorBackground') this.redraw();
+            else if (e.field.indexOf('dataInspectorLayer') === 0 || e.field === 'dataInspectorBackground') this.redraw();
         }, this);
         this.map.sidebar.addTab({
             label: 'Inspect',
@@ -123,4 +140,25 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.tilelayer.redraw();
     }
 
+});
+
+L.FormBuilder.LabeledCheckBox = L.FormBuilder.CheckBox.extend({
+  build: function () {
+    var container = L.DomUtil.create('div', 'formbox', this.form);
+    var label = L.DomUtil.create('label', 'layer-label', container);
+    this.input = L.DomUtil.create('input', this.options.className || '', label);
+    this.input.type = 'checkbox';
+    this.input.name = this.name;
+    this.input._helper = this;
+    this.fetch();
+    L.DomEvent.on(this.input, 'change', this.sync, this);
+    if (typeof this.options.checked !== 'undefined') {
+      this.input.checked = this.options.checked;
+    }
+    if (this.options.text) {
+      var layerLabel = L.DomUtil.create('span', 'layer-name', label);
+      var textNodeProperty = ('innerText' in layerLabel)? 'innerText' : 'textContent';
+      layerLabel[textNodeProperty] = this.options.text;
+    }
+  }
 });

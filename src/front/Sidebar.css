@@ -69,9 +69,15 @@
   margin-bottom: 28px;
 }
 .sidebar-map .leaflet-right {
-  transition: right 500ms; 
-  right: 470px; 
+  transition: right 500ms;
+  right: 470px;
 }
 .sidebar.collapsed ~ .sidebar-map .leaflet-right {
   right: 70px;
+}
+.layer-label {
+  padding-top: 4px;
+}
+.layer-name {
+  margin-left: 10px;
 }

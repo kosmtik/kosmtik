@@ -26,8 +26,9 @@ XRayTile.prototype.styleMap = function (project) {
     var self = this,
         map = new mapnik.Map(256, 256),
         idx = 0,
+        chosenLayers = self.options.layer.split(','),
         layers = project.mml.Layer.reduce(function (prev, layer) {
-            if (self.options.layer && self.options.layer !== '__all__' && self.options.layer !== layer.id) return prev;
+            if (chosenLayers.length && chosenLayers.indexOf(layer.id) === -1) return prev;
             if (idx >= XRayTile.colors.length) idx = 0;
             return prev + Utils.template(XRayTile.layer_template, {id: layer.id, rgb: XRayTile.colors[idx++]});
         }, ''),

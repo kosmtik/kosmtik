@@ -33,7 +33,7 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (urlpath === '/poll/') this.poll(res);
     else if (urlpath === '/export/') this.export(res, uri.query);
     else if (urlpath === '/reload/') this.reload(res);
-    else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(urlpath, uri, res, this.projects[els[1]]);
+    else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(urlpath, uri, res, this.project);
     else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
     else if (els[1] === 'query' && els.length >= 5) this.project.when('loaded', function query () {self.queryTile(els[2], els[3], els[4], res, uri.query);});
     else this.parent.notFound(urlpath, res);

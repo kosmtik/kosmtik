@@ -4,15 +4,15 @@ L.TileLayer.XRay = L.TileLayer.extend({
         this.options.version = Date.now();
         var keys = Object.keys(L.K.Config);
         if (L.K.Config['dataInspectorLayer___all__'] === true) {
-          this.options.showLayer = '';
+            this.options.showLayer = '';
         } else {
-          var showLayers = [];
-          for(var k = 0; k < keys.length; k++) {
-            if (keys[k].indexOf("dataInspectorLayer_") === 0 && L.K.Config[keys[k]] === true) {
-              showLayers.push(keys[k].split("dataInspectorLayer_")[1]);
+            var showLayers = [];
+            for(var k = 0; k < keys.length; k++) {
+                if (keys[k].indexOf("dataInspectorLayer_") === 0 && L.K.Config[keys[k]] === true) {
+                    showLayers.push(keys[k].split("dataInspectorLayer_")[1]);
+                }
             }
-          }
-          this.options.showLayer = showLayers.join(",");
+            this.options.showLayer = showLayers.join(",");
         }
         this.options.background = L.K.Config.dataInspectorBackground || '';
         return L.TileLayer.prototype.getTileUrl.call(this, tilePoint);
@@ -143,22 +143,22 @@ L.Kosmtik.DataInspector = L.Class.extend({
 });
 
 L.FormBuilder.LabeledCheckBox = L.FormBuilder.CheckBox.extend({
-  build: function () {
-    var container = L.DomUtil.create('div', 'formbox', this.form);
-    var label = L.DomUtil.create('label', 'layer-label', container);
-    this.input = L.DomUtil.create('input', this.options.className || '', label);
-    this.input.type = 'checkbox';
-    this.input.name = this.name;
-    this.input._helper = this;
-    this.fetch();
-    L.DomEvent.on(this.input, 'change', this.sync, this);
-    if (typeof this.options.checked !== 'undefined') {
-      this.input.checked = this.options.checked;
+    build: function () {
+        var container = L.DomUtil.create('div', 'formbox', this.form);
+        var label = L.DomUtil.create('label', 'layer-label', container);
+        this.input = L.DomUtil.create('input', this.options.className || '', label);
+        this.input.type = 'checkbox';
+        this.input.name = this.name;
+        this.input._helper = this;
+        this.fetch();
+        L.DomEvent.on(this.input, 'change', this.sync, this);
+        if (typeof this.options.checked !== 'undefined') {
+            this.input.checked = this.options.checked;
+        }
+        if (this.options.text) {
+            var layerLabel = L.DomUtil.create('span', 'layer-name', label);
+            var textNodeProperty = ('innerText' in layerLabel)? 'innerText' : 'textContent';
+            layerLabel[textNodeProperty] = this.options.text;
+        }
     }
-    if (this.options.text) {
-      var layerLabel = L.DomUtil.create('span', 'layer-name', label);
-      var textNodeProperty = ('innerText' in layerLabel)? 'innerText' : 'textContent';
-      layerLabel[textNodeProperty] = this.options.text;
-    }
-  }
 });

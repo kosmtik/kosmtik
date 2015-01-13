@@ -2,14 +2,12 @@ L.TileLayer.XRay = L.TileLayer.extend({
 
     getTileUrl: function (tilePoint) {
         this.options.version = Date.now();
-        var keys = Object.keys(L.K.Config);
-        if (L.K.Config['dataInspectorLayer___all__'] === true) {
-            this.options.showLayer = '';
-        } else {
+        if (L.K.Config['dataInspector']) {
+            var keys = Object.keys(L.K.Config['dataInspector']);
             var showLayers = [];
             for(var k = 0; k < keys.length; k++) {
-                if (keys[k].indexOf("dataInspectorLayer_") === 0 && L.K.Config[keys[k]] === true) {
-                    showLayers.push(keys[k].split("dataInspectorLayer_")[1]);
+                if (L.K.Config[keys[k]] === true) {
+                    showLayers.push(keys[k]);
                 }
             }
             this.options.showLayer = showLayers.join(",");
@@ -42,7 +40,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
                 z: this.map.getZoom(),
                 lat: e.latlng.lat,
                 lng: e.latlng.lng,
-                layer: L.K.Config.dataInspectorLayer || ''
+                layer: ''
             });
             L.K.Xhr.get(url, {
                 callback: function (status, data) {
@@ -67,13 +65,12 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.title = L.DomUtil.create('h3', '', this.container);
         this.formContainer = L.DomUtil.create('div', '', this.container);
         this.title.innerHTML = 'Data Inspector';
-        var layers = [['__all__', 'all']].concat(L.K.Config.project.layers.map(function (l) {return [l.name, l.name];}));
+        var layers = L.K.Config.project.layers.map(function (l) {return l.name;});
         var backgrounds = [['black', 'black'], ['transparent', 'transparent']];
-        var checkLayers = [];
+        var checkLayers = [['dataInspector.__all__', {handler: L.FormBuilder.LabeledCheckBox, text: 'Show All', checked: true} ]];
         for (var i = 0; i < layers.length; i++) {
-          var checkboxID = 'dataInspectorLayer_' + layers[i][0];
-          var checkThis = L.K.Config[checkboxID] || (i === 0);
-          var checkbox = [checkboxID, {handler: L.FormBuilder.LabeledCheckBox, text: 'Show ' + layers[i][1], checked: checkThis }];
+          var checkboxID = 'dataInspector.' + layers[i];
+          var checkbox = [checkboxID, {handler: L.FormBuilder.LabeledCheckBox, text: 'Show ' + layers[i] }];
           checkLayers.push(checkbox);
         }
         this.sidebarForm = new L.K.FormBuilder(L.K.Config, [

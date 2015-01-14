@@ -163,7 +163,8 @@ Config.prototype.toFront = function () {
         exportFormats: Object.keys(this.exporters),
         autoReload: this.getFromUserConfig('autoReload', true),
         backendPolling: true,
-        showCrosshairs: true
+        showCrosshairs: true,
+        dataLayers: {}
     };
     this.emit('tofront', {options: options});
     return options;

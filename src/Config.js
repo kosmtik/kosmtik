@@ -164,7 +164,7 @@ Config.prototype.toFront = function () {
         autoReload: this.getFromUserConfig('autoReload', true),
         backendPolling: true,
         showCrosshairs: true,
-        dataLayers: {
+        dataInspectorLayers: {
             '__all__': true
         }
     };

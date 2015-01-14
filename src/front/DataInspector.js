@@ -2,15 +2,12 @@ L.TileLayer.XRay = L.TileLayer.extend({
 
     getTileUrl: function (tilePoint) {
         this.options.version = Date.now();
+        // display only the checked layers
         var showLayers = [];
-        var keys = Object.keys(L.K.Config.dataLayers);
-        for(var k = 0; k < keys.length; k++) {
-            if (L.K.Config.dataLayers[keys[k]] === true && keys[k] !== '__all__') {
-                // display only the checked layers
-                showLayers.push(keys[k]);
-            }
+        for (var k in L.K.Config.dataInspectorLayers) {
+            if (L.K.Config.dataInspectorLayers[k] === true && k !== '__all__') showLayers.push(k);
         }
-        this.options.showLayer = showLayers.join(",");
+        this.options.showLayer = showLayers.join(',');
         this.options.background = L.K.Config.dataInspectorBackground || '';
         return L.TileLayer.prototype.getTileUrl.call(this, tilePoint);
     }
@@ -67,12 +64,11 @@ L.Kosmtik.DataInspector = L.Class.extend({
         var layers = L.K.Config.project.layers.map(function (l) {return l.name;});
         var backgrounds = [['black', 'black'], ['transparent', 'transparent']];
 
-        var layerSettings = [['dataLayers.__all__', {handler: L.FormBuilder.LabeledCheckBox, text: 'Show All' } ]];
-        for (var i = 0; i < layers.length; i++) {
-            var checkboxID = 'dataLayers.' + layers[i];
-            var checkbox = [checkboxID, {handler: L.FormBuilder.LabeledCheckBox, text: 'Show ' + layers[i] }];
-            layerSettings.push(checkbox);
-        }
+        var layerSettings = [['dataInspectorLayers.__all__', {handler: L.FormBuilder.LabeledCheckBox, label: 'Show All' } ]];
+        layerSettings = layers.reduce(function (prev, curr) {
+            prev.push(['dataInspectorLayers.' + curr, {handler: L.FormBuilder.LabeledCheckBox, label: 'Show "' + curr + '"'}]);
+            return prev;
+        }, layerSettings);
         this.sidebarForm = new L.K.FormBuilder(L.K.Config, [
             ['dataInspector', {handler: L.K.Switch, label: 'Active'}],
             ['dataInspectorBackground', {handler: L.FormBuilder.Select, helpText: 'Choose inspector background', selectOptions: backgrounds}]
@@ -81,21 +77,10 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.sidebarForm.on('synced', function (e) {
             if (e.field === 'dataInspector') this.toggle();
             else if (e.field === 'dataInspectorBackground') this.redraw();
-            else if (e.field.indexOf('dataLayers') === 0) {
-                if (e.field === 'dataLayers.__all__') {
-                    // uncheck all except Show All
-                    var keys = Object.keys(L.K.Config.dataLayers);
-                    for (var k = 0; k < keys.length; k++) {
-                        if (keys[k] !== '__all__') {
-                            document.getElementsByName(keys[k])[0].checked = false;
-                            L.K.Config.dataLayers[keys[k]] = false;
-                        }
-                    }
-                } else {
-                    // uncheck side layers
-                    document.getElementsByName('__all__')[0].checked = false;
-                    L.K.Config.dataLayers['__all__'] = false;
-                }
+            else if (e.field.indexOf('dataInspectorLayers') === 0) {
+                if (e.field !== 'dataInspectorLayers.__all__') L.K.Config.dataInspectorLayers.__all__ = false;
+                else for (var k in L.K.Config.dataInspectorLayers) {L.K.Config.dataInspectorLayers[k] = k === '__all__';}
+                this.sidebarForm.fetchAll();
                 this.redraw();
             }
         }, this);
@@ -157,22 +142,13 @@ L.Kosmtik.DataInspector = L.Class.extend({
 });
 
 L.FormBuilder.LabeledCheckBox = L.FormBuilder.CheckBox.extend({
+
     build: function () {
-        var container = L.DomUtil.create('div', 'formbox', this.form);
-        var label = L.DomUtil.create('label', 'layer-label', container);
-        this.input = L.DomUtil.create('input', this.options.className || '', label);
-        this.input.type = 'checkbox';
-        this.input.name = this.name;
-        this.input._helper = this;
-        this.fetch();
-        L.DomEvent.on(this.input, 'change', this.sync, this);
-        if (typeof this.options.checked !== 'undefined') {
-            this.input.checked = this.options.checked;
-        }
-        if (this.options.text) {
-            var layerLabel = L.DomUtil.create('span', 'layer-name', label);
-            var textNodeProperty = ('innerText' in layerLabel)? 'innerText' : 'textContent';
-            layerLabel[textNodeProperty] = this.options.text;
-        }
-    }
+        L.FormBuilder.CheckBox.prototype.build.call(this);
+        this.label = L.DomUtil.create('label', '', this.input.parentNode);
+        this.label.innerHTML = this.options.label;
+    },
+
+    buildLabel: function () {/* We take control over label. */}
+
 });

@@ -5,13 +5,7 @@ L.TileLayer.XRay = L.TileLayer.extend({
         var showLayers = [];
         var keys = Object.keys(L.K.Config.dataLayers);
         for(var k = 0; k < keys.length; k++) {
-            if (L.K.Config.dataLayers['__all__'] === true) {
-                // display all layers, uncheck all except top Show All box
-                if (keys[k] !== '__all__') {
-                    document.getElementsByName(keys[k])[0].checked = false;
-                }
-            }
-            else if (L.K.Config.dataLayers[keys[k]] === true) {
+            if (L.K.Config.dataLayers[keys[k]] === true && keys[k] !== '__all__') {
                 // display only the checked layers
                 showLayers.push(keys[k]);
             }
@@ -72,20 +66,38 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.title.innerHTML = 'Data Inspector';
         var layers = L.K.Config.project.layers.map(function (l) {return l.name;});
         var backgrounds = [['black', 'black'], ['transparent', 'transparent']];
-        var checkLayers = [['dataLayers.__all__', {handler: L.FormBuilder.LabeledCheckBox, text: 'Show All', checked: true} ]];
+
+        var layerSettings = [['dataLayers.__all__', {handler: L.FormBuilder.LabeledCheckBox, text: 'Show All' } ]];
         for (var i = 0; i < layers.length; i++) {
             var checkboxID = 'dataLayers.' + layers[i];
             var checkbox = [checkboxID, {handler: L.FormBuilder.LabeledCheckBox, text: 'Show ' + layers[i] }];
-            checkLayers.push(checkbox);
+            layerSettings.push(checkbox);
         }
         this.sidebarForm = new L.K.FormBuilder(L.K.Config, [
             ['dataInspector', {handler: L.K.Switch, label: 'Active'}],
             ['dataInspectorBackground', {handler: L.FormBuilder.Select, helpText: 'Choose inspector background', selectOptions: backgrounds}]
-        ].concat(checkLayers));
+        ].concat(layerSettings));
         this.formContainer.appendChild(this.sidebarForm.build());
         this.sidebarForm.on('synced', function (e) {
             if (e.field === 'dataInspector') this.toggle();
-            else if (e.field.indexOf('dataInspectorLayer') === 0 || e.field === 'dataInspectorBackground') this.redraw();
+            else if (e.field === 'dataInspectorBackground') this.redraw();
+            else if (e.field.indexOf('dataLayers') === 0) {
+                if (e.field === 'dataLayers.__all__') {
+                    // uncheck all except Show All
+                    var keys = Object.keys(L.K.Config.dataLayers);
+                    for (var k = 0; k < keys.length; k++) {
+                        if (keys[k] !== '__all__') {
+                            document.getElementsByName(keys[k])[0].checked = false;
+                            L.K.Config.dataLayers[keys[k]] = false;
+                        }
+                    }
+                } else {
+                    // uncheck side layers
+                    document.getElementsByName('__all__')[0].checked = false;
+                    L.K.Config.dataLayers['__all__'] = false;
+                }
+                this.redraw();
+            }
         }, this);
         this.map.sidebar.addTab({
             label: 'Inspect',

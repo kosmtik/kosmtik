@@ -15,9 +15,11 @@ var ProjectServer = function (project, parent) {
     this.project.when('loaded', function () {
         self.initMapPools();
         fs.watch(self.project.root, function (type, filename) {
-            if (filename.indexOf('.') === 0) return;
+            if (filename) {
+                if (filename.indexOf('.') === 0) return;
+                self.project.config.log('File', filename, 'changed on disk');
+            }
             self.addToPollQueue({isDirty: true});
-            self.project.config.log('File', filename, 'changed on disk');
         });
     });
     this.project.load();

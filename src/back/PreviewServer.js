@@ -15,7 +15,8 @@ var http = require('http'),
         '.jpg' : 'image/jpeg',
         '.woff' : 'application/octet-stream',
         '.ttf' : 'application/octet-stream',
-        '.svg' : 'image/svg+xml'
+        '.svg' : 'image/svg+xml',
+        '.ico' : 'image/x-icon'
     };
 
 var PreviewServer = function (config, root, options) {

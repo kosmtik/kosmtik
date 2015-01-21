@@ -19,6 +19,7 @@ var Config = function (root, configpath) {
     this.initExporters();
     this.initLoaders();
     this.initStatics();
+    if (!this.configpath) this.ensureDefaultUserConfigPath();
     this.loadUserConfig();
     this.pluginsManager = new PluginsManager(this);  // Do we need back ref?
     this.emit('loaded');
@@ -38,16 +39,14 @@ Config.prototype.getUserConfigPath = function () {
 };
 
 Config.prototype.loadUserConfig = function () {
-    var configpath = this.getUserConfigPath(),
-        config = {};
+    var configpath = this.getUserConfigPath();
     try {
-        config = fs.readFileSync(configpath, 'utf-8');
-        config = yaml.safeLoad(config);
+        config = yaml.safeLoad(fs.readFileSync(configpath, 'utf-8'));
         this.log('Loading config from', configpath);
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
-    this.userConfig = config;
+    this.userConfig = config || {};
 };
 
 Config.prototype.saveUserConfig = function () {
@@ -60,6 +59,14 @@ Config.prototype.saveUserConfig = function () {
 
 Config.prototype.getFromUserConfig = function (key, fallback) {
     return typeof this.userConfig[key] !== 'undefined' ? this.userConfig[key] : fallback;
+};
+
+Config.prototype.ensureDefaultUserConfigPath = function () {
+    try {
+        fs.mkdirSync(this.getUserConfigDir());
+    } catch (err) {
+        if (err.code !== 'EEXIST') throw err;
+    }
 };
 
 Config.prototype.initExporters = function () {

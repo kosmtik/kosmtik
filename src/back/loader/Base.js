@@ -15,7 +15,7 @@ BaseLoader.prototype.postprocess = function () {
     }
     if (!this.mml.Layer) this.mml.Layer = [];
     if (this.mml.layers) {
-        this.mml.Layer = (this.mml.Layer || []).concat(this.mml.layers.map(function(l) {return {id: l};}));
+        this.mml.Layer = (this.mml.Layer || []).concat(this.mml.layers.map(this.expandLayerName.bind(this)));
     }
     this.mml.Layer = this.mml.Layer.map(this.normalizeLayer);
     if (this.mml.source) {
@@ -47,6 +47,16 @@ BaseLoader.prototype.normalizeSource = function (source) {
         }
     }
     return source;
+};
+
+BaseLoader.prototype.expandLayerName = function (name) {
+    var className = '';
+    if (name.indexOf('.') !== -1) {
+        var els = name.split('.');
+        name = els[0];
+        className = els[1];
+    }
+    return {id: name, 'class': className};
 };
 
 BaseLoader.prototype.normalizeStylesheet = function (style) {

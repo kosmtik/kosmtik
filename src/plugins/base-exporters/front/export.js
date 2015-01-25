@@ -218,13 +218,13 @@ L.K.Exporter = L.Class.extend({
         this.params.width = size.x;
         this.params.height = size.y;
         var params = this.computeParams();
-        this.extentCaption.innerHTML = params.width + "px / " + params.height + "px";
+        this.extentCaption.innerHTML = params.width + 'px / ' + params.height + 'px';
     },
 
     getExtentSize: function () {
         var topLeft = this.map.latLngToLayerPoint(this.leftTop.getLatLng()),
             bottomRight = this.map.latLngToLayerPoint(this.rightBottom.getLatLng());
-        return L.point(Math.abs(bottomRight.x - topLeft.x), Math.abs(bottomRight.y - topLeft.y))
+        return L.point(Math.abs(bottomRight.x - topLeft.x), Math.abs(bottomRight.y - topLeft.y));
     },
 
     updateExtentSize: function () {
@@ -238,7 +238,7 @@ L.K.Exporter = L.Class.extend({
             this.leftBottom.getLatLng().lat,
             this.rightTop.getLatLng().lng,
             this.rightTop.getLatLng().lat
-        ]
+        ];
     },
 
     computeParams: function () {
@@ -252,6 +252,8 @@ L.K.Exporter = L.Class.extend({
             if (params.zoom < this.map.getZoom()) factor = 1 / factor;
             params.width = params.width * factor;
             params.height = params.height * factor;
+        } else {
+            params.zoom = this.map.getZoom();
         }
         params.width = Math.round(params.width);
         params.height = Math.round(params.height);

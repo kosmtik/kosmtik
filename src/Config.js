@@ -39,14 +39,15 @@ Config.prototype.getUserConfigPath = function () {
 };
 
 Config.prototype.loadUserConfig = function () {
-    var configpath = this.getUserConfigPath();
+    var configpath = this.getUserConfigPath(),
+        config = {};
     try {
         config = yaml.safeLoad(fs.readFileSync(configpath, 'utf-8'));
         this.log('Loading config from', configpath);
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
-    this.userConfig = config || {};
+    this.userConfig = config;
 };
 
 Config.prototype.saveUserConfig = function () {

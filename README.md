@@ -8,7 +8,7 @@ but in the future we hope to plug in MapCSS too.
 
 **Alpha version, installable only from source**
 
-## Lite
+## Lite
 
 Only the core needs:
 
@@ -19,7 +19,7 @@ Only the core needs:
 - hooks everywhere to make easy to extend it with plugins
 
 
-## Screenshot
+## Screenshot
 
 ![screenshot](https://raw.github.com/kosmtik/kosmtik/master/screenshot.png "Screenshot of Kosmtik")
 
@@ -40,7 +40,7 @@ Obtain changes from repository (e.g. ```git pull upstream master```)
 rm -rf node_modules && npm install 
 ```
 
-## Usage
+## Usage
 
 To get command line help, run:
 
@@ -74,7 +74,7 @@ node index.js plugins --install kosmtik-map-compare
 ```
 
 
-## Local config
+## Local config
 
 Because you often need to change the project config to match your
 local env, for example to adapt the database connection credentials,

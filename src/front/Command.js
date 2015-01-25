@@ -31,7 +31,7 @@ L.Kosmtik.Command = L.Class.extend({
             this.autocomplete.handleResults(results);
         }, this);
         this.autocomplete.on('selected', function (e) {
-            e.choice.callback.apply(e.choice.context || this._map);
+            e.choice.callback.apply(e.choice.context || this._map);
         }, this);
         this.add({
             keyCode: L.K.Keys.P,
@@ -68,7 +68,7 @@ L.Kosmtik.Command = L.Class.extend({
         specs = this._listeners[key];
         if (specs) {
             if(specs.stop !== false) L.DomEvent.stop(e);
-            specs.callback.apply(specs.context || this._map);
+            specs.callback.apply(specs.context || this._map);
         }
     },
 
@@ -80,7 +80,7 @@ L.Kosmtik.Command = L.Class.extend({
     },
 
     filter: function (filter, max) {
-        max = max || 10;
+        max = max || 10;
         var specs = [], spec;
         for (var i = 0; i < this._specs.length; i++) {
             if (specs.length >= max) break;
@@ -92,7 +92,7 @@ L.Kosmtik.Command = L.Class.extend({
 
     score: function (spec, query) {
         query = query.toLowerCase();
-        var name = (spec.name || '').toString().toLowerCase(),
+        var name = (spec.name || '').toString().toLowerCase(),
             index = name.indexOf(query);
         if (index === 0) spec.score = 5;
         else if (index > 0) spec.score = 3;

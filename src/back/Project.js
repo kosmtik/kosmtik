@@ -9,7 +9,7 @@ var Project = function (config, filepath, options) {
     this.CLASSNAME = 'project';
     ConfigEmitter.call(this, config);
     this.filepath = filepath;
-    this.id = options.id || path.basename(path.dirname(fs.realpathSync(this.filepath)));
+    this.id = options.id || path.basename(path.dirname(fs.realpathSync(this.filepath)));
     this.root = path.dirname(path.resolve(this.filepath));
     this.dataDir = path.join(this.root, 'data');
     try {
@@ -85,14 +85,14 @@ Project.prototype.toFront = function () {
         metatile: this.mml.metatile,
         tileSize: this.tileSize(),
         loadTime: this.loadTime,
-        layers: this.mml.Layer || []
+        layers: this.mml.Layer || []
     };
     this.emitAndForward('tofront', {options: options});
     return options;
 };
 
 Project.prototype.tileSize = function () {
-    return 256 * (this.mml.metatile || 2);
+    return 256 * (this.mml.metatile || 2);
 };
 
 Project.prototype.getUrl = function () {

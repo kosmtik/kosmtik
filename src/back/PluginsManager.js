@@ -28,7 +28,7 @@ var PluginsManager = function (config) {
         '../plugins/hash/index.js',
         '../plugins/local-config/index.js',
         '../plugins/datasource-loader/index.js',
-    ].concat(this.config.userConfig.plugins || []);
+    ].concat(this.config.userConfig.plugins || []);
     for (var i = 0; i < this._registered.length; i++) {
         this.load(this._registered[i]);
     }
@@ -48,7 +48,7 @@ PluginsManager.prototype.load = function (name_or_path) {
 
 PluginsManager.prototype.each = function (method, context) {
     for (var i = 0; i < this._registered.length; i++) {
-        method.call(context || this, this._registered[i]);
+        method.call(context || this, this._registered[i]);
     };
 };
 
@@ -112,7 +112,7 @@ PluginsManager.prototype.reinstall = function () {
 
 PluginsManager.prototype.attach = function (name) {
     // Attach plugin to user config
-    this.config.userConfig.plugins = this.config.userConfig.plugins || [];
+    this.config.userConfig.plugins = this.config.userConfig.plugins || [];
     if (this.config.userConfig.plugins.indexOf(name) === -1) this.config.userConfig.plugins.push(name);
     this.config.log('Attached plugin:', name);
 };

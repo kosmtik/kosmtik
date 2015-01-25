@@ -11,11 +11,11 @@ BaseLoader.prototype.postprocess = function () {
         this.mml.Stylesheet = this.mml.Stylesheet.map(this.normalizeStylesheet.bind(this));
     }
     if (this.mml.styles) {
-        this.mml.Stylesheet = (this.mml.Stylesheet || []).concat(this.mml.styles.map(this.normalizeStylesheet.bind(this)));
+        this.mml.Stylesheet = (this.mml.Stylesheet || []).concat(this.mml.styles.map(this.normalizeStylesheet.bind(this)));
     }
     if (!this.mml.Layer) this.mml.Layer = [];
     if (this.mml.layers) {
-        this.mml.Layer = (this.mml.Layer || []).concat(this.mml.layers.map(this.expandLayerName.bind(this)));
+        this.mml.Layer = (this.mml.Layer || []).concat(this.mml.layers.map(this.expandLayerName.bind(this)));
     }
     this.mml.Layer = this.mml.Layer.map(this.normalizeLayer);
     if (this.mml.source) {

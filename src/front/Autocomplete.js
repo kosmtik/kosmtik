@@ -178,7 +178,7 @@ L.Kosmtik.Autocomplete = L.Class.extend({
     },
 
     setChoice: function (choice) {
-        choice = choice || this.RESULTS[this.CURRENT];
+        choice = choice || this.RESULTS[this.CURRENT];
         if (choice) {
             this.hide();
             this.input.value = '';
@@ -214,7 +214,7 @@ L.Kosmtik.Autocomplete = L.Class.extend({
     },
 
     formatResult: function (item, el) {
-        return (this.options.formatResult || this._formatResult).call(this, item, el);
+        return (this.options.formatResult || this._formatResult).call(this, item, el);
     },
 
     createResult: function (item, index) {

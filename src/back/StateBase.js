@@ -29,7 +29,7 @@ StateBase.prototype.changeState = function (type, e) {
         }
         delete this._state_after[type];
     }.bind(this);
-    e = e || {};
+    e = e || {};
     e.continue = function () {
         if(this._state_to_process[type]) {
             listeners[listeners.length - this._state_to_process[type]--].call(this, e);
@@ -40,7 +40,7 @@ StateBase.prototype.changeState = function (type, e) {
     e[this.CLASSNAME] = this;
     var listeners = this._state_before[type] || [],
         configType = this.CLASSNAME + ':' + type;
-    if (this.config && this.config._state_before[configType]) listeners = listeners.concat(this.config._state_before[configType] || []);
+    if (this.config && this.config._state_before[configType]) listeners = listeners.concat(this.config._state_before[configType] || []);
     if (!this._state_to_process[type]) {
         this._state_to_process[type] = listeners.length;
         e.continue();
@@ -53,7 +53,7 @@ StateBase.prototype.when = function (type, callback) {
 };
 
 StateBase.prototype.afterState = function (type, callback) {
-    this._state_after[type] = this._state_after[type] || [];
+    this._state_after[type] = this._state_after[type] || [];
     this._state_after[type].push(callback);
 };
 

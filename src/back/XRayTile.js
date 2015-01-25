@@ -1,5 +1,4 @@
-var util = require('util'),
-    mapnik = require('mapnik'),
+var mapnik = require('mapnik'),
     Utils = require('./Utils.js'),
     fs = require('fs'),
     path = require('path'),
@@ -10,12 +9,11 @@ var XRayTile = function (z, x, y, data, options) {
     this.x = +x;
     this.y = +y;
     this.data = data;
-    this.options = options || {};
+    this.options = options || {};
 };
 
 XRayTile.prototype.render = function (project, map, cb) {
-    var self = this,
-        styleMap = this.styleMap(project),
+    var styleMap = this.styleMap(project),
         vtile = new mapnik.VectorTile(this.z, this.x, this.y);
     vtile.setData(this.data);
     vtile.parse();
@@ -32,15 +30,15 @@ XRayTile.prototype.styleMap = function (project) {
             if (idx >= XRayTile.colors.length) idx = 0;
             return prev + Utils.template(XRayTile.layer_template, {id: layer.id, rgb: XRayTile.colors[idx++]});
         }, ''),
-        xml = Utils.template(XRayTile.map_template, {layers: layers || '', bg: this.options.background || '#000000'});
+        xml = Utils.template(XRayTile.map_template, {layers: layers || '', bg: this.options.background || '#000000'});
     map.fromStringSync(xml);
     return map;
 };
 
 XRayTile.prototype.stringToRGB = function (s) {
     var hash = crypto.createHash('md5').update(s).digest('hex').slice(0,3);
-    return [hash.charCodeAt(0) + 100, hash.charCodeAt(1) + 100, hash.charCodeAt(2) + 100].join(',')
-}
+    return [hash.charCodeAt(0) + 100, hash.charCodeAt(1) + 100, hash.charCodeAt(2) + 100].join(',');
+};
 
 XRayTile.map_template = fs.readFileSync(path.join(__dirname, 'xray', 'map.xml'), 'utf8');
 XRayTile.layer_template = fs.readFileSync(path.join(__dirname, 'xray', 'layer.xml'), 'utf8');

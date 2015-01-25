@@ -58,9 +58,9 @@ L.Kosmtik.Poll = L.Class.extend({
     },
 
     polled: function (status, data) {
-        if (status === 204 || status === 200) this.fire('polled');
+        if (status === 204 || status === 200) this.fire('polled');
         if (status === 204) return this.loop(1);
-        if (status !== 200 || !data) return this.onError({status: status, error: data});
+        if (status !== 200 || !data) return this.onError({status: status, error: data});
         try {
             data = JSON.parse(data);
         } catch (err) {
@@ -105,7 +105,7 @@ L.Kosmtik.Switch = L.FormBuilder.CheckBox.extend({
         L.FormBuilder.CheckBox.prototype.build.apply(this);
         this.input.parentNode.appendChild(this.label);
         L.DomUtil.addClass(this.input.parentNode, 'with-switch');
-        var id = (this.formBuilder.options.id || Date.now()) + '.' + this.name;
+        var id = (this.formBuilder.options.id || Date.now()) + '.' + this.name;
         this.label.setAttribute('for', id);
         L.DomUtil.addClass(this.input, 'switch');
         this.input.id = id;
@@ -270,7 +270,7 @@ L.Kosmtik.Help = L.Class.extend({
             shortcuts = L.DomUtil.create('table', 'shortcuts', container);
         title.innerHTML = 'Keyboard shortcuts';
         this.map.commands.each(function (specs) {
-            if (!specs.name || !specs.keyCode) return;
+            if (!specs.name || !specs.keyCode) return;
             var row = L.DomUtil.create('tr', '', shortcuts);
             if (specs.description) row.title = specs.description;
             L.DomUtil.create('th', '', row).innerHTML = L.K.Command.makeLabel(specs);

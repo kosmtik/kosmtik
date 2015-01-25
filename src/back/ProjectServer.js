@@ -81,7 +81,7 @@ ProjectServer.prototype.jsontile = function (z, x, y, res, query) {
             if (err) return self.raise(err.message, res, release);
             var content;
             try {
-                content = tile.toGeoJSON(query.layer || '__all__');
+                content = tile.toGeoJSON(query.layer || '__all__');
             } catch (err) {
                 // This layer is not visible in this tile,
                 // return an empty geojson;
@@ -150,7 +150,7 @@ ProjectServer.prototype.queryTile = function (z, lat, lon, res, query) {
         var tile = new tileClass(z, x, y, {metatile: 1});
         return tile.renderToVector(self.project, map, function (err, t) {
             if (err) return self.raise(err.message, res, release);
-            var options = {tolerance: query.tolerance || 100};
+            var options = {tolerance: query.tolerance || 100};
             if (query.layer && query.layer !== '__all__') options.layer = query.layer;
             var features = t.query(lon, lat, options), results = [];
             for (var i = 0; i < features.length; i++) {

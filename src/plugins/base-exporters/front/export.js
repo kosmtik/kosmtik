@@ -20,7 +20,7 @@ L.Kosmtik.ExportZoomChooser = L.FormBuilder.IntSelect.extend({
 
     getOptions: function () {
         var choices = [[-1, 'Current zoom']];
-        for (var i = 0; i <= (L.K.Config.project.maxZoom || 18); i++) {
+        for (var i = 0; i <= (L.K.Config.project.maxZoom || 18); i++) {
             choices.push([i, i]);
         }
         return choices;
@@ -152,7 +152,7 @@ L.K.Exporter = L.Class.extend({
         }, this);
         this.builder.on('synced', function (e) {
             if (e.field === 'showExtent') this.toggleExtent();
-            else if (e.field === 'zoom' || e.field === 'scale') this.setExtentCaptionContent();
+            else if (e.field === 'zoom' || e.field === 'scale') this.setExtentCaptionContent();
         }, this);
         this.drawFromCenter();
     },
@@ -171,10 +171,10 @@ L.K.Exporter = L.Class.extend({
     },
 
     drawFromLatLngs: function (leftTop, leftBottom, rightBottom, rightTop) {
-        leftTop = leftTop || this.leftTop.getLatLng();
-        leftBottom = leftBottom || this.leftBottom.getLatLng();
-        rightBottom = rightBottom || this.rightBottom.getLatLng();
-        rightTop = rightTop || this.rightTop.getLatLng();
+        leftTop = leftTop || this.leftTop.getLatLng();
+        leftBottom = leftBottom || this.leftBottom.getLatLng();
+        rightBottom = rightBottom || this.rightBottom.getLatLng();
+        rightTop = rightTop || this.rightTop.getLatLng();
         this.shape.setLatLngs([
             [[90, -180], [-90, -180], [-90, 180], [90, 180]],
             [leftTop, leftBottom, rightBottom, rightTop]

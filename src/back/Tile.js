@@ -2,17 +2,17 @@ var mapnik = require('mapnik'),
     zoomXYToLatLng = require('./GeoUtils.js').zoomXYToLatLng;
 
 var Tile = function (z, x, y, options) {
-    options = options || {};
+    options = options || {};
     var DEFAULT_HEIGHT = 256;
     var DEFAULT_WIDTH = 256;
     this.z = +z;
     this.x = +x;
     this.y = +y;
     this.projection = new mapnik.Projection(options.projection || Tile.DEFAULT_OUTPUT_PROJECTION);
-    this.scale = options.scale || 1;
-    this.height = options.height || options.size || DEFAULT_HEIGHT;
-    this.width = options.width || options.size || DEFAULT_WIDTH;
-    this.buffer_size = options.buffer_size || 0;
+    this.scale = options.scale || 1;
+    this.height = options.height || options.size || DEFAULT_HEIGHT;
+    this.width = options.width || options.size || DEFAULT_WIDTH;
+    this.buffer_size = options.buffer_size || 0;
 };
 
 // 900913

@@ -46,7 +46,7 @@ Config.prototype.loadUserConfig = function () {
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
-    this.userConfig = config || {};
+    this.userConfig = config || {};
 };
 
 Config.prototype.saveUserConfig = function () {

@@ -8,7 +8,7 @@ L.TileLayer.XRay = L.TileLayer.extend({
             if (L.K.Config.dataInspectorLayers[k] === true && k !== '__all__') showLayers.push(k);
         }
         this.options.showLayer = showLayers.join(',');
-        this.options.background = L.K.Config.dataInspectorBackground || '';
+        this.options.background = L.K.Config.dataInspectorBackground || '';
         return L.TileLayer.prototype.getTileUrl.call(this, tilePoint);
     }
 

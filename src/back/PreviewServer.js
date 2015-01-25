@@ -24,7 +24,7 @@ var PreviewServer = function (config, root, options) {
     ConfigEmitter.call(this, config);
     this.config.server = this;
     this.initRoutes();
-    options = options || {};
+    options = options || {};
     this.projects = {};
     this.server = http.createServer();
     this.server.on('request', this.serve.bind(this));

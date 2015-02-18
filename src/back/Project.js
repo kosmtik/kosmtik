@@ -71,8 +71,8 @@ Project.prototype.createMapPool = function (options) {
 Project.prototype.export = function (options, callback) {
     var format = options.format;
     if (!this.config.exporters[format]) throw 'Unkown format ' + format;
-    var Exporter = require(this.config.exporters[format]).Exporter,
-        exporter = new Exporter(this, options);
+    var Exporter = require(this.config.exporters[format]).Exporter;
+    var exporter = new Exporter(this, options);
     exporter.export(callback);
 };
 

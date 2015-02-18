@@ -167,7 +167,7 @@ L.K.Exporter = L.Class.extend({
             leftBottom = this.map.layerPointToLatLng([left, bottom]),
             rightBottom = this.map.layerPointToLatLng([right, bottom]),
             rightTop = this.map.layerPointToLatLng([right, top]);
-            this.drawFromLatLngs(leftTop, leftBottom, rightBottom, rightTop);
+        this.drawFromLatLngs(leftTop, leftBottom, rightBottom, rightTop);
     },
 
     drawFromLatLngs: function (leftTop, leftBottom, rightBottom, rightTop) {
@@ -247,7 +247,7 @@ L.K.Exporter = L.Class.extend({
         params.bounds = this.toBBoxString();
         params.width = params.width * +params.scale;
         params.height = params.height * +params.scale;
-        if (params.zoom != -1) {
+        if (params.zoom !== -1) {
             factor = Math.pow(2, Math.abs(params.zoom - this.map.getZoom()));
             if (params.zoom < this.map.getZoom()) factor = 1 / factor;
             params.width = params.width * factor;

@@ -15,7 +15,7 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var vtile = new mapnik.VectorTile(this.z, this.x, this.y),
         processed = 0,
-        parse = function (data) {
+        parse = function (data, resp) {
             try {
                 vtile.setData(data);
                 vtile.parse();
@@ -30,15 +30,15 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
             var compression = false;
             if (resp.headers['content-encoding'] === 'gzip') compression = 'gunzip';
             else if (resp.headers['content-encoding'] === 'deflate') compression = 'inflate';
-            else if (body && body[0] == 0x1F && body[1] == 0x8B) compression = 'gunzip';
-            else if (body && body[0] == 0x78 && body[1] == 0x9C) compression = 'inflate';
+            else if (body && body[0] === 0x1F && body[1] === 0x8B) compression = 'gunzip';
+            else if (body && body[0] === 0x78 && body[1] === 0x9C) compression = 'inflate';
             if (compression) {
                 zlib[compression](body, function(err, data) {
                     if (err) return cb(err);
-                    parse(data);
+                    parse(data, resp);
                 });
             } else {
-                parse(body);
+                parse(body, resp);
             }
         },
         params = {

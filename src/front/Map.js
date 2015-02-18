@@ -108,7 +108,7 @@ L.Kosmtik.Map = L.Map.extend({
     createPollIndicator: function () {
         var button = L.DomUtil.create('li', 'poll-indicator');
         button.innerHTML = '⇵';
-        button.title = 'Sync status'
+        button.title = 'Sync status';
         this.toolbar.addTool(button);
     },
 

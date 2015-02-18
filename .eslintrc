@@ -1,0 +1,16 @@
+{
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "quotes": "single",
+        "no-underscore-dangle": false,
+        "curly": false,
+        "consistent-return": false,
+        "new-cap": false,
+        "strict": global,
+        "indent": 4
+    },
+    "globals": {L: true}
+}

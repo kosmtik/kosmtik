@@ -74,7 +74,7 @@ Config.prototype.initExporters = function () {
     this.exporters = {};
 };
 
-Config.prototype.registerExporter= function (format, path) {
+Config.prototype.registerExporter = function (format, path) {
     this.exporters[format] = path;
 };
 
@@ -85,8 +85,8 @@ Config.prototype.initLoaders = function () {
     this.registerLoader('.yaml', './back/loader/YAML.js');
 };
 
-Config.prototype.registerLoader = function (ext, name_or_path) {
-    this.loaders[ext] = name_or_path;
+Config.prototype.registerLoader = function (ext, nameOrPath) {
+    this.loaders[ext] = nameOrPath;
 };
 
 Config.prototype.getLoader = function (ext) {
@@ -186,7 +186,7 @@ Config.prototype.attachRoutes = function (e) {
 
 Config.prototype.serveForFront = function (req, res) {
     res.writeHead(200, {
-        'Content-Type': 'application/javascript',
+        'Content-Type': 'application/javascript'
     });
     var tpl = 'L.K.Config = %;';
     res.write(tpl.replace('%', JSON.stringify(this.toFront())));

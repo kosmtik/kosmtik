@@ -1,6 +1,6 @@
 L.Kosmtik.MetatileBounds = L.TileLayer.extend({
 
-    initialize: function (map, options) {
+    initialize: function (map) {
         this.map = map;
         this.map.settingsForm.addElement(['showMetatiles', {handler: L.K.Switch, label: 'Display metatiles bounds (ctrl-alt-M)'}]);
         this.map.on('settings:synced', function (e) {
@@ -14,7 +14,8 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
             context: this,
             name: 'Metatiles bounds: toggle view'
         });
-        return L.TileLayer.prototype.initialize.call(this, '', options);
+        L.TileLayer.prototype.initialize.call(this, '');
+        this.setTileSize();
     },
 
     toggle: function () {
@@ -37,11 +38,13 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
         // Delete the clusters to prevent from having several times
         // the same data
         map.on('zoomstart', this.resetVectorLayer, this);
+        map.on('reloaded', this.reset, this);
         L.TileLayer.prototype.onAdd.call(this, map);
     },
 
     onRemove: function (map) {
         map.off('zoomstart', this.resetVectorLayer, this);
+        map.off('reloaded', this.reset, this);
         this.removeVectorLayer();
         L.TileLayer.prototype.onRemove.call(this, map);
     },
@@ -69,9 +72,18 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
         this.vectorlayer.addLayer(L.polygon([nw, sw, se, ne], options));
     },
 
+    setTileSize: function () {
+        this.options.tileSize = L.K.Config.project.metatile * 256;
+    },
+
     redraw: function () {
         if (this.vectorlayer) this.vectorlayer.clearLayers();
         L.TileLayer.prototype.redraw.call(this);
+    },
+
+    reset: function () {
+        this.setTileSize();
+        this.redraw();
     }
 
 });

@@ -18,7 +18,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.loader = L.DomUtil.create('div', 'map-loader', this._controlContainer);
         this.crosshairs = new L.K.Crosshairs(this);
         this.alert = new L.K.Alert(this);
-        this.metatilesBounds = new L.K.MetatileBounds(this, {tileSize: L.K.Config.project.metatile * 256});
+        this.metatilesBounds = new L.K.MetatileBounds(this);
         var tilelayerOptions = {
             version: L.K.Config.project.loadTime,
             minZoom: this.options.minZoom,
@@ -70,6 +70,7 @@ L.Kosmtik.Map = L.Map.extend({
                     L.K.Config.project = JSON.parse(data);
                     this.tilelayer.options.version = L.K.Config.project.loadTime;
                     this.tilelayer.redraw();
+                    this.fire('reloaded');
                 }
                 this.unsetState('loading');
             },

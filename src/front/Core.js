@@ -176,7 +176,7 @@ L.Kosmtik.Alert = L.Class.extend({
         this.closeButton = L.DomUtil.create('a', 'close', this.container);
         this.content = L.DomUtil.create('div', 'content', this.container);
         this.closeButton.href = '#';
-        this.closeButton.innerHTML = '❌ Close';
+        this.closeButton.innerHTML = 'Close';
         L.DomEvent
             .on(this.closeButton, 'click', L.DomEvent.stop)
             .on(this.closeButton, 'click', this.hide, this);

@@ -480,6 +480,10 @@ input.switch:checked ~ label:after {
     text-align: right;
     color: #efefef;
 }
+.kosmtik-alert .close:before {
+    content: '❌ ';
+    font-family: 'dejavu_sansbook';
+}
 .alert .kosmtik-alert {
     padding: 10px;
     height: auto;

@@ -10,7 +10,11 @@
         "consistent-return": false,
         "new-cap": false,
         "strict": global,
-        "indent": 4
+        "indent": 4,
+        "no-shadow": false
     },
-    "globals": {L: true}
+    "globals": {
+        "L": true,
+        "kosmtik": true
+    }
 }

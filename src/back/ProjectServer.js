@@ -4,13 +4,13 @@ var fs = require('fs'),
     GeoUtils = require('./GeoUtils.js'),
     VectorBasedTile = require('./VectorBasedTile.js').Tile,
     MetatileBasedTile = require('./MetatileBasedTile.js').Tile,
-    XRayTile = require('./XRayTile.js').Tile,
-    TILEPREFIX = 'tile';
+    XRayTile = require('./XRayTile.js').Tile;
+var TILEPREFIX = 'tile';
 
 var ProjectServer = function (project, parent) {
     this.project = project;
     this.parent = parent;
-    this._poll_queue = [];
+    this._pollQueue = [];
     var self = this;
     this.project.when('loaded', function () {
         self.initMapPools();
@@ -61,6 +61,7 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
         return tile.render(self.project, map, function (err, im) {
             if (err) return self.raise(err.message, res, release);
             im.encode('png', function (err, buffer) {
+                if (err) return self.raise(err.message, res, release);
                 res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
                 res.write(buffer);
                 res.end();
@@ -127,6 +128,7 @@ ProjectServer.prototype.xraytile = function (z, x, y, res, query) {
             xtile.render(self.project, map, function (err, im) {
                 if (err) return self.raise(err.message, res, release);
                 im.encode('png', function (err, buffer) {
+                    if (err) return self.raise(err.message, res, release);
                     res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
                     res.write(buffer);
                     res.end();
@@ -170,7 +172,7 @@ ProjectServer.prototype.queryTile = function (z, lat, lon, res, query) {
 
 ProjectServer.prototype.config = function (res) {
     res.writeHead(200, {
-        'Content-Type': 'application/javascript',
+        'Content-Type': 'application/javascript'
     });
     var tpl = 'L.K.Config.project = %;';
     res.write(tpl.replace('%', JSON.stringify(this.project.toFront())));
@@ -179,6 +181,7 @@ ProjectServer.prototype.config = function (res) {
 
 ProjectServer.prototype.export = function (res, options) {
     this.project.export(options, function (err, buffer) {
+        if (err) return self.raise(err.message, res);
         res.writeHead(200, {
             'Content-Disposition': 'attachment; filename: "xxxx"'
         });
@@ -200,14 +203,14 @@ ProjectServer.prototype.main = function (res) {
         data = data.replace('%%CSS%%', css);
         res.writeHead(200, {
             'Content-Type': 'text/html',
-            'Content-Length' : data.length
+            'Content-Length': data.length
         });
         res.end(data);
     });
 };
 
 ProjectServer.prototype.addToPollQueue = function (message) {
-    if (this._poll_queue.indexOf(message) === -1) this._poll_queue.push(message);
+    if (this._pollQueue.indexOf(message) === -1) this._pollQueue.push(message);
 };
 
 ProjectServer.prototype.raise = function (message, res, cb) {
@@ -219,15 +222,16 @@ ProjectServer.prototype.raise = function (message, res, cb) {
 };
 
 ProjectServer.prototype.poll = function (res) {
-    if (this._poll_queue.length) {
-        data = JSON.stringify(this._poll_queue);
-        this._poll_queue = [];
+    var data;
+    if (this._pollQueue.length) {
+        data = JSON.stringify(this._pollQueue);
+        this._pollQueue = [];
     } else {
         data = '';
     }
     res.writeHead(data.length ? 200 : 204, {
         'Content-Type': 'application/json',
-        'Content-Length' : data.length,
+        'Content-Length': data.length,
         'Cache-Control': 'private, no-cache, must-revalidate'
     });
     res.end(data);

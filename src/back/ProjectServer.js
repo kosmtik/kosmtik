@@ -13,7 +13,12 @@ var ProjectServer = function (project, parent) {
     this._pollQueue = [];
     var self = this;
     this.project.when('loaded', function () {
-        self.initMapPools();
+        try {
+            self.initMapPools();
+        } catch (err) {
+            console.log(err.message);
+            self.addToPollQueue({error: err.message});
+        }
         fs.watch(self.project.root, function (type, filename) {
             if (filename) {
                 if (filename.indexOf('.') === 0) return;
@@ -45,10 +50,16 @@ ProjectServer.prototype.serveTile = function (z, x, y, res, query) {
     y = y.split('.');
     var ext = y[1];
     y = y[0];
-    if (ext === 'json') this.jsontile(z, x, y, res, query);
-    else if (ext === 'pbf') this.pbftile(z, x, y, res);
-    else if (ext === 'xray') this.xraytile(z, x, y, res, query);
-    else this.tile(z, x, y, res);
+    var func;
+    if (ext === 'json') func = this.jsontile;
+    else if (ext === 'pbf') func = this.pbftile;
+    else if (ext === 'xray') func = this.xraytile;
+    else func = this.tile;
+    try {
+        func.call(this, z, x, y, res, query);
+    } catch (err) {
+        this.raise('Project not loaded properly.', res);
+    }
 };
 
 ProjectServer.prototype.tile = function (z, x, y, res) {
@@ -214,20 +225,19 @@ ProjectServer.prototype.addToPollQueue = function (message) {
 };
 
 ProjectServer.prototype.raise = function (message, res, cb) {
+    console.trace();
     console.log(message);
-    this.addToPollQueue({error: message});
+    if (message) this.addToPollQueue({error: message});
     res.writeHead(500);
     res.end();
     if (cb) cb();
 };
 
 ProjectServer.prototype.poll = function (res) {
-    var data;
+    var data = '';
     if (this._pollQueue.length) {
         data = JSON.stringify(this._pollQueue);
         this._pollQueue = [];
-    } else {
-        data = '';
     }
     res.writeHead(data.length ? 200 : 204, {
         'Content-Type': 'application/json',

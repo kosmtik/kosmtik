@@ -164,14 +164,25 @@ ProjectServer.prototype.queryTile = function (z, lat, lon, res, query) {
         return tile.renderToVector(self.project, map, function (err, t) {
             if (err) return self.raise(err.message, res, release);
             var options = {tolerance: query.tolerance || 100};
-            if (query.layer && query.layer !== '__all__') options.layer = query.layer;
-            var features = t.query(lon, lat, options), results = [];
-            for (var i = 0; i < features.length; i++) {
-                results.push({
-                    distance: features[i].distance,
-                    layer: features[i].layer,
-                    attributes: features[i].attributes()
-                });
+            var results = [], layers = [];
+            var doQuery = function (results, options) {
+                var features = t.query(lon, lat, options);
+                for (var i = 0; i < features.length; i++) {
+                    results.push({
+                        distance: features[i].distance,
+                        layer: features[i].layer,
+                        attributes: features[i].attributes()
+                    });
+                }
+            };
+            if (query.layer && query.layer !== '__all__') layers = query.layer.split(',');
+            if (!layers.length) {
+                doQuery(results, options);
+            } else {
+                for (var i = 0; i < layers.length; i++) {
+                    options.layer = layers[i];
+                    doQuery(results, options);
+                }
             }
             res.writeHead(200, {'Content-Type': 'application/javascript'});
             res.write(JSON.stringify(results));

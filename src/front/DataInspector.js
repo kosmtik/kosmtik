@@ -2,14 +2,22 @@ L.TileLayer.XRay = L.TileLayer.extend({
 
     getTileUrl: function (tilePoint) {
         this.options.version = Date.now();
-        // display only the checked layers
+        this.options.showLayer = L.TileLayer.XRay.computeLayers();
+        this.options.background = L.K.Config.dataInspectorBackground || '';
+        return L.TileLayer.prototype.getTileUrl.call(this, tilePoint);
+    }
+
+});
+
+L.extend(L.TileLayer.XRay, {
+
+    // display only the checked layers
+    computeLayers: function () {
         var showLayers = [];
         for (var k in L.K.Config.dataInspectorLayers) {
             if (L.K.Config.dataInspectorLayers[k] === true && k !== '__all__') showLayers.push(k);
         }
-        this.options.showLayer = showLayers.join(',');
-        this.options.background = L.K.Config.dataInspectorBackground || '';
-        return L.TileLayer.prototype.getTileUrl.call(this, tilePoint);
+        return showLayers.join(',');
     }
 
 });
@@ -32,11 +40,11 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.addCommands();
         this.map.on('click', function (e) {
             if (!L.K.Config.dataInspector) return;
-            var url = L.Util.template('./query/{z}/{lat}/{lng}/?layer={layer}', {
+            var url = L.Util.template('./query/{z}/{lat}/{lng}/?layer={showLayers}', {
                 z: this.map.getZoom(),
                 lat: e.latlng.lat,
                 lng: e.latlng.lng,
-                layer: ''
+                showLayers: L.TileLayer.XRay.computeLayers()
             });
             L.K.Xhr.get(url, {
                 callback: function (status, data) {

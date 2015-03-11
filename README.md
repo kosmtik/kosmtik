@@ -70,7 +70,7 @@ node index.js plugins --install pluginname
 
 For example:
 ```
-node index.js plugins --install kosmtik-map-compare
+node index.js plugins --install kosmtik-map-compare [--install kosmtik-overlay…]
 ```
 
 

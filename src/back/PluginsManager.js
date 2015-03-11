@@ -16,7 +16,8 @@ var PluginsManager = function (config) {
     });
     this.config.commands.plugins.option('install', {
         metavar: 'NAME',
-        help: 'Install a plugin'
+        help: 'Install a plugin',
+        list: true
     });
     this.config.commands.plugins.option('reinstall', {
         flag: true,
@@ -27,7 +28,7 @@ var PluginsManager = function (config) {
         '../plugins/base-exporters/index.js',
         '../plugins/hash/index.js',
         '../plugins/local-config/index.js',
-        '../plugins/datasource-loader/index.js',
+        '../plugins/datasource-loader/index.js'
     ].concat(this.config.userConfig.plugins || []);
     for (var i = 0; i < this._registered.length; i++) {
         this.load(this._registered[i]);
@@ -49,7 +50,7 @@ PluginsManager.prototype.load = function (name_or_path) {
 PluginsManager.prototype.each = function (method, context) {
     for (var i = 0; i < this._registered.length; i++) {
         method.call(context || this, this._registered[i]);
-    };
+    }
 };
 
 PluginsManager.prototype.isInstalled = function (name) {
@@ -80,27 +81,34 @@ PluginsManager.prototype.available = function (callback) {
 
 };
 
-PluginsManager.prototype.install = function (name) {
+PluginsManager.prototype.install = function (names) {
     var self = this,
-        pkg = this.loadPackage();
-    npm.load(pkg, function () {
-        npm.commands.view([name], true, function (err, data) {
-            if (err) throw err.message;
-            var version = Object.keys(data)[0];
-            if (!version) return self.config.log('Not found', name, 'ABORTING');
-            var plugin = data[version];
-            if (!plugin.kosmtik || !semver.satisfies(pkg.version, plugin.kosmtik)) {
-                return self.config.log('Unable to install', name, 'version', plugin.kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
-            }
-            npm.commands.install([name], function (err) {
-                if (err) self.config.log('Error when installing package', name, err);
-                self.config.log('Successfully installed package', name);
-                self.attach(plugin.name);
-                self.config.saveUserConfig();
+        pkg = this.loadPackage(),
+        i = 0;
+    var loopInstall = function () {
+        var name = names[i++];
+        if (!name) return;
+        self.config.log('Starting installation of ' + name);
+        npm.load(pkg, function () {
+            npm.commands.view([name], true, function (err, data) {
+                if (err) throw err.message;
+                var version = Object.keys(data)[0];
+                if (!version) return self.config.log('Not found', name, 'ABORTING');
+                var plugin = data[version];
+                if (!plugin.kosmtik || !semver.satisfies(pkg.version, plugin.kosmtik)) {
+                    return self.config.log('Unable to install', name, 'version', plugin.kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
+                }
+                npm.commands.install([name], function (err) {
+                    if (err) return self.config.log('Error when installing package', name, err);
+                    self.config.log('Successfully installed package', name);
+                    self.attach(plugin.name);
+                    self.config.saveUserConfig();
+                    loopInstall();
+                });
             });
         });
-    });
-
+    };
+    loopInstall();
 };
 
 PluginsManager.prototype.reinstall = function () {
@@ -118,7 +126,7 @@ PluginsManager.prototype.attach = function (name) {
 };
 
 PluginsManager.prototype.handleCommand = function () {
-    var self = this;
+    var self = this, installed;
     if (this.config.parsed_opts.installed) {
         console.log('Installed plugins');
         for (var i = 0; i < this._registered.length; i++) {

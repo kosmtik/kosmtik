@@ -15,7 +15,7 @@ var XRayTile = function (z, x, y, data, options) {
 XRayTile.prototype.render = function (project, map, cb) {
     var styleMap = this.styleMap(project),
         vtile = new mapnik.VectorTile(this.z, this.x, this.y);
-    vtile.setData(this.data);
+    if (this.data.length > 0) vtile.setData(this.data);
     vtile.parse();
     vtile.render(styleMap, new mapnik.Image(256, 256), cb);
 };

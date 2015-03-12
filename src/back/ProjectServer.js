@@ -163,7 +163,7 @@ ProjectServer.prototype.queryTile = function (z, lat, lon, res, query) {
         var tile = new tileClass(z, x, y, {metatile: 1});
         return tile.renderToVector(self.project, map, function (err, t) {
             if (err) return self.raise(err.message, res, release);
-            var options = {tolerance: parseInt(query.tolerance) || 100};
+            var options = {tolerance: parseInt(query.tolerance, 10) || 100};
             var results = [], layers = [];
             var doQuery = function (results, options) {
                 var features = t.query(lon, lat, options);

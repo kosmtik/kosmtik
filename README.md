@@ -26,7 +26,8 @@ Only the core needs:
 
 ## Install
 
-Clone this repository with ``git clone https://github.com/kosmtik/kosmtik.git`` and:
+Clone this repository with ``git clone https://github.com/kosmtik/kosmtik.git``,
+go to the downloaded directory with ``cd kosmtik``, and run:
 
 ```
 npm install

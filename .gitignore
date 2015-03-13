@@ -4,3 +4,4 @@ npm-debug.log
 logo.png
 v8.log
 tmp/
+plugins-src/*

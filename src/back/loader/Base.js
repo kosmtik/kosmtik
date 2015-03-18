@@ -7,6 +7,7 @@ var BaseLoader = function (project) {
 };
 
 BaseLoader.prototype.postprocess = function () {
+    this.mml.metatile = +(this.mml.metatile || 2);
     if (this.mml.Stylesheet) {
         this.mml.Stylesheet = this.mml.Stylesheet.map(this.normalizeStylesheet.bind(this));
     }

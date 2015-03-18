@@ -92,7 +92,7 @@ Project.prototype.toFront = function () {
 };
 
 Project.prototype.tileSize = function () {
-    return 256 * (this.mml.metatile || 2);
+    return 256 * this.mml.metatile;
 };
 
 Project.prototype.getUrl = function () {

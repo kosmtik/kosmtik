@@ -15,11 +15,13 @@ LocalConfig.prototype.patchMML = function (e) {
         };
     if (!filepath) {
         filepath = path.join(e.project.root, 'localconfig.json');
+        if (!fs.existsSync(filepath)) {
+            // Do we have a js module instead?
+            filepath = path.join(e.project.root, 'localconfig.js');
+        }
     }
-    if (!fs.existsSync(filepath)) {
-        // Do we have a js module instead?
-        filepath = path.join(e.project.root, 'localconfig.js');
-    }
+    // path.isAbsolute is Node 0.12 only
+    if (path.isAbsolute && !path.isAbsolute(filepath)) filepath = path.join(__dirname, filepath);
     if (!fs.existsSync(filepath)) {
         return done();  // Nothing to do;
     }
@@ -27,7 +29,7 @@ LocalConfig.prototype.patchMML = function (e) {
         ext = path.extname(filepath);
     if (ext === '.js') {
         try {
-            var UserConfig = new require(filepath).LocalConfig(l, e.project);
+            new require(filepath).LocalConfig(l, e.project);
             console.warn('[Local Config] Patched config from', filepath);
         } catch (err) {
             console.warn('[Local Config] Unable to load local config from', filepath);
@@ -35,6 +37,7 @@ LocalConfig.prototype.patchMML = function (e) {
         done();
     } else {
         fs.readFile(filepath, 'utf-8', function (err, data) {
+            if (err) console.warn('[Local Config] Unable to load local config from', filepath);
             l.fromString(data);
             console.warn('[Local Config]', 'Patched config from', filepath);
             done();

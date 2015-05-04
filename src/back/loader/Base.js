@@ -36,6 +36,7 @@ BaseLoader.prototype.normalizeLayer = function (layer) {
 BaseLoader.prototype.normalizeSource = function (source) {
     if (typeof source === 'string') {
         var uri = url.parse(source);
+        uri.href = uri.href.replace(/%7B/g, '{').replace(/%7D/g, '}');
         source = {
             protocol: uri.protocol
         };

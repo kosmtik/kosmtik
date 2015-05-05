@@ -36,6 +36,8 @@ BaseLoader.prototype.normalizeLayer = function (layer) {
 BaseLoader.prototype.normalizeSource = function (source) {
     if (typeof source === 'string') {
         var uri = url.parse(source);
+        // Since 0.12, url.parse escapes unwise chars in URL, but we need
+        // to keep the variables, like {x}, {y} as is.
         uri.href = uri.href.replace(/%7B/g, '{').replace(/%7D/g, '}');
         source = {
             protocol: uri.protocol

@@ -12,6 +12,10 @@ LocalConfig.prototype.patchMML = function (e) {
         done = function () {
             e.project.emitAndForward('localconfig:done', e);
             e.continue();
+        },
+        error = function (err) {
+            console.warn('[Local Config] Unable to load local config from', filepath);
+            console.error(err);
         };
     if (!filepath) {
         filepath = path.join(e.project.root, 'localconfig.json');
@@ -21,8 +25,9 @@ LocalConfig.prototype.patchMML = function (e) {
         }
     }
     // path.isAbsolute is Node 0.12 only
-    if (path.isAbsolute && !path.isAbsolute(filepath)) filepath = path.join(__dirname, filepath);
+    if (path.isAbsolute && !path.isAbsolute(filepath)) filepath = path.join(process.cwd(), filepath);
     if (!fs.existsSync(filepath)) {
+        error(new Error('File not found: ' + filepath))
         return done();  // Nothing to do;
     }
     var l = new Localizer(e.project.mml),
@@ -32,14 +37,18 @@ LocalConfig.prototype.patchMML = function (e) {
             new require(filepath).LocalConfig(l, e.project);
             console.warn('[Local Config] Patched config from', filepath);
         } catch (err) {
-            console.warn('[Local Config] Unable to load local config from', filepath);
+            error(err);
         }
         done();
     } else {
         fs.readFile(filepath, 'utf-8', function (err, data) {
-            if (err) console.warn('[Local Config] Unable to load local config from', filepath);
-            l.fromString(data);
-            console.warn('[Local Config]', 'Patched config from', filepath);
+            if (err) error(err);
+            try {
+                l.fromString(data);
+                console.warn('[Local Config]', 'Patched config from', filepath);
+            } catch (err) {
+                error(err);
+            }
             done();
         });
     }

@@ -19,8 +19,11 @@ L.Kosmtik.Sidebar = L.Control.extend({
         var tab = L.DomUtil.create('li', options.className || '', this._tabs);
         tab.innerHTML = options.label;
         tab._sidebar = this;
-        tab._callback = options.callback;
-        tab._callbackContext = options.context;
+        if (options.callback) {
+            this.on('open', function (e) {
+                if(e.el === tab) options.callback.call(options.callbackContext || this);
+            });
+        }
         var pane = L.DomUtil.create('li', 'sidebar-pane ' + (options.className || ''), this._container);
         if (options.content.nodeType && options.content.nodeType === 1) {
             pane.appendChild(options.content);
@@ -71,7 +74,7 @@ L.Kosmtik.Sidebar = L.Control.extend({
         L.DomUtil.addClass(el._pane, 'active');
         L.DomUtil.removeClass(this._sidebar, 'collapsed');
         this.fire('open', {el: el});
-     },
+    },
 
     close: function () {
         if (!L.DomUtil.hasClass(this._sidebar, 'collapsed')) {
@@ -86,11 +89,10 @@ L.Kosmtik.Sidebar = L.Control.extend({
         this.fire('tab:click', {el: e.target});
         if (L.DomUtil.hasClass(e.target, 'active')) this.close();
         else this.open(e.target);
-        if (e.target._callback) e.target._callback.apply(e.target._callbackContext || this);
     },
 
     _onKeyUp: function (e) {
-        if (e.keyCode == L.K.Keys.ESC) {
+        if (e.keyCode === L.K.Keys.ESC) {
             this.close();
         }
     }

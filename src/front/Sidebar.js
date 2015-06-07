@@ -21,7 +21,7 @@ L.Kosmtik.Sidebar = L.Control.extend({
         tab._sidebar = this;
         if (options.callback) {
             this.on('open', function (e) {
-                if(e.el === tab) options.callback.call(options.callbackContext || this);
+                if (e.el === tab) options.callback.call(options.context || this);
             });
         }
         var pane = L.DomUtil.create('li', 'sidebar-pane ' + (options.className || ''), this._container);

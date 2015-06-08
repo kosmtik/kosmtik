@@ -12,6 +12,9 @@
   background-color: #444;
   color: #efefef;
 }
+.sidebar.large {
+  width: calc(100% - 80px);
+}
 .sidebar.collapsed {
   width: 60px; 
 }
@@ -60,7 +63,8 @@
   display: none;
   right: 0;
   padding: 10px 20px;
-  width: 400px;
+  width: 100%;
+  min-width: 400px;
 }
 .sidebar-pane.active {
   display: block;

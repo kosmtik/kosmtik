@@ -24,6 +24,11 @@ L.Kosmtik.Sidebar = L.Control.extend({
                 if (e.el === tab) options.callback.call(options.context || this);
             });
         }
+        this.on('opening', function (e) {
+            if (e.el !== tab) return;
+            if (options.large) L.DomUtil.addClass(this._sidebar, 'large');
+            else L.DomUtil.removeClass(this._sidebar, 'large');
+        });
         var pane = L.DomUtil.create('li', 'sidebar-pane ' + (options.className || ''), this._container);
         if (options.content.nodeType && options.content.nodeType === 1) {
             pane.appendChild(options.content);

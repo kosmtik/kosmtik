@@ -141,6 +141,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.sidebarForm.fetchAll();
         if (L.K.Config.dataInspector) this.tilelayer.addTo(this.map);
         else this.map.removeLayer(this.tilelayer);
+        this.map.closePopup();
     },
 
     redraw: function () {

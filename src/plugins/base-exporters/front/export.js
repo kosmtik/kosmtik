@@ -150,9 +150,9 @@ L.K.Exporter = L.Class.extend({
             this.leftTop.setLatLng([e.target._latlng.lat, this.leftTop._latlng.lng]);
             this.drawFromLatLngs();
         }, this);
-        this.builder.on('synced', function (e) {
-            if (e.field === 'showExtent') this.toggleExtent();
-            else if (e.field === 'zoom' || e.field === 'scale') this.setExtentCaptionContent();
+        this.builder.on('postsync', function (e) {
+            if (e.helper.field === 'showExtent') this.toggleExtent();
+            else if (e.helper.field === 'zoom' || e.helper.field === 'scale') this.setExtentCaptionContent();
         }, this);
         this.drawFromCenter();
     },

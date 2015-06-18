@@ -37,7 +37,7 @@ L.Kosmtik.Map = L.Map.extend({
             if (L.K.Config.autoReload) this.reload();
         });
         this.on('settings:synced', function (e) {
-            if (e.field === 'backendPolling') this.togglePoll();
+            if (e.helper.field === 'backendPolling') this.togglePoll();
         });
         this.help = new L.Kosmtik.Help(this);
     },

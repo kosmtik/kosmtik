@@ -5,11 +5,11 @@ L.Kosmtik = L.K = {};
 /*   Utils   */
 /*************/
 L.Kosmtik.buildQueryString = function (params) {
-    var query_string = [];
+    var queryString = [];
     for (var key in params) {
-        query_string.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+        queryString.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
     }
-    return query_string.join('&');
+    return queryString.join('&');
 };
 
 L.Kosmtik.Xhr = {
@@ -105,7 +105,7 @@ L.Kosmtik.Switch = L.FormBuilder.CheckBox.extend({
         L.FormBuilder.CheckBox.prototype.build.apply(this);
         this.input.parentNode.appendChild(this.label);
         L.DomUtil.addClass(this.input.parentNode, 'with-switch');
-        var id = (this.formBuilder.options.id || Date.now()) + '.' + this.name;
+        var id = (this.builder.options.id || Date.now()) + '.' + this.name;
         this.label.setAttribute('for', id);
         L.DomUtil.addClass(this.input, 'switch');
         this.input.id = id;
@@ -117,7 +117,7 @@ L.Kosmtik.Util = {};
 
 L.Kosmtik.Util.renderPropertiesTable = function (properties) {
     var renderRow = function (container, key, value) {
-        if (!key || ! value) return;
+        if (!key || !value) return;
         var tr = L.DomUtil.create('tr', '', container);
         L.DomUtil.create('th', '', tr).innerHTML = key;
         L.DomUtil.create('td', '', tr).innerHTML = value;

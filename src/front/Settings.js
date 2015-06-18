@@ -9,7 +9,7 @@ L.Kosmtik.SettingsForm = L.Class.extend({
         this.map = map;
         this.builder = new L.K.FormBuilder(L.K.Config, this.elements);
         this.formContainer.appendChild(this.builder.build());
-        this.builder.on('synced', function (e) {
+        this.builder.on('postsync', function (e) {
             this.fire('settings:synced', e);
         }, this.map);
         this.map.sidebar.addTab({

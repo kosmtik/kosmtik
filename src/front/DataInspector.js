@@ -33,8 +33,8 @@ L.Kosmtik.DataInspector = L.Class.extend({
             maxZoom: this.map.options.maxZoom
         };
         this.tilelayer = new L.TileLayer.XRay('./tile/{z}/{x}/{y}.xray?t={version}&layer={showLayer}&background={background}', options);
-        this.tilelayer.on('loading', function () {this.setState('loading');}, this.map);
-        this.tilelayer.on('load', function () {this.unsetState('loading');}, this.map);
+        this.tilelayer.on('loading', function () { this.setState('loading'); }, this.map);
+        this.tilelayer.on('load', function () { this.unsetState('loading'); }, this.map);
         this.createSidebarPanel();
         this.createToolbarButton();
         this.addCommands();
@@ -69,7 +69,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
         this.title = L.DomUtil.create('h3', '', this.container);
         this.formContainer = L.DomUtil.create('div', '', this.container);
         this.title.innerHTML = 'Data Inspector';
-        var layers = L.K.Config.project.layers.map(function (l) {return l.name;});
+        var layers = L.K.Config.project.layers.map(function (l) { return l.name; });
         var backgrounds = [['black', 'black'], ['transparent', 'transparent']];
 
         var layerSettings = [['dataInspectorLayers.__all__', {handler: L.FormBuilder.LabeledCheckBox, label: 'Show All' } ]];
@@ -82,12 +82,12 @@ L.Kosmtik.DataInspector = L.Class.extend({
             ['dataInspectorBackground', {handler: L.FormBuilder.Select, helpText: 'Choose inspector background', selectOptions: backgrounds}]
         ].concat(layerSettings));
         this.formContainer.appendChild(this.sidebarForm.build());
-        this.sidebarForm.on('synced', function (e) {
-            if (e.field === 'dataInspector') this.toggle();
-            else if (e.field === 'dataInspectorBackground') this.redraw();
-            else if (e.field.indexOf('dataInspectorLayers') === 0) {
-                if (e.field !== 'dataInspectorLayers.__all__') L.K.Config.dataInspectorLayers.__all__ = false;
-                else for (var k in L.K.Config.dataInspectorLayers) {L.K.Config.dataInspectorLayers[k] = k === '__all__';}
+        this.sidebarForm.on('postsync', function (e) {
+            if (e.helper.field === 'dataInspector') this.toggle();
+            else if (e.helper.field === 'dataInspectorBackground') this.redraw();
+            else if (e.helper.field.indexOf('dataInspectorLayers') === 0) {
+                if (e.helper.field !== 'dataInspectorLayers.__all__') L.K.Config.dataInspectorLayers.__all__ = false;
+                else for (var k in L.K.Config.dataInspectorLayers) L.K.Config.dataInspectorLayers[k] = k === '__all__';
                 this.sidebarForm.fetchAll();
                 this.redraw();
             }
@@ -112,7 +112,7 @@ L.Kosmtik.DataInspector = L.Class.extend({
             ['dataInspector', {handler: L.K.Switch, label: 'Data Inspector'}]
         ]);
         button.appendChild(this.toolbarForm.build());
-        this.toolbarForm.on('synced', this.toggle, this);
+        this.toolbarForm.on('postsync', this.toggle, this);
         this.map.toolbar.addTool(button);
     },
 

@@ -4,14 +4,14 @@
         "node": true
     },
     "rules": {
-        "quotes": "single",
-        "no-underscore-dangle": false,
-        "curly": false,
-        "consistent-return": false,
-        "new-cap": false,
-        "strict": global,
-        "indent": 4,
-        "no-shadow": false
+        "quotes": [2, "single"],
+        "no-underscore-dangle": 0,
+        "curly": 0,
+        "consistent-return": 0,
+        "new-cap": 0,
+        "strict": [2, "never"],
+        "indent": [2, 4],
+        "no-shadow": 0
     },
     "globals": {
         "L": true,

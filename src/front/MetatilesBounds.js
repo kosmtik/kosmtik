@@ -64,12 +64,16 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
         var options = {
             color: '#444',
             weight: 1,
-            opacity: 0.65,
+            opacity: 0.7,
             fill: false,
             clickable: false,
             noClip: true
         };
-        this.vectorlayer.addLayer(L.polygon([nw, sw, se, ne], options));
+        this.vectorlayer.addLayer(L.polyline([sw, se, ne], options));
+        options.color = '#fff';
+        options.dashArray = '10,10';
+        options.opacity = 0.8;
+        this.vectorlayer.addLayer(L.polyline([sw, se, ne], options));
     },
 
     setTileSize: function () {

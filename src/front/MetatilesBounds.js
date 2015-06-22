@@ -57,7 +57,6 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
     addData: function (tilePoint) {
         var tileSize = this.options.tileSize,
             nwPoint = tilePoint.multiplyBy(tileSize),
-            nw = this._map.unproject(nwPoint),
             sw = this._map.unproject(nwPoint.add([0, tileSize])),
             se = this._map.unproject(nwPoint.add([tileSize, tileSize])),
             ne = this._map.unproject(nwPoint.add([tileSize, 0]));

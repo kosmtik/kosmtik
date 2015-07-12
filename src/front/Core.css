@@ -274,6 +274,12 @@ input.switch:checked ~ label:after {
     left: 0;
     width:100%;
 }
+.zoom-indicator {
+    background-color: #444;
+    color: #ecf0f1;
+    text-align: center;
+    font-family: 'fira_sanslight';
+}
 
 
 /* ********************************* */

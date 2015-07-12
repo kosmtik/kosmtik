@@ -98,7 +98,7 @@ L.Kosmtik.Map = L.Map.extend({
             shiftKey: true,
             ctrlKey: true,
             altKey: true,
-            callback: function () {this.settingsForm.toggle('autoReload');},
+            callback: function () { this.settingsForm.toggle('autoReload'); },
             context: this,
             name: 'Autoreload: toggle',
             description: 'Autoreload or not when project has changed'
@@ -151,4 +151,30 @@ L.Kosmtik.Map = L.Map.extend({
         else this.poll.stop();
     }
 
+});
+
+L.Kosmtik.ZoomIndicator = L.Control.extend({
+
+    options: {
+        position: 'topleft'
+    },
+
+    onAdd: function (map) {
+        this.map = map;
+        this.container = L.DomUtil.create('div', 'zoom-indicator');
+        map.on('zoomend', this.update, this);
+        return this.container;
+    },
+
+    update: function () {
+        this.container.textContent = this.map.getZoom();
+    }
+
+});
+
+
+L.K.Map.addInitHook(function () {
+    this.whenReady(function () {
+        (new L.K.ZoomIndicator()).addTo(this);
+    });
 });

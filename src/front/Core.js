@@ -117,7 +117,7 @@ L.Kosmtik.Util = {};
 
 L.Kosmtik.Util.renderPropertiesTable = function (properties) {
     var renderRow = function (container, key, value) {
-        if (!key || !value) return;
+        if (!key || value === undefined) return;
         var tr = L.DomUtil.create('tr', '', container);
         L.DomUtil.create('th', '', tr).innerHTML = key;
         L.DomUtil.create('td', '', tr).innerHTML = value;

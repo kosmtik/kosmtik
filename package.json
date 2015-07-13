@@ -19,7 +19,7 @@
   "license": "WTFPL",
   "dependencies": {
     "carto": "^0.14.1",
-    "generic-pool": "^2.1.1",
+    "generic-pool": "^2.2.0",
     "js-yaml": "^3.2.5",
     "json-localizer": "0.0.2",
     "leaflet": "^0.7.3",

@@ -27,11 +27,11 @@
     "leaflet-hash": "^0.2.1",
     "mapnik": "^3.4.0",
     "nomnom": "^1.8.1",
-    "npm": "^2.3.0",
-    "request": "^2.51.0",
-    "semver": "^4.2.0"
+    "npm": "^2.13.0",
+    "request": "^2.58.0",
+    "semver": "^5.0.0"
   },
   "devDependencies": {
-    "mocha": "^2.1.0"
+    "mocha": "^2.2.5"
   }
 }

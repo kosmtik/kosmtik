@@ -14,8 +14,8 @@ L.Kosmtik.Command = L.Class.extend({
             if (spec.keyCode) {
                 var key = L.K.Command.makeLabel(spec),
                     shortcut = L.DomUtil.create('small', 'shortcut');
-                    shortcut.innerHTML = key;
-                    el.insertBefore(shortcut, el.firstChild);
+                shortcut.innerHTML = key;
+                el.insertBefore(shortcut, el.firstChild);
             }
         };
         this.autocomplete = new L.K.Autocomplete(this.tool, {
@@ -101,11 +101,11 @@ L.Kosmtik.Command = L.Class.extend({
     },
 
     scoreAll: function (query) {
-        var match = [], score;
+        var match = [];
         this.each(function (spec) {
             this.score(spec, query);
             if (spec.score > 0) match.push(spec);
-        }, this)
+        }, this);
         return match.sort(function (a, b) {
             return b.score - a.score;
         });

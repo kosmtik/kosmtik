@@ -245,14 +245,15 @@ ProjectServer.prototype.raise = function (message, res, cb) {
 };
 
 ProjectServer.prototype.poll = function (res) {
-    var data = '';
+    var data = '', len;
     if (this._pollQueue.length) {
         data = JSON.stringify(this._pollQueue);
         this._pollQueue = [];
     }
-    res.writeHead(data.length ? 200 : 204, {
+    len = Buffer.byteLength(data, 'utf8');
+    res.writeHead(len ? 200 : 204, {
         'Content-Type': 'application/json',
-        'Content-Length': data.length,
+        'Content-Length': len,
         'Cache-Control': 'private, no-cache, must-revalidate'
     });
     res.end(data);

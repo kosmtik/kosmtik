@@ -11,7 +11,8 @@
         "new-cap": 0,
         "strict": [2, "never"],
         "indent": [2, 4],
-        "no-shadow": 0
+        "no-shadow": 0,
+        "semi-spacing": 0
     },
     "globals": {
         "L": true,

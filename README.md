@@ -8,6 +8,8 @@ but in the future we hope to plug in MapCSS too.
 
 **Alpha version, installable only from source**
 
+[![Dependency Status](https://david-dm.org/kosmtik/kosmtik.svg)](https://david-dm.org/kosmtik/kosmtik)
+
 ## Lite
 
 Only the core needs:

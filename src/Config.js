@@ -1,6 +1,7 @@
 var util = require('util'),
     path = require('path'),
     fs = require('fs'),
+    semver = require('semver'),
     yaml = require('js-yaml'),
     StateBase = require('./back/StateBase.js').StateBase,
     Helpers = require('./back/Helpers.js').Helpers,
@@ -112,7 +113,7 @@ Config.prototype.initOptions = function () {
     });
     this.opts.option('mapnik_version', {
         full: 'mapnik-version',
-        default: mapnik.versions.mapnik,
+        default: this.defaultMapnikVersion(),
         help: 'Optional mapnik reference version to be passed to Carto'
     });
     this.opts.option('proxy', {
@@ -195,6 +196,12 @@ Config.prototype.serveForFront = function (req, res) {
 
 Config.prototype.log = function () {
     console.warn.apply(console, Array.prototype.concat.apply(['[Core]'], arguments));
+};
+
+Config.prototype.defaultMapnikVersion = function () {
+    var version = semver(mapnik.versions.mapnik);
+    version.patch = 0;
+    return version.format();
 };
 
 exports.Config = Config;

@@ -71,9 +71,9 @@ BaseLoader.prototype.normalizeStylesheet = function (style) {
 };
 
 BaseLoader.prototype.load = function () {
-	this.mml = this.loadFile();
-	this.postprocess();
-	return this.mml;
+    this.mml = this.loadFile();
+    this.postprocess();
+    return this.mml;
 };
 
 exports.BaseLoader = BaseLoader;

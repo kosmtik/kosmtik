@@ -27,6 +27,7 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
         },
         onResponse = function (err, resp, body) {
             if (err) return cb(err);
+            if (resp.statusCode !== 200) return cb(new Error('Unable to retrieve data from ' + resp.request.uri.href));
             var compression = false;
             if (resp.headers['content-encoding'] === 'gzip') compression = 'gunzip';
             else if (resp.headers['content-encoding'] === 'deflate') compression = 'inflate';

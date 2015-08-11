@@ -21,7 +21,7 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
                 vtile.parse();
             } catch (error) {
                 console.log(error.message);
-                cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
+                return cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
             }
             if (++processed === project.mml.source.length) cb(null, vtile);
         },

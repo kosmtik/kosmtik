@@ -1,5 +1,7 @@
 # Kosmtik
 
+[![Join the chat at https://gitter.im/kosmtik/kosmtik](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kosmtik/kosmtik?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Very lite but extendable mapping framework to create Mapnik ready maps with
 OpenStreetMap data (and more).
 

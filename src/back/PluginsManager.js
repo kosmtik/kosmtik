@@ -112,10 +112,11 @@ PluginsManager.prototype.install = function (names) {
 };
 
 PluginsManager.prototype.reinstall = function () {
+    var names = [];
     this.each(function (name) {
-        if (this.isLocal(name)) return;
-        this.install(name);
+        if (!this.isLocal(name)) names.push(name);
     });
+    this.install(names);
 };
 
 PluginsManager.prototype.attach = function (name) {

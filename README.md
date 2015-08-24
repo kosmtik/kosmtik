@@ -1,6 +1,7 @@
 # Kosmtik
 
 [![Join the chat at https://gitter.im/kosmtik/kosmtik](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kosmtik/kosmtik?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Dependency Status](https://david-dm.org/kosmtik/kosmtik.svg)](https://david-dm.org/kosmtik/kosmtik)
 
 Very lite but extendable mapping framework to create Mapnik ready maps with
 OpenStreetMap data (and more).
@@ -10,7 +11,6 @@ but in the future we hope to plug in MapCSS too.
 
 **Alpha version, installable only from source**
 
-[![Dependency Status](https://david-dm.org/kosmtik/kosmtik.svg)](https://david-dm.org/kosmtik/kosmtik)
 
 ## Lite
 

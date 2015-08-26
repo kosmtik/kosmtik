@@ -39,11 +39,13 @@ npm install
 
 ## Update
 
-Obtain changes from repository (e.g. ```git pull upstream master```) 
+Obtain changes from repository (e.g. `git pull`)
 
-```
-rm -rf node_modules && npm install 
-```
+    rm -rf node_modules && npm install
+
+To reinstall all plugins:
+
+    node index.js plugins --reinstall
 
 ## Usage
 

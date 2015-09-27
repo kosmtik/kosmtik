@@ -20,7 +20,7 @@
   "dependencies": {
     "carto": "^0.15.2",
     "generic-pool": "^2.2.0",
-    "js-yaml": "^3.3.1",
+    "js-yaml": "^3.4.2",
     "json-localizer": "0.0.3",
     "leaflet": "^0.7.3",
     "leaflet-formbuilder": "^0.2.0",

@@ -28,7 +28,7 @@
     "mapnik": "^3.4.7",
     "nomnom": "^1.8.1",
     "npm": "^3.3.5",
-    "request": "^2.58.0",
+    "request": "^2.64.0",
     "semver": "^5.0.0"
   },
   "devDependencies": {

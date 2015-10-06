@@ -1,6 +1,6 @@
 {
   "name": "kosmtik",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
   "scripts": {

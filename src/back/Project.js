@@ -83,7 +83,7 @@ Project.prototype.toFront = function () {
         minZoom: this.mml.minzoom,
         maxZoom: this.mml.maxzoom,
         metatile: this.mml.metatile,
-        name: this.mml.name,
+        name: this.mml.name ? this.mml.name : '',
         tileSize: this.tileSize(),
         loadTime: this.loadTime,
         layers: this.mml.Layer || []

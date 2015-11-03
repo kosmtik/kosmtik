@@ -60,7 +60,7 @@ VectorBasedTile.prototype.render = function (project, map, cb) {
     var self = this;
     this._render(project, map, function (err, vtile) {
         if (err) cb(err);
-        else vtile.render(map, new mapnik.Image(self.width, self.height), cb);
+        else vtile.render(map, new mapnik.Image(self.width, self.height), {'buffer_size': map.bufferSize}, cb);
     });
 };
 

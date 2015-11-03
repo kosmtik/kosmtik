@@ -40,6 +40,7 @@ L.Kosmtik.Map = L.Map.extend({
             if (e.helper.field === 'backendPolling') this.togglePoll();
         });
         this.help = new L.Kosmtik.Help(this);
+        document.title = L.K.Config.project.name;
     },
 
     setState: function (state) {

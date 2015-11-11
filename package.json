@@ -1,6 +1,6 @@
 {
   "name": "kosmtik",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "generic-pool": "^2.2.0",
     "js-yaml": "^3.4.2",
     "json-localizer": "0.0.3",
-    "leaflet": "^0.7.3",
+    "leaflet": "^1.0.0-beta.2",
     "leaflet-formbuilder": "^0.2.0",
     "leaflet-hash": "^0.2.1",
     "mapnik": "^3.4.7",

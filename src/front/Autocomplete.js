@@ -1,7 +1,5 @@
 
-L.Kosmtik.Autocomplete = L.Class.extend({
-
-    includes: L.Mixin.Events,
+L.Kosmtik.Autocomplete = L.Evented.extend({
 
     options: {
         placeholder: 'Start typing…',

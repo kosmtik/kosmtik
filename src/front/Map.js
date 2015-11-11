@@ -163,6 +163,7 @@ L.Kosmtik.ZoomIndicator = L.Control.extend({
         this.map = map;
         this.container = L.DomUtil.create('div', 'zoom-indicator');
         map.on('zoomend', this.update, this);
+        this.update();
         return this.container;
     },
 

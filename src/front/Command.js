@@ -65,7 +65,7 @@ L.Kosmtik.Command = L.Class.extend({
 
     onKeyDown: function (e) {
         var key = this._makeKey(e),
-        specs = this._listeners[key];
+            specs = this._listeners[key];
         if (specs) {
             if(specs.stop !== false) L.DomEvent.stop(e);
             specs.callback.apply(specs.context || this._map);

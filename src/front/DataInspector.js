@@ -22,9 +22,7 @@ L.extend(L.TileLayer.XRay, {
 
 });
 
-L.Kosmtik.DataInspector = L.Class.extend({
-
-    includes: [L.Mixin.Events],
+L.Kosmtik.DataInspector = L.Evented.extend({
 
     initialize: function (map) {
         this.map = map;

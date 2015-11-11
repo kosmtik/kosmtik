@@ -461,6 +461,7 @@ input.switch:checked ~ label:after {
     position: absolute;
     top: calc(50% - 9px);
     text-align: center;
+    z-index: 1000;
 }
 .crosshairs:before {
     content: '✚';

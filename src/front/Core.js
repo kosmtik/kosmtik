@@ -41,9 +41,7 @@ L.Kosmtik.Xhr = {
 
 };
 
-L.Kosmtik.Poll = L.Class.extend({
-
-    includes: [L.Mixin.Events],
+L.Kosmtik.Poll = L.Evented.extend({
 
     initialize: function (uri) {
         this.uri = uri;
@@ -130,7 +128,7 @@ L.Kosmtik.Util.renderPropertiesTable = function (properties) {
     return table;
 };
 
-L.K.Crosshairs = L.Class.extend({
+L.K.Crosshairs = L.Layer.extend({
 
     initialize: function (map) {
         this.icon = L.DomUtil.create('div', 'crosshairs', map._container);

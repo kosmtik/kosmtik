@@ -1,5 +1,5 @@
 var fs = require('fs'),
-	path = require('path'),
+    path = require('path'),
     url = require('url');
 
 var BaseLoader = function (project) {
@@ -7,7 +7,7 @@ var BaseLoader = function (project) {
 };
 
 BaseLoader.prototype.postprocess = function () {
-    this.mml.metatile = +(this.mml.metatile || 2);
+    this.mml.metatile = +(this.mml.metatile || this.mml.source ? 1 : 2);  // Default vectortiles to 1, classic to 2.
     if (this.mml.Stylesheet) {
         this.mml.Stylesheet = this.mml.Stylesheet.map(this.normalizeStylesheet.bind(this));
     }

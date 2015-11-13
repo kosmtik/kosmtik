@@ -101,7 +101,7 @@ See the examples below to get it working right now.
 
 
 ### Example of a json file
-```
+```json
 [
     {
         "where": "center",
@@ -132,7 +132,7 @@ See the examples below to get it working right now.
 ```
 
 ### Example of a js module
-```
+```javascript
 exports.LocalConfig = function (localizer, project) {
     localizer.where('center').then([29.9377, -3.4216, 9]);
     localizer.where('Layer').if({'Datasource.type': 'postgis'}).then({

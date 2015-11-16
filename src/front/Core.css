@@ -114,8 +114,14 @@ select[multiple="multiple"] {
     font-weight: normal;
     cursor: pointer;
 }
+.button.neutral, input[type="submit"].neutral {
+    background-color: #49535d;
+}
 .button:hover, input[type="submit"]:hover {
     background-color: #34495e;
+}
+.button.neutral:hover, input[type="submit"].neutral:hover {
+    background-color: #49495d;
 }
 .help-text, .helptext {
     display: block;

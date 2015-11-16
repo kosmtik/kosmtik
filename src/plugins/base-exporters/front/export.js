@@ -80,10 +80,14 @@ L.K.Exporter = L.Class.extend({
             title = L.DomUtil.create('h3', '', container),
             formContainer = L.DomUtil.create('div', '', container);
         title.innerHTML = 'Export';
-        this.builder = new L.K.FormBuilder(this.params, []);
+        this.builder = new L.K.FormBuilder(this.params);
         formContainer.appendChild(this.builder.build());
+        var reset = L.DomUtil.create('a', 'button neutral', container);
+        reset.innerHTML = '⛶ Current view';
+        L.DomEvent.on(reset, 'click', L.DomEvent.stop)
+                  .on(reset, 'click', this.setCurrentView, this);
         var submit = L.DomUtil.create('a', 'button', container);
-        submit.innerHTML = 'Export map';
+        submit.innerHTML = '⬇ Export map';
         L.DomEvent
             .on(submit, 'click', L.DomEvent.stop)
             .on(submit, 'click', function () {
@@ -101,6 +105,11 @@ L.K.Exporter = L.Class.extend({
             context: this,
             name: 'Export: configure'
         });
+        this.map.commands.add({
+            callback: this.setCurrentView,
+            context: this,
+            name: 'Export: set current view'
+        });
     },
 
     openSidebar: function () {
@@ -115,6 +124,16 @@ L.K.Exporter = L.Class.extend({
         }
         this.builder.setFields(elements);
         this.builder.build();
+    },
+
+    setCurrentView: function () {
+        var bounds = this.map.getBounds(),
+            size = this.map.getSize();
+        this.leftTop.setLatLng(bounds.getNorthWest());
+        this.leftBottom.setLatLng(bounds.getSouthWest());
+        this.rightBottom.setLatLng(bounds.getSouthEast());
+        this.rightTop.setLatLng(bounds.getNorthEast());
+        this.drawFromLatLngs();
     },
 
     initExtentLayer: function () {

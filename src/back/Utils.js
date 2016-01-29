@@ -33,7 +33,12 @@ module.exports = {
         var list = fs.readdirSync(dir);
         list.forEach(function(file) {
             file = path.join(dir, file);
-            var stat = fs.statSync(file);
+            try {
+                var stat = fs.statSync(file);
+            } catch (e) {
+                // Dead link?
+                return;
+            }
             results.push({path: file, stat: stat});
             if (stat && stat.isDirectory()) results = results.concat(module.exports.tree(file));
         });

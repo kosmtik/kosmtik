@@ -13,7 +13,7 @@
    height="256"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="/home/ybon/Code/js/kosmtik/favicon16.png"
    inkscape:export-xdpi="5.625"
@@ -28,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.9899495"
-     inkscape:cx="-40.619267"
-     inkscape:cy="153.72001"
+     inkscape:cx="-768.93925"
+     inkscape:cy="32.501705"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -38,7 +38,9 @@
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:snap-page="true">
+     inkscape:snap-page="true"
+     showguides="false"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid2985"
@@ -46,6 +48,14 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true" />
+    <sodipodi:guide
+       position="-656,112"
+       orientation="0,1"
+       id="guide4459" />
+    <sodipodi:guide
+       position="-688,-112"
+       orientation="0,1"
+       id="guide4461" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -55,7 +65,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -281,5 +291,29 @@
        style="fill:#ffffff;fill-opacity:1;stroke:none"
        d="m -751.43111,924.36218 0,128.00002 c 0,-70.69247 57.30755,-128.00002 128,-128.00002 l -128,0 z m 128,0 c 70.69245,0 128,57.30755 128,128.00002 l 0,-128.00002 -128,0 z m 128,128.00002 c 0,70.6924 -57.30755,128 -128,128 l 128,0 0,-128 z m -128,128 c -70.69245,0 -128,-57.3076 -128,-128 l 0,128 128,0 z"
        id="rect3785-0-3" />
+    <circle
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#464646;stroke-width:1.98449612;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.96899239, 1.98449619;stroke-dashoffset:0;stroke-opacity:1"
+       id="path4482"
+       cx="-947.69293"
+       cy="1051.5831"
+       r="127.00775" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4484"
+       width="192"
+       height="298.10153"
+       x="-1008"
+       y="914.26068" />
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:#464646;stroke-width:1.98449612;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.96899239, 1.98449619;stroke-dashoffset:0;stroke-opacity:1"
+       id="path4482-1"
+       sodipodi:type="arc"
+       sodipodi:cx="-953.95172"
+       sodipodi:cy="1053.101"
+       sodipodi:rx="127.00775"
+       sodipodi:ry="127.00775"
+       sodipodi:start="5.2010812"
+       sodipodi:end="1.0821041"
+       d="m -894.32519,940.95977 a 127.00775,127.00775 0 0 1 67.38122,112.14123 127.00775,127.00775 0 0 1 -67.38122,112.1411 l -59.62653,-112.1411 z" />
   </g>
 </svg>

@@ -19,13 +19,16 @@ var Config = function (root, configpath) {
     this.initOptions();
     this.initExporters();
     this.initLoaders();
+    this.initRenderers();
     this.initStatics();
     if (!this.configpath) this.ensureDefaultUserConfigPath();
     this.loadUserConfig();
     this.pluginsManager = new PluginsManager(this);  // Do we need back ref?
     this.emit('loaded');
     this.on('server:init', this.attachRoutes.bind(this));
-    this.parsed_opts = {};  // Default. TODO better option management.
+    this.parsed_opts = {
+        renderer: 'carto'
+    };  // Default. TODO better option management.
 };
 
 util.inherits(Config, StateBase);
@@ -79,11 +82,25 @@ Config.prototype.registerExporter = function (format, path) {
     this.exporters[format] = path;
 };
 
+Config.prototype.initRenderers = function () {
+    this.renderers = {};
+    this.registerRenderer('carto', './back/renderer/Carto.js');
+};
+
+Config.prototype.registerRenderer = function (name, path) {
+    this.renderers[name] = path;
+};
+
+Config.prototype.getRenderer = function (name) {
+    if (!this.renderers[name]) throw new Error('Unknown renderer: ' + name);
+    return require(this.renderers[name]).Renderer;
+};
+
 Config.prototype.initLoaders = function () {
     this.loaders = {};
     this.registerLoader('.mml', './back/loader/MML.js');
-    this.registerLoader('.yml', './back/loader/YAML.js');
-    this.registerLoader('.yaml', './back/loader/YAML.js');
+    this.registerLoader('.yml', './back/loader/MML.js');
+    this.registerLoader('.yaml', './back/loader/MML.js');
 };
 
 Config.prototype.registerLoader = function (ext, nameOrPath) {
@@ -91,7 +108,7 @@ Config.prototype.registerLoader = function (ext, nameOrPath) {
 };
 
 Config.prototype.getLoader = function (ext) {
-    if (!this.loaders[ext]) throw 'Unkown project config type: ' + ext;
+    if (!this.loaders[ext]) throw 'Unknown project config type: ' + ext;
     return require(this.loaders[ext]).Loader;
 };
 
@@ -123,6 +140,11 @@ Config.prototype.initOptions = function () {
         full: 'keep-cache',
         flag: true,
         help: 'Do not flush cached metatiles on project load'
+    });
+    this.opts.option('renderer', {
+        full: 'renderer',
+        default: 'carto',
+        help: 'Specify a renderer by its name, carto is the default.'
     });
 };
 

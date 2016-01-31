@@ -64,10 +64,13 @@ BaseLoader.prototype.expandLayerName = function (name) {
 };
 
 BaseLoader.prototype.normalizeStylesheet = function (style) {
-    if (typeof style !== 'string') {
-        return { id: style.id, data: style.data };
+    if (this.project.config.parsed_opts.renderer === 'carto') {
+        if (typeof style !== 'string') {
+            return { id: style.id, data: style.data };
+        }
+        return { id: style, data: fs.readFileSync(path.join(this.project.root, style), 'utf8') };
     }
-    return { id: style, data: fs.readFileSync(path.join(this.project.root, style), 'utf8') };
+    return style;
 };
 
 BaseLoader.prototype.load = function () {

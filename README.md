@@ -90,7 +90,7 @@ kosmtik comes with an internal plugin to manage that. You have two
 options: with a json file named `localconfig.json`, or with a js module
 name `localconfig.js`.
 
-Place your localconfig.js or localconfig.json file in the same directory as your 
+Place your localconfig.js or localconfig.json file in the same directory as your
 carto project (or `.yml`, `.yaml`).
 
 In both cases, the behaviour is the same, you create some rules to target
@@ -147,6 +147,15 @@ exports.LocalConfig = function (localizer, project) {
 };
 
 ```
+
+## Choose a CartoCSS implementation
+
+By default Kosmtik uses the [JavaScript implementation](https://github.com/mapbox/carto) (Carto) of CartoCSS.
+Additionally, there also exists a [Go implementation](https://github.com/omniscale/magnacarto) (Magnacarto),
+which is available as a [native extension](https://github.com/gmgeo/node-magnacarto) for Node.js. Magnacarto
+is much faster than Carto, but may not support the full range of features. Currently the native extension is
+available for Linux and MacOS X systems and is still considered experimental. You can enable it through the
+command line option `--renderer magnacarto`.
 
 ## Known plugins
 

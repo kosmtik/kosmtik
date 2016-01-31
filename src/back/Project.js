@@ -50,8 +50,13 @@ Project.prototype.render = function (force) {
     if (this.xml && !force) return this.xml;
     this.load(force);
     var renderer, Renderer;
-    if (this.mml) Renderer = require('./renderer/Carto.js').Carto;
-    else throw 'Oops, unkown renderer';
+    var implementations = {
+        carto: require('./renderer/Carto.js').Carto,
+        magnacarto: require('./renderer/Magnacarto.js').Magnacarto
+    };
+    if (!implementations[this.config.parsed_opts.renderer] || !this.mml) throw 'Oops, unknown renderer';
+    Renderer = implementations[this.config.parsed_opts.renderer];
+
     renderer = new Renderer(this);
     this.config.log('Generating Mapnik XML…');
     this.xml = renderer.render();
@@ -70,7 +75,7 @@ Project.prototype.createMapPool = function (options) {
 
 Project.prototype.export = function (options, callback) {
     var format = options.format;
-    if (!this.config.exporters[format]) throw 'Unkown format ' + format;
+    if (!this.config.exporters[format]) throw 'Unknown format ' + format;
     var Exporter = require(this.config.exporters[format]).Exporter;
     var exporter = new Exporter(this, options);
     exporter.export(callback);

@@ -7,7 +7,7 @@ var Config = require('../src/Config.js').Config,
 
 var trunc_6 = function(key, val) {
     return val.toFixed ? Number(val.toFixed(6)) : val;
-}
+};
 
 function compareGeoJSON(json1, json2) {
     if (typeof json1 === 'string') json1 = JSON.parse(json1);

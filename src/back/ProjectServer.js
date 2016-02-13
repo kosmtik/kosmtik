@@ -286,8 +286,9 @@ ProjectServer.prototype.reload = function (res) {
 };
 
 ProjectServer.prototype.initMapPools = function () {
-    this.mapPool = this.project.createMapPool({bufferSize:256});
-    this.vectorMapPool = this.project.createMapPool({size: 256, bufferSize:256});
+    var bufferSize = this.project.mml.bufferSize || 256;
+    this.mapPool = this.project.createMapPool({bufferSize: bufferSize});
+    this.vectorMapPool = this.project.createMapPool({size: 256, bufferSize: bufferSize});
 };
 
 exports.ProjectServer = ProjectServer;

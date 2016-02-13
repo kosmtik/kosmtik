@@ -22,7 +22,7 @@ module.exports = function(mapnik) {
                 map.fromString(xml, mapOptions, loaded);
                 function loaded(err) {
                     if (err) return callback(err);
-                    if (options.bufferSize) {
+                    if (!map.bufferSize && options.bufferSize) {
                         map.bufferSize = options.bufferSize;
                     }
                     return callback(err, map);

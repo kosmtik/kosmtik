@@ -62,8 +62,8 @@ Project.prototype.createMapPool = function (options) {
     options = options || {};
     this.render();
     this.config.log('Loading map…');
-    // TODO bufferSize?
-    this.mapPool = this.mapnikPool.fromString(this.xml, {size: options.size || this.tileSize()}, {base: this.root});
+    if(!options.size) options.size = this.tileSize();
+    this.mapPool = this.mapnikPool.fromString(this.xml, options, {base: this.root});
     this.config.log('Map ready');
     return this.mapPool;
 };

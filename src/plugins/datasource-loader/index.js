@@ -8,6 +8,7 @@ var log = function () {
 
 var DataSourceLoader = function (config) {
     config.beforeState('project:loaded', this.patchMML.bind(this));
+    this._cache = {};
 };
 
 DataSourceLoader.prototype.patchMML = function (e) {
@@ -15,12 +16,16 @@ DataSourceLoader.prototype.patchMML = function (e) {
     var processed = 0, self = this,
         sources = e.project.mml.source,
         commit = function () {if (++processed === sources.length) e.continue();},
+        processTileJSON = function (source, json) {
+            self.processTileJSON(source, json);
+            commit();
+        },
         requestTileJSON = function (source) {
             e.project.config.helpers.request({uri: source.tilejson}, function (err, resp, body) {
                 if (err) throw err;
                 var json = JSON.parse(body);
-                self.processTileJSON(source, json);
-                commit();
+                self._cache[source.tilejson] = json;
+                processTileJSON(source, json);
             });
         };
     if (sources && sources.length) {
@@ -29,7 +34,8 @@ DataSourceLoader.prototype.patchMML = function (e) {
                 this.loadLocalSource.bind(this)(sources[i], e.project.config);
                 commit();
             } else if (sources[i].tilejson) {
-                requestTileJSON(sources[i]);
+                if (!this._cache[sources[i].tilejson]) requestTileJSON(sources[i]);
+                else processTileJSON(sources[i], this._cache[sources[i].tilejson]);
             }
         }
     }

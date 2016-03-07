@@ -25,11 +25,12 @@
     "leaflet": "^1.0.0-beta.2",
     "leaflet-formbuilder": "^0.2.0",
     "leaflet-hash": "^0.2.1",
+    "magnacarto": "^0.3.1",
     "mapnik": "^3.4.17",
     "nomnom": "^1.8.1",
     "npm": "^3.3.5",
     "request": "^2.64.0",
-    "semver": "^5.0.3"
+    "semver": "^5.1.0"
   },
   "devDependencies": {
     "mocha": "^2.2.5"

@@ -25,7 +25,9 @@ var Config = function (root, configpath) {
     this.pluginsManager = new PluginsManager(this);  // Do we need back ref?
     this.emit('loaded');
     this.on('server:init', this.attachRoutes.bind(this));
-    this.parsed_opts = {};  // Default. TODO better option management.
+    this.parsed_opts = {
+        renderer: 'carto'
+    };  // Default. TODO better option management.
 };
 
 util.inherits(Config, StateBase);
@@ -82,8 +84,8 @@ Config.prototype.registerExporter = function (format, path) {
 Config.prototype.initLoaders = function () {
     this.loaders = {};
     this.registerLoader('.mml', './back/loader/MML.js');
-    this.registerLoader('.yml', './back/loader/YAML.js');
-    this.registerLoader('.yaml', './back/loader/YAML.js');
+    this.registerLoader('.yml', './back/loader/MML.js');
+    this.registerLoader('.yaml', './back/loader/MML.js');
 };
 
 Config.prototype.registerLoader = function (ext, nameOrPath) {
@@ -91,7 +93,7 @@ Config.prototype.registerLoader = function (ext, nameOrPath) {
 };
 
 Config.prototype.getLoader = function (ext) {
-    if (!this.loaders[ext]) throw 'Unkown project config type: ' + ext;
+    if (!this.loaders[ext]) throw 'Unknown project config type: ' + ext;
     return require(this.loaders[ext]).Loader;
 };
 
@@ -123,6 +125,11 @@ Config.prototype.initOptions = function () {
         full: 'keep-cache',
         flag: true,
         help: 'Do not flush cached metatiles on project load'
+    });
+    this.opts.option('renderer', {
+        full: 'renderer',
+        default: 'carto',
+        help: 'Select a renderer, one of carto or magnacarto'
     });
 };
 

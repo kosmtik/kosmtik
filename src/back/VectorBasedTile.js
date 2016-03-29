@@ -18,7 +18,6 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
         parse = function (data, resp) {
             try {
                 vtile.setData(data);
-                vtile.parse();
             } catch (error) {
                 console.log(error.message);
                 return cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));

@@ -171,8 +171,8 @@ Config.prototype.toFront = function () {
     var options = {
         exportFormats: Object.keys(this.exporters),
         autoReload: this.getFromUserConfig('autoReload', true),
-        backendPolling: true,
-        showCrosshairs: true,
+        backendPolling: this.getFromUserConfig('backendPolling', true),
+        showCrosshairs: this.getFromUserConfig('showCrosshairs', true),
         dataInspectorLayers: {
             '__all__': true
         }

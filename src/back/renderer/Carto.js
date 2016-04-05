@@ -21,4 +21,4 @@ Carto.prototype.render = function () {
 
 };
 
-exports.Carto = Carto;
+exports.Renderer = Carto;

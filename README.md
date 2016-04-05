@@ -90,7 +90,7 @@ kosmtik comes with an internal plugin to manage that. You have two
 options: with a json file named `localconfig.json`, or with a js module
 name `localconfig.js`.
 
-Place your localconfig.js or localconfig.json file in the same directory as your 
+Place your localconfig.js or localconfig.json file in the same directory as your
 carto project (or `.yml`, `.yaml`).
 
 In both cases, the behaviour is the same, you create some rules to target
@@ -148,6 +148,13 @@ exports.LocalConfig = function (localizer, project) {
 
 ```
 
+## Custom renderers
+
+By default Kosmtik uses [Carto](https://github.com/mapbox/carto) to render the style. Via plugins
+it is possible to use other renderers or Carto implementations. You can switch the renderer installing
+the appropriate plugin and by passing the command line option `--renderer NAME`. `NAME` refers to the
+renderer name (e.g. `carto` for the default renderer or `magnacarto` for the Magnacarto renderer).
+
 ## Known plugins
 
 - [kosmtik-overpass-layer](https://github.com/kosmtik/kosmtik-overpass-layer): add Overpass Layer in your carto project
@@ -159,5 +166,6 @@ exports.LocalConfig = function (localizer, project) {
 - [kosmtik-osm-data-overlay](https://github.com/kosmtik/kosmtik-osm-data-overlay): display OSM data on top of your map
 - [kosmtik-tiles-export](https://github.com/kosmtik/kosmtik-tiles-export): export a tiles tree from your project
 - [kosmtik-mbtiles-export](https://github.com/kosmtik/kosmtik-mbtiles-export): export your project in MBTiles
+- [kosmtik-magnacarto](https://github.com/gmgeo/kosmtik-magnacarto): Magnacarto renderer for CartoCSS
 
 Run `node index.js plugins --available` to get an up to date list.

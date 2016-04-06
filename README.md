@@ -166,6 +166,6 @@ renderer name (e.g. `carto` for the default renderer or `magnacarto` for the Mag
 - [kosmtik-osm-data-overlay](https://github.com/kosmtik/kosmtik-osm-data-overlay): display OSM data on top of your map
 - [kosmtik-tiles-export](https://github.com/kosmtik/kosmtik-tiles-export): export a tiles tree from your project
 - [kosmtik-mbtiles-export](https://github.com/kosmtik/kosmtik-mbtiles-export): export your project in MBTiles
-- [kosmtik-magnacarto](https://github.com/gmgeo/kosmtik-magnacarto): Magnacarto renderer for CartoCSS
+- [kosmtik-magnacarto](https://github.com/kosmtik/kosmtik-magnacarto): Magnacarto renderer for CartoCSS
 
 Run `node index.js plugins --available` to get an up to date list.

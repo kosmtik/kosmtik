@@ -31,9 +31,6 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
             y: Math.floor(params.y/2)
         };
     }
-    if(params.z != this.z) {
-        console.log("overzooming");
-    }
 
     var vtile = new mapnik.VectorTile(params.z, params.x, params.y),
         processed = 0,

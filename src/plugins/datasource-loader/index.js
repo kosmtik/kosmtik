@@ -64,6 +64,7 @@ DataSourceLoader.prototype.attachSourceUrl = function (source, project) {
 
 DataSourceLoader.prototype.processTileJSON = function (source, tilejson) {
     source.url = tilejson.tiles[0];
+    source.maxzoom = tilejson.maxzoom;
 };
 
 exports.Plugin = DataSourceLoader;

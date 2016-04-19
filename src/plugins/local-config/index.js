@@ -27,7 +27,7 @@ LocalConfig.prototype.patchMML = function (e) {
     // path.isAbsolute is Node 0.12 only
     if (path.isAbsolute && !path.isAbsolute(filepath)) filepath = path.join(process.cwd(), filepath);
     if (!fs.existsSync(filepath)) {
-        error(new Error('File not found: ' + filepath))
+        error(new Error('File not found: ' + filepath));
         return done();  // Nothing to do;
     }
     var l = new Localizer(e.project.mml),

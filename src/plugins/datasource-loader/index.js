@@ -57,7 +57,9 @@ DataSourceLoader.prototype.loadLocalSource = function (source, config) {
         ext = path.extname(filepath);
     if (ext !== '.yml') filepath = path.join(filepath, 'data.yml');
     var project = new Project(config, filepath);
+    project.load(false);
     this.attachSourceUrl(source, project);
+    source.maxzoom = project.mml.maxzoom;
     config.server.registerProject(project);
 };
 

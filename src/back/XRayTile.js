@@ -16,10 +16,14 @@ XRayTile.prototype.render = function (project, map, cb) {
     var styleMap = this.styleMap(project),
         vtile = new mapnik.VectorTile(this.z, this.x, this.y);
     if (this.data.length){
-        vtile.setData(this.data);
-        vtile.parse();
+        vtile.setData(this.data, function(err) {
+            if(err) {
+                console.log(err.message);
+                return cb(err);
+            }
+            vtile.render(styleMap, new mapnik.Image(256, 256), cb);  
+        });
     }
-    vtile.render(styleMap, new mapnik.Image(256, 256), cb);
 };
 
 XRayTile.prototype.styleMap = function (project) {

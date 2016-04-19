@@ -16,14 +16,13 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
     var vtile = new mapnik.VectorTile(this.z, this.x, this.y),
         processed = 0,
         parse = function (data, resp) {
-            try {
-                vtile.setData(data);
-                vtile.parse();
-            } catch (error) {
-                console.log(error.message);
-                return cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
-            }
-            if (++processed === project.mml.source.length) cb(null, vtile);
+            vtile.setData(data, function(err) {
+                if(err) {
+                    console.log(err.message);
+                    return cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
+                }
+                if (++processed === project.mml.source.length) cb(null, vtile);
+            });
         },
         onResponse = function (err, resp, body) {
             if (err) return cb(err);

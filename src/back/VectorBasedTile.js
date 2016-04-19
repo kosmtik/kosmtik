@@ -15,16 +15,12 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
 
     //Support for overzooming
-    var maxzoom = 99,
-        params = {
+    var params = {
             z: this.z,
             x: this.x,
             y: this.y
         };
-    for (var i = 0; i < project.mml.source.length; i++) {
-        maxzoom = Math.min(maxzoom, project.mml.source[i].maxzoom);
-    }
-    while(params.z > maxzoom) {
+    while(params.z > project.mml.sourceMaxzoom) {
         params = {
             z: params.z - 1,
             x: Math.floor(params.x/2),

@@ -14,8 +14,17 @@ var DataSourceLoader = function (config) {
 DataSourceLoader.prototype.patchMML = function (e) {
     if (!e.project.mml) return e.continue();
     var processed = 0, self = this,
+        sourceMaxzoom = 100,
         sources = e.project.mml.source,
-        commit = function () {if (++processed === sources.length) e.continue();},
+        commit = function () {
+            if (++processed === sources.length){
+                for (var i = 0; i < sources.length; i++) {
+                    sourceMaxzoom = Math.min(sourceMaxzoom, sources[i].maxzoom);
+                }
+                e.project.mml.sourceMaxzoom = sourceMaxzoom;
+                e.continue();
+            }
+        },
         processTileJSON = function (source, json) {
             self.processTileJSON(source, json);
             commit();

@@ -15,6 +15,7 @@ var ProjectServer = function (project, parent) {
     this.project.when('loaded', function () {
         try {
             self.initMapPools();
+            self.project.changeState('ready');
         } catch (err) {
             console.log(err.message);
             self.addToPollQueue({error: err.message});
@@ -43,6 +44,7 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(urlpath, uri, res, this.project);
     else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
     else if (els[1] === 'query' && els.length >= 5) this.project.when('loaded', function query () {self.queryTile(els[2], els[3], els[4], res, uri.query);});
+    else if (els[1] === '.thumb.png') this.project.when('ready', function query () {self.thumb(res);});
     else this.parent.notFound(urlpath, res);
 };
 
@@ -192,6 +194,15 @@ ProjectServer.prototype.queryTile = function (z, lat, lon, res, query) {
     });
 };
 
+ProjectServer.prototype.thumb = function (res) {
+    var thumbPath = path.join(this.project.root, '.thumb.png'),
+        self = this;
+    fs.exists(thumbPath, function (exists) {
+        if (!exists) thumbPath = path.join(self.parent.config.root, 'src/front/logo.svg');
+        self.parent.serveFile(thumbPath, res);
+    });
+};
+
 ProjectServer.prototype.config = function (res) {
     res.writeHead(200, {
         'Content-Type': 'application/javascript'
@@ -213,22 +224,7 @@ ProjectServer.prototype.export = function (res, options) {
 };
 
 ProjectServer.prototype.main = function (res) {
-    var js = this.project.config._js.reduce(function(a, b) {
-        return a + '<script src="' + b + '"></script>\n';
-    }, '');
-    var css = this.project.config._css.reduce(function(a, b) {
-        return a + '<link rel="stylesheet" href="' + b + '" />\n';
-    }, '');
-    fs.readFile(path.join(kosmtik.src, 'front/project.html'), {encoding: 'utf8'}, function(err, data) {
-        if(err) throw err;
-        data = data.replace('%%JS%%', js);
-        data = data.replace('%%CSS%%', css);
-        res.writeHead(200, {
-            'Content-Type': 'text/html',
-            'Content-Length': data.length
-        });
-        res.end(data);
-    });
+    this.parent.serveHTML('front/project.html', res);
 };
 
 ProjectServer.prototype.addToPollQueue = function (message) {

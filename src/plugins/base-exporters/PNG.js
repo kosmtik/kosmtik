@@ -14,6 +14,7 @@ PNGExporter.prototype.export = function (callback) {
     this.scale = this.options.scale ? +this.options.scale : 2;
     if (this.options.bounds) this.bounds = this.options.bounds.split(',').map(function (x) {return +x;});
     else this.bounds = this.project.mml.bounds;
+    this.zoom = this.options.zoom || this.project.mml.center[2];
     if (this.project.mml.source) this.renderFromVector(callback);
     else this.render(callback);
 };
@@ -21,6 +22,7 @@ PNGExporter.prototype.render = function (callback) {
     var self = this;
     var map = new mapnik.Map(+this.options.width, +this.options.height);
     map.fromString(this.project.render(), {base: this.project.root}, function render (err, map) {
+        if (err) return callback(err);
         var projection = new mapnik.Projection(map.srs),
             im = new mapnik.Image(+self.options.width, +self.options.height);
         map.zoomToBox(projection.forward(self.bounds));
@@ -33,9 +35,9 @@ PNGExporter.prototype.render = function (callback) {
 
 PNGExporter.prototype.renderFromVector = function (callback) {
     var self = this,
-        leftTop = GeoUtils.zoomLatLngToXY(this.options.zoom, this.bounds[3], this.bounds[0]),
-        rightBottom = GeoUtils.zoomLatLngToXY(this.options.zoom, this.bounds[1], this.bounds[2]),
-        floatLeftTop = GeoUtils.zoomLatLngToFloatXY(this.options.zoom, this.bounds[3], this.bounds[0]),
+        leftTop = GeoUtils.zoomLatLngToXY(this.zoom, this.bounds[3], this.bounds[0]),
+        rightBottom = GeoUtils.zoomLatLngToXY(this.zoom, this.bounds[1], this.bounds[2]),
+        floatLeftTop = GeoUtils.zoomLatLngToFloatXY(this.zoom, this.bounds[3], this.bounds[0]),
         size = self.project.tileSize() * this.scale,
         gap = [(floatLeftTop[0] - leftTop[0]) * size, (floatLeftTop[1] - leftTop[1]) * size],
         map = new mapnik.Map(+this.options.width, +this.options.height),
@@ -45,7 +47,7 @@ PNGExporter.prototype.renderFromVector = function (callback) {
         };
     map.fromStringSync(this.project.render(), {base: this.project.root});
     var processTile = function (x, y) {
-        var tile = new VectorBasedTile(self.options.zoom, x, y, {width: size, height: size});
+        var tile = new VectorBasedTile(self.zoom, x, y, {width: size, height: size});
         return tile.render(self.project, map, function (err, im) {
             if (err) throw err;
             im.encode('png', function (err, buffer) {

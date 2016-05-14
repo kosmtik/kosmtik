@@ -9,8 +9,9 @@ var Project = function (config, filepath, options) {
     this.CLASSNAME = 'project';
     ConfigEmitter.call(this, config);
     this.filepath = filepath;
+    this.absoluteFilepath = path.resolve(this.filepath);
     this.id = options.id || path.basename(path.dirname(fs.realpathSync(this.filepath)));
-    this.root = path.dirname(path.resolve(this.filepath));
+    this.root = path.dirname(this.absoluteFilepath);
     this.dataDir = path.join(this.root, 'data');
     try {
         fs.mkdirSync(this.dataDir);
@@ -24,6 +25,7 @@ var Project = function (config, filepath, options) {
     this.changeState('init');
     this.cachePath = path.join('tmp', this.id);
     this.beforeState('loaded', this.initCache);
+    this.when('ready', this.saveThumbnail.bind(this));
 };
 
 util.inherits(Project, ConfigEmitter);
@@ -37,7 +39,20 @@ Project.prototype.load = function (force) {
     this.mml = loader.load();
     this.loadTime = Date.now();
     this.changeState('loaded');
+    this.attach();
     return this.mml;
+};
+
+Project.prototype.attach = function () {
+    // Attach plugin to user config.
+    this.config.userConfig.projects = this.config.userConfig.projects || {};
+    if (!this.config.userConfig.projects[this.id]) this.config.userConfig.projects[this.id] = {
+        path: this.absoluteFilepath,
+        id: this.id,
+        root: this.root
+    };
+    this.config.saveUserConfig();
+    this.config.log('Attached project:', this.absoluteFilepath);
 };
 
 Project.prototype.reload = function () {
@@ -51,7 +66,6 @@ Project.prototype.render = function (force) {
     this.load(force);
     var renderer, Renderer;
     Renderer = this.config.getRenderer(this.config.parsed_opts.renderer);
-
     renderer = new Renderer(this);
     this.config.log('Generating Mapnik XML…');
     this.xml = renderer.render();
@@ -63,9 +77,25 @@ Project.prototype.createMapPool = function (options) {
     this.render();
     this.config.log('Loading map…');
     if(!options.size) options.size = this.tileSize();
-    this.mapPool = this.mapnikPool.fromString(this.xml, options, {base: this.root});
+    var pool = this.mapnikPool.fromString(this.xml, options, {base: this.root});
     this.config.log('Map ready');
-    return this.mapPool;
+    return pool;
+};
+
+Project.prototype.saveThumbnail = function () {
+    var self = this,
+        filepath = path.join(self.root, '.thumb.png'),
+        callback = function (err, buffer) {
+            if (err) return;
+            fs.writeFile(filepath, buffer, function done () {
+                self.config.log('Exported project thumbnail to', filepath);
+            });
+        };
+    try {
+        this.export({format: 'png', height: 200, width: 200}, callback);
+    } catch (err) {
+        this.config.log('Unable to create thumbnail.');
+    }
 };
 
 Project.prototype.export = function (options, callback) {

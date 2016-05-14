@@ -516,6 +516,7 @@ input.switch:checked ~ label:after {
 .help-panel .shortcuts td {
     text-align: right;
 }
+
 /* *********************** */
 /*      Export panel       */
 /* *********************** */
@@ -591,6 +592,53 @@ ul.k-autocomplete-results {
 }
 .leaflet-popup-content .data-inspector table + table {
     border-top: 1px solid #666;
+}
+
+/* *********************** */
+/*           Home          */
+/* *********************** */
+#content {
+    padding: 60px 20px;
+}
+#content h3 {
+    margin-bottom: 20px;
+}
+.card {
+    float: none;
+    clear: both;
+    max-width: 400px;
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    background-position: center right 5px;
+    cursor: pointer;
+    text-align: center;
+}
+.card h4 {
+    text-transform: uppercase;
+}
+.card img {
+    height: 200px;
+}
+.card + .card {
+    margin-top: 20px;
+}
+.grid {
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+.grid .card {
+    clear: none;
+    margin-right: 10px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    flex-grow: 1;
+    flex-basis: 300px;
+    position: relative;
 }
 
 

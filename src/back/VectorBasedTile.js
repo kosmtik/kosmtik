@@ -13,7 +13,22 @@ util.inherits(VectorBasedTile, Tile);
 VectorBasedTile.prototype._render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
-    var vtile = new mapnik.VectorTile(this.z, this.x, this.y),
+
+    //Support for overzooming
+    var params = {
+            z: this.z,
+            x: this.x,
+            y: this.y
+        };
+    while(params.z > project.mml.sourceMaxzoom) {
+        params = {
+            z: params.z - 1,
+            x: Math.floor(params.x/2),
+            y: Math.floor(params.y/2)
+        };
+    }
+
+    var vtile = new mapnik.VectorTile(params.z, params.x, params.y),
         processed = 0,
         parse = function (data, resp) {
             vtile.setData(data, function(err) {
@@ -40,12 +55,8 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
             } else {
                 parse(body, resp);
             }
-        },
-        params = {
-            z: this.z,
-            x: this.x,
-            y: this.y
         };
+
     for (var i = 0; i < project.mml.source.length; i++) {
         var options = {
             uri: Utils.template(project.mml.source[i].url, params),
@@ -56,10 +67,16 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
 };
 
 VectorBasedTile.prototype.render = function (project, map, cb) {
-    var self = this;
+    var self = this,
+        opts = {
+            buffer_size: map.bufferSize,
+            z: this.z,
+            x: this.x,
+            y: this.y
+        };
     this._render(project, map, function (err, vtile) {
         if (err) cb(err);
-        else vtile.render(map, new mapnik.Image(self.width, self.height), {'buffer_size': map.bufferSize}, cb);
+        else vtile.render(map, new mapnik.Image(self.width, self.height), opts, cb);
     });
 };
 

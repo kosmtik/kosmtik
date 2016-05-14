@@ -11,7 +11,7 @@ L.Kosmtik.ExportFormatChooser = L.FormBuilder.Select.extend({
 L.Kosmtik.ExportScaleChooser = L.FormBuilder.IntSelect.extend({
 
     getOptions: function () {
-        return [1, 2, 3, 4, 5].map(function (item) {return [item, item];});
+        return [1, 2, 3, 4, 5].map(function (item) {return [item, '&times; ' + item];});
     }
 
 });

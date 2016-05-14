@@ -24,6 +24,7 @@ var PluginsManager = function (config) {
         help: 'Reinstall every installed plugin'
     });
     this.config.on('command:plugins', this.handleCommand.bind(this));
+    this.config.beforeState('project:loaded', this.handleProject.bind(this));
     this._registered = [
         '../plugins/base-exporters/index.js',
         '../plugins/hash/index.js',
@@ -41,6 +42,7 @@ PluginsManager.prototype.load = function (name_or_path) {
         Plugin = require(name_or_path).Plugin;
     } catch (err) {
         this.config.log('Unable to load plugin', name_or_path, err.code);
+        this.config.log('→ try: node index.js plugins -- install', name_or_path);
         return;
     }
     this.config.log('Loading plugin from', name_or_path);
@@ -148,6 +150,24 @@ PluginsManager.prototype.handleCommand = function () {
     } else if (this.config.parsed_opts.reinstall) {
         this.reinstall();
     }
+};
+
+PluginsManager.prototype.handleProject = function (e) {
+    var self = this;
+    if ('kosmtik' in e.project.mml && 'plugins' in e.project.mml.kosmtik) {
+        var warn = e.project.mml.kosmtik.plugins
+        .filter(function(plugin) {
+            var installed = self.isInstalled(plugin);
+            if (!installed) {
+                self.install([plugin]);
+                return true;
+            }
+        });
+        if (warn) {
+            self.config.log("Please relaunch the server to make sure all plugins are properly loaded.");
+        }
+    }
+    e.continue();
 };
 
 exports.PluginsManager = PluginsManager;

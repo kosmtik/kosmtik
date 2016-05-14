@@ -42,7 +42,7 @@ PluginsManager.prototype.load = function (name_or_path) {
         Plugin = require(name_or_path).Plugin;
     } catch (err) {
         this.config.log('Unable to load plugin', name_or_path, err.code);
-        this.config.log('→ try: node index.js plugins -- install', name_or_path);
+        this.config.log('→ try: node index.js plugins --install', name_or_path);
         return;
     }
     this.config.log('Loading plugin from', name_or_path);

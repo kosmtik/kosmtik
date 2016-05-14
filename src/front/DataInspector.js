@@ -40,8 +40,8 @@ L.Kosmtik.DataInspector = L.Evented.extend({
             if (!L.K.Config.dataInspector) return;
             var url = L.Util.template('./query/{z}/{lat}/{lng}/?layer={showLayers}', {
                 z: this.map.getZoom(),
-                lat: e.latlng.lat,
-                lng: e.latlng.lng,
+                lat: e.latlng.wrap().lat,
+                lng: e.latlng.wrap().lng,
                 showLayers: L.TileLayer.XRay.computeLayers()
             });
             L.K.Xhr.get(url, {

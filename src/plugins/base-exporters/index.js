@@ -21,7 +21,7 @@ var BaseExporters = function (config) {
         metavar: 'INT',
         default: 1000
     });
-    config.commands.export.option('bbox', {
+    config.commands.export.option('bounds', {
         help: 'BBox to use [Default: project extent]',
         metavar: 'minX,minY,maxX,maxY'
     });

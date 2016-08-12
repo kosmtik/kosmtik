@@ -120,11 +120,11 @@ Config.prototype.initOptions = function () {
         position: 1,
         help: 'Optional project path to load at start.'
     });
-    this.commands.serve.option('port', {
+    this.opts.option('port', {
         default: 6789,
         help: 'Port to listen on.'
     });
-    this.commands.serve.option('host', {
+    this.opts.option('host', {
         default: '127.0.0.1',
         help: 'Host to listen on.'
     });

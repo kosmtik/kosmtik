@@ -16,10 +16,10 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
 
     //Support for overzooming
     var params = {
-            z: this.z,
-            x: this.x,
-            y: this.y
-        };
+        z: this.z,
+        x: this.x,
+        y: this.y
+    };
     while(params.z > project.mml.sourceMaxzoom) {
         params = {
             z: params.z - 1,
@@ -31,12 +31,16 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
     var vtile = new mapnik.VectorTile(params.z, params.x, params.y),
         processed = 0,
         parse = function (data, resp) {
+            function done () {
+                if (++processed === project.mml.source.length) cb(null, vtile);
+            }
+            if (!data.length) return done();
             vtile.setData(data, function(err) {
                 if(err) {
                     console.log(err.message);
                     return cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
                 }
-                if (++processed === project.mml.source.length) cb(null, vtile);
+                done();
             });
         },
         onResponse = function (err, resp, body) {

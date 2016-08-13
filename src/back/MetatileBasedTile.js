@@ -33,12 +33,11 @@ MetatileBasedTile.prototype.render = function (project, map, cb) {
                             // else just wait again
                         });
                     } catch (err) {
-                        if (err && err.code !== 'ENOENT') return cb(err);
+                        if (err.code !== 'ENOENT') return cb(err);
                     }
-                } else if (err && err.code !== 'EEXIST') {
+                } else if (err) {
                     return cb(err);
                 } else  {
-                    if (err) return cb(err);
                     self.renderMetatile(metaPath, project, map, function (err, buffer) {
                         fs.unlink(lockPath, function (err2) {
                             if (err) return cb(err);

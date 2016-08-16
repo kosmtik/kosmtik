@@ -51,13 +51,14 @@ Config.prototype.loadUserConfig = function () {
     } catch (err) {
         this.log('No usable config file found in', configpath);
     }
-    this.userConfig = config;
+    this.userConfig = config || {};
 };
 
 Config.prototype.saveUserConfig = function () {
     var configpath = this.getUserConfigPath(),
         self = this;
     fs.writeFile(configpath, yaml.safeDump(this.userConfig), function (err) {
+        if (err) throw err;
         self.log('Saved env conf to', configpath);
     });
 };
@@ -171,7 +172,8 @@ Config.prototype.initStatics = function () {
         '/src/front/FormBuilder.js',
         '/src/front/Settings.js',
         '/src/front/Command.js',
-        '/src/front/Map.js'
+        '/src/front/Map.js',
+        '/src/front/ProjectLoader.js',
     ];
     this._css = [
         '/node_modules/leaflet/dist/leaflet.css',
@@ -197,7 +199,8 @@ Config.prototype.toFront = function () {
         showCrosshairs: this.getFromUserConfig('showCrosshairs', true),
         dataInspectorLayers: {
             '__all__': true
-        }
+        },
+        projects: this.getFromUserConfig('projects', {})
     };
     this.emit('tofront', {options: options});
     return options;

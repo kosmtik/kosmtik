@@ -65,19 +65,29 @@ PreviewServer.prototype.serve = function (req, res) {
         els = urlpath.split('/');
     if (urlpath === '/') this.serveHome(uri, req, res);
     else if (this.hasRoute(urlpath)) this._routes[urlpath].call(this, req, res);
-    else if (this.projects[els[1]]) this.forwardToProject(uri, els[1], res);
+    else if (this.matchProject(els[1])) this.forwardToProject(uri, els[1], res);
     else this.serveFile(path.join(this.root, urlpath), res);
 };
 
+PreviewServer.prototype.matchProject = function (id) {
+    return this.projects[id] || (this.config.userConfig.projects && this.config.userConfig.projects[id]);
+};
+
 PreviewServer.prototype.forwardToProject = function (uri, id, res) {
+    if (!this.projects[id]) this.loadProjectFromConfig(id);
     uri.pathname = uri.pathname.replace('/' + id, '');
     this.projects[id].serve(uri, res);
 };
 
+PreviewServer.prototype.loadProjectFromConfig = function (id) {
+    var project = new Project(this.config, this.config.userConfig.projects[id].path);
+    this.registerProject(project);
+};
+
 PreviewServer.prototype.serveHome = function (uri, req, res) {
     // Go to project for now
-    if (this.defaultProject) return this.redirect(this.defaultProject.id, res);
-    return this.serveFile(path.join(kosmtik.src, 'front/index.html'), res);
+    // if (this.defaultProject) return this.redirect(this.defaultProject.id, res);
+    return this.serveHTML('front/index.html', res);
 };
 
 PreviewServer.prototype.redirect = function (newuri, res) {
@@ -103,6 +113,25 @@ PreviewServer.prototype.serveFile = function (filepath, res) {
         } else {
             self.notFound(filepath, res);
         }
+    });
+};
+
+PreviewServer.prototype.serveHTML = function (filepath, res) {
+    var js = this.config._js.reduce(function(a, b) {
+        return a + '<script src="' + b + '"></script>\n';
+    }, '');
+    var css = this.config._css.reduce(function(a, b) {
+        return a + '<link rel="stylesheet" href="' + b + '" />\n';
+    }, '');
+    fs.readFile(path.join(kosmtik.src, filepath), {encoding: 'utf8'}, function(err, data) {
+        if(err) throw err;
+        data = data.replace('%%JS%%', js);
+        data = data.replace('%%CSS%%', css);
+        res.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Content-Length': data.length
+        });
+        res.end(data);
     });
 };
 

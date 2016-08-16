@@ -1,4 +1,5 @@
-L.Kosmtik = L.K = {};
+L.KosmtikSingleton = L.Evented.extend({});
+L.Kosmtik = L.K = new L.KosmtikSingleton();
 
 
 /*************/

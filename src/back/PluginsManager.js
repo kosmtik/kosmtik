@@ -68,6 +68,9 @@ PluginsManager.prototype.loadPackage = function () {
 };
 
 PluginsManager.prototype.available = function (callback) {
+    console.error('"available" is broken because "npm search" is broken, sorry.');
+    console.error('See https://github.com/npm/npm/issues/6016.');
+    return
     npm.load(this.loadPackage(), function () {
         npm.commands.search(['kosmtik'], true, function (err, results) {
             if (err) return callback(err);

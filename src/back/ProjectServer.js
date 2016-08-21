@@ -118,7 +118,7 @@ ProjectServer.prototype.pbftile = function (z, x, y, res) {
         return tile.renderToVector(self.project, map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
             var content = tile.getData();
-            res.writeHead(200, {'Content-Type': 'application/x-protobuf'});
+            res.writeHead(200, {'Content-Type': 'application/x-protobuf', 'Access-Control-Allow-Origin': '*'});
             res.write(content);
             res.end();
             release();

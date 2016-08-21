@@ -20,11 +20,11 @@ Tile.DEFAULT_OUTPUT_PROJECTION = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +
 
 Tile.prototype.setupBounds = function () {
     var xy = zoomXYToLatLng(this.z, this.x * this.scale, this.y * this.scale);
-    this.maxX = xy[0];
-    this.minY = xy[1];
+    this.maxY = xy[0];
+    this.minX = xy[1];
     xy = zoomXYToLatLng(this.z, this.x * this.scale + this.scale, this.y * this.scale + this.scale);
-    this.minX = xy[0];
-    this.maxY = xy[1];
+    this.minY = xy[0];
+    this.maxX = xy[1];
 };
 
 Tile.prototype.render = function (project, map, cb) {

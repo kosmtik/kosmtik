@@ -7,7 +7,7 @@ module.exports = {
             lonDeg = x / n * 360.0 - 180.0,
             latRad = Math.atan(sinh(Math.PI * (1 - 2 * y / n))),
             latDeg = latRad * 180.0 / Math.PI;
-        return [lonDeg, latDeg];
+        return [latDeg, lonDeg];
     },
 
     zoomLatLngToXY: function (z, lat, lng) {

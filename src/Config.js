@@ -146,6 +146,9 @@ Config.prototype.initOptions = function () {
         default: 'carto',
         help: 'Specify a renderer by its name, carto is the default.'
     });
+    this.opts.option('metatile', {
+        help: 'Override mml metatile setting [Default: mml setting]'
+    });
 };
 
 Config.prototype.parseOptions = function () {

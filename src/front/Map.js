@@ -21,6 +21,7 @@ L.Kosmtik.Map = L.Map.extend({
         this.metatilesBounds = new L.K.MetatileBounds(this);
         var tilelayerOptions = {
             version: L.K.Config.project.loadTime,
+            tileSize: L.K.Config.project.tileSize,
             minZoom: this.options.minZoom,
             maxZoom: this.options.maxZoom
         };

@@ -62,7 +62,7 @@ Project.prototype.createMapPool = function (options) {
     options = options || {};
     this.render();
     this.config.log('Loading map…');
-    if(!options.size) options.size = this.tileSize();
+    if(!options.size) options.size = this.metatileSize();
     this.mapPool = this.mapnikPool.fromString(this.xml, options, {base: this.root});
     this.config.log('Map ready');
     return this.mapPool;
@@ -82,7 +82,7 @@ Project.prototype.toFront = function () {
         zoom: this.mml.center[2],
         minZoom: this.mml.minzoom,
         maxZoom: this.mml.maxzoom,
-        metatile: this.mml.metatile,
+        metatile: this.metatile(),
         name: this.mml.name || '',
         tileSize: this.tileSize(),
         loadTime: this.loadTime,
@@ -93,7 +93,15 @@ Project.prototype.toFront = function () {
 };
 
 Project.prototype.tileSize = function () {
-    return 256 * this.mml.metatile;
+    return 256;
+};
+
+Project.prototype.metatileSize = function () {
+    return this.tileSize() * this.metatile( );
+};
+
+Project.prototype.metatile = function () {
+    return this.config.parsed_opts.metatile || this.mml.metatile || 1;
 };
 
 Project.prototype.getUrl = function () {

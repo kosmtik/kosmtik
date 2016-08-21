@@ -76,7 +76,7 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
     },
 
     setTileSize: function () {
-        this.options.tileSize = L.K.Config.project.metatile * 256;
+        this.options.tileSize = L.K.Config.project.metatile * L.K.Config.project.tileSize;
     },
 
     redraw: function () {

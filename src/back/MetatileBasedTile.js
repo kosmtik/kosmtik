@@ -10,6 +10,7 @@ var MetatileBasedTile = function (z, x, y, options) {
     this.metatile = options.metatile || 1;
     this.metaX = Math.floor(x / this.metatile);
     this.metaY = Math.floor(y / this.metatile);
+    this.format = options.format || 'png';
     this.options = options;
 };
 
@@ -69,7 +70,7 @@ MetatileBasedTile.prototype.renderMetatile = function (metaPath, project, map, c
     var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.options.metatile * 256, scale: this.options.metatile});
     tile.render(project, map, function (err, im) {
         if (err) return cb(err);
-        im.encode('png', function (err, buffer) {
+        im.encode(self.format, function (err, buffer) {
             if (err) return cb(err);
             fs.writeFile(metaPath, buffer, {flag: 'wx'}, function (err) {
                 if (err && err.code !== 'EEXIST') return cb(err);

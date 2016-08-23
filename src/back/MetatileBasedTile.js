@@ -69,7 +69,7 @@ MetatileBasedTile.prototype.extractFromBytes = function (buffer, cb) {
 
 MetatileBasedTile.prototype.renderMetatile = function (metaPath, project, map, cb) {
     var self = this;
-    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.options.metatile * this.size, scale: this.scale});
+    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.metatile * this.size, scale: this.scale});
     tile.render(project, map, function (err, im) {
         if (err) return cb(err);
         im.encode(self.format, function (err, buffer) {

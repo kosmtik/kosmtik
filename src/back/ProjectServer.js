@@ -100,7 +100,7 @@ ProjectServer.prototype.jsontile = function (z, x, y, res, query) {
                 content = '{"type": "FeatureCollection", "features": []}';
             }
             if (typeof content !== 'string') content = JSON.stringify(content);  // Mapnik 3.1.0 now returns a string
-            res.writeHead(200, {'Content-Type': 'application/javascript'});
+            res.writeHead(200, {'Content-Type': 'application/javascript', 'Access-Control-Allow-Origin': '*'});
             res.write(content);
             res.end();
             release();

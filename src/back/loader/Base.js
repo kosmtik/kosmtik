@@ -43,7 +43,9 @@ BaseLoader.prototype.normalizeSource = function (source) {
             protocol: uri.protocol
         };
         if (source.protocol === 'tmsource:') {
-            source.path = uri.path;
+            // Relative path badly parsed by Node.
+            if (uri.host === '..' || uri.host === '.') source.path = uri.host + uri.path;
+            else source.path = uri.path;
         } else if (source.protocol.indexOf('http') === 0) {
             source.tilejson = uri.href;
         } else if (source.protocol.indexOf('tms') === 0) {

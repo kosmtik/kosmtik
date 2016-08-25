@@ -53,7 +53,7 @@ DataSourceLoader.prototype.patchMML = function (e) {
 
 DataSourceLoader.prototype.loadLocalSource = function (source, config) {
     log('Loading source from', source.path);
-    var filepath = source.path,
+    var filepath = path.resolve(source.path),
         ext = path.extname(filepath);
     if (ext !== '.yml') filepath = path.join(filepath, 'data.yml');
     var project = new Project(config, filepath);

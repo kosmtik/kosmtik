@@ -114,7 +114,11 @@ ProjectServer.prototype.pbftile = function (z, x, y, res) {
         var release = function () {self.vectorMapPool.release(map);};
         if (err) return self.raise(err.message, res);
         var tileClass = self.project.mml.source ? VectorBasedTile : Tile;
-        var tile = new tileClass(z, x, y, {metatile: 1});
+        try {
+            var tile = new tileClass(z, x, y, {metatile: 1});
+        } catch (err) {
+            return self.raise(err.message, res, release);
+        }
         return tile.renderToVector(self.project, map, function (err, tile) {
             if (err) return self.raise(err.message, res, release);
             var content = tile.getData();

@@ -1,6 +1,5 @@
 var request = require('request'),
-    kosmtikPackage = require('../../package'),
-    version = kosmtikPackage.version;
+    version = require('../../package').version;
 
 
 var Helpers = function (config) {

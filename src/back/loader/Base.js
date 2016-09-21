@@ -50,6 +50,8 @@ BaseLoader.prototype.normalizeSource = function (source) {
             source.tilejson = uri.href;
         } else if (source.protocol.indexOf('tms') === 0) {
             source.url = uri.href.replace(/^tms/, 'http');
+        } else {
+            source.url = uri.href;
         }
     }
     return source;

@@ -2,6 +2,7 @@ var fs = require('fs'),
     path = require('path'),
     Tile = require('./Tile.js').Tile,
     GeoUtils = require('./GeoUtils.js'),
+    Utils = require('./Utils.js'),
     VectorBasedTile = require('./VectorBasedTile.js').Tile,
     MetatileBasedTile = require('./MetatileBasedTile.js').Tile,
     XRayTile = require('./XRayTile.js').Tile;
@@ -40,6 +41,7 @@ ProjectServer.prototype.serve = function (uri, res) {
     else if (urlpath === '/poll/') this.poll(res);
     else if (urlpath === '/export/') this.export(res, uri.query);
     else if (urlpath === '/reload/') this.reload(res);
+    else if (urlpath === '/clear-vector-cache/') this.clearVectorCache(res);
     else if (this.parent.hasProjectRoute(urlpath)) this.parent.serveProjectRoute(urlpath, uri, res, this.project);
     else if (els[1] === TILEPREFIX && els.length === 5) this.project.when('loaded', function tile () {self.serveTile(els[2], els[3], els[4], res, uri.query);});
     else if (els[1] === 'query' && els.length >= 5) this.project.when('loaded', function query () {self.queryTile(els[2], els[3], els[4], res, uri.query);});
@@ -203,6 +205,18 @@ ProjectServer.prototype.config = function (res) {
     var tpl = 'L.K.Config.project = %;';
     res.write(tpl.replace('%', JSON.stringify(this.project.toFront())));
     res.end();
+};
+
+ProjectServer.prototype.clearVectorCache = function (res) {
+    var self = this;
+    Utils.cleardir(this.project.getVectorCacheDir(), function (err) {
+        if (err) return self.raise(err.message, res);
+        res.writeHead(204, {
+            'Content-Length': 0,
+            'Content-Type': 'text/html'  // Firefox complains without Content-Type, even if the body is empty.
+        });
+        res.end();
+    });
 };
 
 ProjectServer.prototype.export = function (res, options) {

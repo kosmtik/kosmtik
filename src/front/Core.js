@@ -19,7 +19,7 @@ L.Kosmtik.Xhr = {
         xhr.open(settings.verb, settings.uri, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
+            if (xhr.readyState === 4 && settings.callback) {
                 settings.callback.call(settings.context || xhr, xhr.status, xhr.responseText, xhr);
             }
         };
@@ -28,12 +28,14 @@ L.Kosmtik.Xhr = {
     },
 
     get: function(uri, options) {
+        options = options || {};
         options.verb = 'GET';
         options.uri = uri;
         return L.K.Xhr._ajax(options);
     },
 
     post: function(uri, options) {
+        options = options || {};
         options.verb = 'POST';
         options.uri = uri;
         return L.K.Xhr._ajax(options);

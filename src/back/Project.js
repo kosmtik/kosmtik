@@ -23,7 +23,8 @@ var Project = function (config, filepath, options) {
     this.mapnik.register_fonts(path.join(path.dirname(filepath), 'fonts'), {recurse: true});
     this.changeState('init');
     this.cachePath = path.join('tmp', this.id);
-    this.beforeState('loaded', this.initCache);
+    this.beforeState('loaded', this.initMetaCache);
+    this.beforeState('loaded', this.initVectorCache);
 };
 
 util.inherits(Project, ConfigEmitter);
@@ -109,19 +110,34 @@ Project.prototype.getUrl = function () {
     return '/' + this.id + '/';
 };
 
-Project.prototype.initCache = function (e) {
-    var self = this, cacheFiles = [];
-    Utils.mkdirs(self.cachePath, function (err) {
+Project.prototype.getVectorCacheDir = function () {
+    return path.join(this.cachePath, 'vector');
+};
+
+Project.prototype.getMetaCacheDir = function () {
+    return path.join(this.cachePath, 'meta');
+};
+
+Project.prototype.initMetaCache = function (e) {
+    var self = this, cacheFiles = [],
+        dir = this.getMetaCacheDir();
+    Utils.mkdirs(dir, function (err) {
         if (err) throw err;
+        self.config.log('Creating metatiles cache dir', dir);
         if (self.config.parsed_opts.keepcache) return e.continue();
-        try {
-            cacheFiles = Utils.tree(self.cachePath);
-        } catch (err2) {
-            if (err2 && err2.code !== 'ENOENT') throw err2;
-        }
-        for (var i = 0; i < cacheFiles.length; i++) {
-            if (cacheFiles[i].stat.isFile()) fs.unlink(cacheFiles[i].path);
-        }
+        self.config.log('Deleting previous metatiles', dir);
+        Utils.cleardir(dir, function (err) {
+            if (err) throw err;
+            e.continue();
+        });
+    });
+};
+
+Project.prototype.initVectorCache = function (e) {
+    var self = this, dir = this.getVectorCacheDir();
+    Utils.mkdirs(dir, function (err) {
+        if (err) throw err;
+        self.config.log('Created vector cache dir', dir);
         e.continue();
     });
 };

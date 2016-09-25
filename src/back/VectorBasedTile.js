@@ -1,5 +1,7 @@
 var util = require('util'),
     mapnik = require('mapnik'),
+    path = require('path'),
+    fs = require('fs'),
     Tile = require('./Tile.js').Tile,
     Utils = require('./Utils.js'),
     zlib = require('zlib');
@@ -30,7 +32,8 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
 
     var vtile = new mapnik.VectorTile(params.z, params.x, params.y),
         processed = 0,
-        parse = function (data, resp) {
+        parse = function (err, data) {
+            if (err) return cb(err);
             function done () {
                 if (++processed === project.mml.source.length) cb(null, vtile);
             }
@@ -41,6 +44,26 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
                     return cb(new Error('Unable to parse vector tile data for uri ' + resp.request.uri.href));
                 }
                 done();
+            });
+        };
+
+    for (var i = 0; i < project.mml.source.length; i++) {
+        var options = {
+            uri: Utils.template(project.mml.source[i].url, params),
+            encoding: null  // we want a buffer, not a string
+        };
+        this.fetch(project, options, parse);
+    }
+};
+
+VectorBasedTile.prototype.fetch = function (project, options, cb) {
+    var self = this,
+        cachedir = project.getVectorCacheDir(),
+        filepath = path.join(cachedir, options.uri.replace(/\//g, '.') + '.cache'),
+        write = function (data) {
+            fs.writeFile(filepath, data, function (err) {
+                if (err) return cb(err);
+                self.fetch(project, options, cb);
             });
         },
         onResponse = function (err, resp, body) {
@@ -54,21 +77,22 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
             if (compression) {
                 zlib[compression](body, function(err, data) {
                     if (err) return cb(err);
-                    parse(data, resp);
+                    write(data);
                 });
             } else {
-                parse(body, resp);
+                write(body);
             }
         };
-
-    for (var i = 0; i < project.mml.source.length; i++) {
-        var options = {
-            uri: Utils.template(project.mml.source[i].url, params),
-            encoding: null  // we want a buffer, not a string
-        };
-        project.config.helpers.request(options, onResponse);
-    }
+    fs.readFile(filepath, function (err, data) {
+        if (err) {
+            if (err.code !== 'ENOENT') return cb(err);
+            project.config.helpers.request(options, onResponse);
+            return;
+        }
+        cb(null, data);
+    });
 };
+
 
 VectorBasedTile.prototype.render = function (project, map, cb) {
     var self = this,

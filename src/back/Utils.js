@@ -11,6 +11,22 @@ module.exports = {
         });
     },
 
+    cleardir: function (dirpath, callback) {
+        var files = [], i = 0;
+        try {
+            files = module.exports.tree(dirpath);
+        } catch (err) {
+            if (err && err.code !== 'ENOENT') callback(err);
+        }
+        function loop (err) {
+            if (err) return callback(err);
+            var file = files[i++];
+            if (!file) return callback();
+            if (file.stat.isFile()) fs.unlink(file.path, loop);
+        }
+        loop();
+    },
+
     sinh: function (x) {
         var y = Math.exp(x);
         return (y - 1/y) / 2;

@@ -42,6 +42,15 @@ L.Kosmtik.Map = L.Map.extend({
         });
         this.help = new L.Kosmtik.Help(this);
         if(L.K.Config.project.name.length) document.title = L.K.Config.project.name + ' — Kosmtik';
+        this.commands.add({
+            keyCode: L.K.Keys.V,
+            shiftKey: true,
+            ctrlKey: true,
+            altKey: true,
+            callback: this.clearVectorCache,
+            context: this,
+            name: 'Core: empty vector cache'
+        });
     },
 
     setState: function (state) {
@@ -151,6 +160,10 @@ L.Kosmtik.Map = L.Map.extend({
     togglePoll: function () {
         if (L.K.Config.backendPolling) this.poll.start();
         else this.poll.stop();
+    },
+
+    clearVectorCache: function () {
+        L.K.Xhr.get('./clear-vector-cache/');
     }
 
 });

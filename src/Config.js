@@ -225,7 +225,6 @@ Config.prototype.log = function () {
 
 Config.prototype.defaultMapnikVersion = function () {
     var version = semver(mapnik.versions.mapnik);
-    version.patch = 0;
     return version.format();
 };
 

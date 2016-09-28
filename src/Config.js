@@ -197,7 +197,7 @@ Config.prototype.toFront = function () {
         exportFormats: Object.keys(this.exporters),
         autoReload: this.getFromUserConfig('autoReload', true),
         backendPolling: this.getFromUserConfig('backendPolling', true),
-        showCrosshairs: this.getFromUserConfig('showCrosshairs', true),
+        showCrosshairs: this.getFromUserConfig('showCrosshairs', false),
         dataInspectorLayers: {
             '__all__': true
         }

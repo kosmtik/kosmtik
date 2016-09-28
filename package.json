@@ -3,6 +3,8 @@
   "version": "0.0.13",
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
+  "bin": "./index.js",
+  "preferGlobal": true,
   "scripts": {
     "test": "node node_modules/.bin/mocha"
   },

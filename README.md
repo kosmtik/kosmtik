@@ -10,8 +10,6 @@ OpenStreetMap data (and more).
 For now, only Carto based projects are supported (with .mml or .yml config),
 but in the future we hope to plug in MapCSS too.
 
-**Alpha version, installable only from source**
-
 
 ## Lite
 
@@ -29,57 +27,46 @@ Only the core needs:
 ![screenshot](https://raw.github.com/kosmtik/kosmtik/master/screenshot.png "Screenshot of Kosmtik")
 
 
-## Install
+## Install or Update
 
-Clone this repository with ``git clone https://github.com/kosmtik/kosmtik.git``,
-go to the downloaded directory with ``cd kosmtik``, and run:
+    npm -g install kosmtik
 
-```
-npm install
-```
+This might need root/Administrator rights. If you cannot install globally
+you can also install locally with
 
-## Update
+    npm install kosmtik
 
-Obtain changes from repository (e.g. `git pull`)
-
-    rm -rf node_modules && npm install
+This will create a `node_modules/kosmtik` folder. You then have to replace all occurences of `kosmtik`
+below with `node node_modules/kosmtik/index.js`.
 
 To reinstall all plugins:
 
-    node index.js plugins --reinstall
+    kosmtik plugins --reinstall
 
 ## Usage
 
 To get command line help, run:
 
-```
-node index.js -h
-```
+    kosmtik -h
 
 To run a Carto project (or `.yml`, `.yaml`):
 
-```
-node index.js serve <path/to/your/project.mml>
-```
+    kosmtik serve <path/to/your/project.mml>
 
 Then open your browser at http://127.0.0.1:6789/.
 
 
 You may also want to install plugins. To see the list of available ones, type:
 
-```
-node index.js plugins --available
-```
+    kosmtik plugins --available
 
 And then pick one and install it like this:
-```
-node index.js plugins --install pluginname
-```
+
+    kosmtik plugins --install pluginname
 
 For example:
-```
-node index.js plugins --install kosmtik-map-compare [--install kosmtik-overlay…]
-```
+
+    kosmtik plugins --install kosmtik-map-compare [--install kosmtik-overlay…]
 
 
 ## Local config
@@ -168,4 +155,4 @@ renderer name (e.g. `carto` for the default renderer or `magnacarto` for the Mag
 - [kosmtik-mbtiles-export](https://github.com/kosmtik/kosmtik-mbtiles-export): export your project in MBTiles
 - [kosmtik-magnacarto](https://github.com/kosmtik/kosmtik-magnacarto): Magnacarto renderer for CartoCSS
 
-Run `node index.js plugins --available` to get an up to date list.
+Run `kosmtik plugins --available` to get an up to date list.

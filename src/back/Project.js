@@ -135,11 +135,15 @@ Project.prototype.initMetaCache = function (e) {
 
 Project.prototype.initVectorCache = function (e) {
     var self = this, dir = this.getVectorCacheDir();
-    Utils.mkdirs(dir, function (err) {
-        if (err) throw err;
-        self.config.log('Created vector cache dir', dir);
+    if (dir) {
+        Utils.mkdirs(dir, function (err) {
+            if (err) throw err;
+            self.config.log('Created vector cache dir', dir);
+            e.continue();
+        });
+    } else {
         e.continue();
-    });
+    }
 };
 
 exports.Project = Project;

@@ -29,6 +29,11 @@ Only the core needs:
 
 ## Install or Update
 
+Note: NodeJS versions are moving very fast, and kosmtik or its dependencies are
+hardly totally up to date with latest release. Ideally, you should run the LTS
+version of NodeJS. You can use a NodeJS version manager (like
+[NVM](https://github.com/creationix/nvm)) to help.
+
     npm -g install kosmtik
 
 This might need root/Administrator rights. If you cannot install globally

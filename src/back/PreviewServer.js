@@ -65,13 +65,13 @@ PreviewServer.prototype.serve = function (req, res) {
         els = urlpath.split('/');
     if (urlpath === '/') this.serveHome(uri, req, res);
     else if (this.hasRoute(urlpath)) this._routes[urlpath].call(this, req, res);
-    else if (this.projects[els[1]]) this.forwardToProject(uri, els[1], res);
+    else if (this.projects[els[1]]) this.forwardToProject(uri, els[1], req, res);
     else this.serveFile(path.join(this.root, urlpath), res);
 };
 
-PreviewServer.prototype.forwardToProject = function (uri, id, res) {
+PreviewServer.prototype.forwardToProject = function (uri, id, req, res) {
     uri.pathname = uri.pathname.replace('/' + id, '');
-    this.projects[id].serve(uri, res);
+    this.projects[id].serve(uri, req, res);
 };
 
 PreviewServer.prototype.serveHome = function (uri, req, res) {
@@ -132,8 +132,8 @@ PreviewServer.prototype.hasProjectRoute = function (path) {
     return !!this._project_routes[path];
 };
 
-PreviewServer.prototype.serveProjectRoute = function (path, uri, res, project) {
-    return this._project_routes[path].call(this, uri, res, project);
+PreviewServer.prototype.serveProjectRoute = function (path, uri, req, res, project) {
+    return this._project_routes[path].call(this, uri, req, res, project, this);
 };
 
 PreviewServer.prototype.pushToFront = function (res, anonymous) {

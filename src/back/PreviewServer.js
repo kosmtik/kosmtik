@@ -136,13 +136,12 @@ PreviewServer.prototype.serveProjectRoute = function (path, uri, res, project) {
     return this._project_routes[path].call(this, uri, res, project);
 };
 
-PreviewServer.prototype.pushToFront = function (res, anonymous) {
+PreviewServer.prototype.pushToFront = function (res, func) {
     // Ugly but GOOD
-    if (anonymous.name) throw 'Cannot use bridge helper with named function:' + anonymous.name;
     res.writeHead(200, {
         'Content-Type': 'application/javascript',
     });
-    res.write(anonymous.toString().substring(13, anonymous.toString().length - 1));
+    res.write(func.toString().substring(13, func.toString().length - 1));
     res.end();
 };
 

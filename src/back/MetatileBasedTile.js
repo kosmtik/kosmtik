@@ -17,9 +17,9 @@ var MetatileBasedTile = function (z, x, y, options) {
 };
 
 MetatileBasedTile.prototype.render = function (project, map, cb) {
-    var self = this,
-        metaPath = path.join(project.cachePath, this.z + '.' + this.metaX + '.' + this.metaY + '.meta'),
-        lockPath = path.join(project.cachePath, this.z + '.' + this.metaX + '.' + this.metaY + '.lock');
+    var self = this, basePath = project.getMetaCacheDir(),
+        metaPath = path.join(basePath, this.z + '.' + this.metaX + '.' + this.metaY + '.meta'),
+        lockPath = path.join(basePath, this.z + '.' + this.metaX + '.' + this.metaY + '.lock');
 
     fs.readFile(metaPath, function (err, data) {
         if (err) {

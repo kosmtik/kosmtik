@@ -1,4 +1,4 @@
-L.Kosmtik.MetatileBounds = L.TileLayer.extend({
+L.Kosmtik.MetatileBounds = L.GridLayer.extend({
 
     initialize: function (map) {
         this.map = map;
@@ -14,7 +14,7 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
             context: this,
             name: 'Metatiles bounds: toggle view'
         });
-        L.TileLayer.prototype.initialize.call(this, '');
+        L.GridLayer.prototype.initialize.call(this);
         this.setTileSize();
     },
 
@@ -39,18 +39,17 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
         // the same data
         map.on('zoomstart', this.resetVectorLayer, this);
         map.on('reloaded', this.reset, this);
-        L.TileLayer.prototype.onAdd.call(this, map);
+        L.GridLayer.prototype.onAdd.call(this, map);
     },
 
     onRemove: function (map) {
         map.off('zoomstart', this.resetVectorLayer, this);
         map.off('reloaded', this.reset, this);
         this.removeVectorLayer();
-        L.TileLayer.prototype.onRemove.call(this, map);
+        L.GridLayer.prototype.onRemove.call(this, map);
     },
 
     _addTile: function (tilePoint, container) {
-        L.TileLayer.prototype._addTile.call(this, tilePoint, container);
         this.addData(tilePoint);
     },
 
@@ -81,7 +80,7 @@ L.Kosmtik.MetatileBounds = L.TileLayer.extend({
 
     redraw: function () {
         if (this.vectorlayer) this.vectorlayer.clearLayers();
-        L.TileLayer.prototype.redraw.call(this);
+        L.GridLayer.prototype.redraw.call(this);
     },
 
     reset: function () {

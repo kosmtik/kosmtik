@@ -8,7 +8,7 @@ var util = require('util'),
     mapnik = require('mapnik'),
     PluginsManager = require('./back/PluginsManager.js').PluginsManager;
 
-GLOBAL.kosmtik = {};
+global.kosmtik = {};
 kosmtik.src = __dirname;
 
 var Config = function (root, configpath) {

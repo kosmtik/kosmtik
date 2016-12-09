@@ -6,7 +6,8 @@ var util = require('util'),
     StateBase = require('./back/StateBase.js').StateBase,
     Helpers = require('./back/Helpers.js').Helpers,
     mapnik = require('mapnik'),
-    PluginsManager = require('./back/PluginsManager.js').PluginsManager;
+    PluginsManager = require('./back/PluginsManager.js').PluginsManager,
+    _has = require('lodash.has');
 
 global.kosmtik = {};
 kosmtik.src = __dirname;
@@ -27,7 +28,8 @@ var Config = function (root, configpath) {
     this.emit('loaded');
     this.on('server:init', this.attachRoutes.bind(this));
     this.parsed_opts = {
-        renderer: 'carto'
+        renderer: 'carto',
+        mapnik_version: this.defaultMapnikVersion()
     };  // Default. TODO better option management.
 };
 
@@ -113,41 +115,61 @@ Config.prototype.getLoader = function (ext) {
 };
 
 Config.prototype.initOptions = function () {
-    this.opts = require('nomnom');
+    var self = this;
+
+    this.opts = require('commander');
     this.commands = {};
-    this.commands.serve = this.opts.command('serve').help('Run the server');
-    this.commands.serve.option('path', {
-        position: 1,
-        help: 'Optional project path to load at start.'
-    });
-    this.opts.option('port', {
-        default: 6789,
-        help: 'Port to listen on.'
-    });
-    this.opts.option('host', {
-        default: '127.0.0.1',
-        help: 'Host to listen on.'
-    });
-    this.opts.option('mapnik_version', {
-        full: 'mapnik-version',
-        default: this.defaultMapnikVersion(),
-        help: 'Optional mapnik reference version to be passed to Carto'
-    });
-    this.opts.option('proxy', {
-        help: 'Optional proxy to use when doing http requests'
-    });
-    this.opts.option('keepcache', {
-        full: 'keep-cache',
-        flag: true,
-        help: 'Do not flush cached metatiles on project load'
-    });
-    this.opts.option('renderer', {
-        full: 'renderer',
-        default: 'carto',
-        help: 'Specify a renderer by its name, carto is the default.'
-    });
-    this.opts.option('metatile', {
-        help: 'Override mml metatile setting [Default: mml setting]'
+    this.commands.serve = this.opts.command('serve [path]')
+        .description('Run the server with optional project path to load at start.')
+        .option('--port [port]',
+            'Port to listen on. Default is 6789.',
+            parseInt,
+            6789)
+        .option('--host [host]',
+            'Host to listen on. Defaults to 127.0.0.1.',
+            '127.0.0.1')
+        .option('--proxy <proxy>',
+            'Optional proxy to use when doing http requests.')
+        .option('--mapnik-version [version]',
+            'Optional mapnik reference version to be passed to Carto.',
+            this.defaultMapnikVersion())
+        .option('--keep-cache',
+            'Do not flush cached metatiles on project load.')
+        .option('--renderer [name]',
+            'Specify a renderer by its name, carto is the default.',
+            'carto')
+        .option('--metatile <metatile>',
+            'Override mml metatile setting [Default: mml setting].')
+        .action(function (path, options) {
+            if (_has(options, 'port')) {
+                self.parsed_opts.port = options.port;
+            }
+            if (_has(options, 'host')) {
+                self.parsed_opts.host = options.host;
+            }
+            if (_has(options, 'proxy')) {
+                self.parsed_opts.proxy = options.proxy;
+            }
+            if (_has(options, 'localconfig')) {
+                self.parsed_opts.localconfig = options.localconfig;
+            }
+            if (_has(options, 'renderer')) {
+                self.parsed_opts.renderer = options.renderer;
+            }
+            if (_has(options, 'metatile')) {
+                self.parsed_opts.metatile = options.metatile;
+            }
+            // since commander does not support individual variable names
+            // we have to set them manually
+            if (_has(options, 'mapnikVersion')) {
+                self.parsed_opts.mapnik_version = options.mapnikVersion;
+            }
+            if (_has(options, 'keepCache')) {
+                self.parsed_opts.keepcache = options.keepcache;
+            }
+
+            self.parsed_opts.path = path;
+            self.parsed_opts.commandName = 'serve';
     });
 };
 
@@ -155,8 +177,8 @@ Config.prototype.parseOptions = function () {
     // Make sure to include all formats, even the ones
     // added by plugins.
     this.emit('parseopts');
-    this.parsed_opts = this.opts.parse();
-    this.emit('command:' + this.parsed_opts[0]);
+    this.opts.parse(process.argv);
+    this.emit('command:' + this.parsed_opts.commandName);
 };
 
 Config.prototype.initStatics = function () {

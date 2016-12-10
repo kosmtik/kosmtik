@@ -52,20 +52,12 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
             uri: Utils.template(project.mml.source[i].url, params),
             encoding: null  // we want a buffer, not a string
         };
-        this.fetch(project, options, parse);
+        this.load(project, options, parse);
     }
 };
 
 VectorBasedTile.prototype.fetch = function (project, options, cb) {
     var self = this,
-        cachedir = project.getVectorCacheDir(),
-        filepath = path.join(cachedir, options.uri.replace(/\//g, '.') + '.cache'),
-        write = function (data) {
-            fs.writeFile(filepath, data, function (err) {
-                if (err) return cb(err);
-                self.fetch(project, options, cb);
-            });
-        },
         onResponse = function (err, resp, body) {
             if (err) return cb(err);
             if (resp.statusCode !== 200) return cb(new Error('Unable to retrieve data from ' + resp.request.uri.href));
@@ -77,16 +69,31 @@ VectorBasedTile.prototype.fetch = function (project, options, cb) {
             if (compression) {
                 zlib[compression](body, function(err, data) {
                     if (err) return cb(err);
-                    write(data);
+                    cb(null, data);
                 });
             } else {
-                write(body);
+                cb(null, body);
             }
+        };
+    project.config.helpers.request(options, onResponse);
+};
+
+VectorBasedTile.prototype.load = function (project, options, cb) {
+    if (project.config.userConfig.cacheVectorTiles === false) return this.fetch(project, options, cb);
+    var self = this,
+        cachedir = project.getVectorCacheDir(),
+        filepath = path.join(cachedir, options.uri.replace(/\//g, '.') + '.cache'),
+        write = function (err, data) {
+            if (err) return cb(err);
+            fs.writeFile(filepath, data, function (err) {
+                if (err) cb(err);
+                else cb(null, data);
+            });
         };
     fs.readFile(filepath, function (err, data) {
         if (err) {
             if (err.code !== 'ENOENT') return cb(err);
-            project.config.helpers.request(options, onResponse);
+            self.fetch(project, options, write);
             return;
         }
         cb(null, data);

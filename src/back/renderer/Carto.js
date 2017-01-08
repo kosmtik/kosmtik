@@ -1,4 +1,4 @@
-var carto = require('carto');
+var carto = require('@mapbox/carto');
 
 
 var Carto = function (project) {

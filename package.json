@@ -21,7 +21,7 @@
   "license": "WTFPL",
   "dependencies": {
     "@mapbox/carto": "^0.16.1",
-    "generic-pool": "^2.2.0",
+    "generic-pool": "^3.1.6",
     "js-yaml": "^3.4.2",
     "json-localizer": "0.0.3",
     "leaflet": "^1.0.2",
@@ -29,11 +29,11 @@
     "leaflet-hash": "^0.2.1",
     "mapnik": "3.5.14",
     "nomnom": "^1.8.1",
-    "npm": "^3.10.6",
+    "npm": "^4.0.5",
     "request": "^2.64.0",
     "semver": "^5.0.3"
   },
   "devDependencies": {
-    "mocha": "^2.2.5"
+    "mocha": "^3.2.0"
   }
 }

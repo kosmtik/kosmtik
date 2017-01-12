@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@mapbox/carto": "^0.16.1",
-    "generic-pool": "^3.1.6",
+    "generic-pool": "^2.5.0",
     "js-yaml": "^3.4.2",
     "json-localizer": "0.0.3",
     "leaflet": "^1.0.2",

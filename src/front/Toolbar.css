@@ -38,6 +38,8 @@
     height: 100%;
     font-size: 12px;
     float: right;
+    height: 40px;
+    line-height: 38px;
 }
 .toolbar ul li:hover {
   background-color: #555;
@@ -58,10 +60,8 @@ li.reload:before {
     font-family: 'dejavu_sansbook';
 }
 .toolbar ul li.with-switch {
-    height: 40px;
-    line-height: 40px;
-    padding-right: 20px;
-    padding-top: 7px;
+    padding-right: 25px;
+    padding-top: 8px;
 }
 .toolbar ul li.with-switch .formbox {
     border: none;
@@ -84,4 +84,7 @@ li.reload:before {
 }
 .polling-error .toolbar .poll-indicator {
     background-color: #d35400;
+}
+.toolbar .k-command-palette {
+    margin-right: 10px;
 }

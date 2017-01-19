@@ -59,7 +59,7 @@ VectorBasedTile.prototype._render = function (project, map, cb) {
 VectorBasedTile.prototype.fetch = function (project, options, cb) {
     var self = this,
         cachedir = project.getVectorCacheDir(),
-        filepath = path.join(cachedir, options.uri.replace(/\//g, '.') + '.cache'),
+        filepath = cachedir ? path.join(cachedir, options.uri.replace(/\//g, '.') + '.cache') : null,
         write = function (data) {
             fs.writeFile(filepath, data, function (err) {
                 if (err) return cb(err);
@@ -77,20 +77,32 @@ VectorBasedTile.prototype.fetch = function (project, options, cb) {
             if (compression) {
                 zlib[compression](body, function(err, data) {
                     if (err) return cb(err);
-                    write(data);
+                    if (filepath) {
+                        write(data);
+                    } else {
+                        cb(null, data);
+                    }
                 });
             } else {
-                write(body);
+                if (filepath) {
+                    write(body);
+                } else {
+                    cb(null, body);
+                }
             }
         };
-    fs.readFile(filepath, function (err, data) {
-        if (err) {
-            if (err.code !== 'ENOENT') return cb(err);
-            project.config.helpers.request(options, onResponse);
-            return;
-        }
-        cb(null, data);
-    });
+    if (filepath) {
+        fs.readFile(filepath, function (err, data) {
+            if (err) {
+                if (err.code !== 'ENOENT') return cb(err);
+                project.config.helpers.request(options, onResponse);
+                return;
+            }
+            cb(null, data);
+        });
+    } else {
+        project.config.helpers.request(options, onResponse);
+    }
 };
 
 

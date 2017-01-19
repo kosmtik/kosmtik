@@ -16,7 +16,7 @@ var Project = function (config, filepath, options) {
         fs.mkdirSync(this.dataDir);
     } catch (err) {}
     this.mapnik = require('mapnik');
-    this.mapnikPool = require('./MapPool.js')(this.mapnik);
+    this.mapnikPool = require('mapnik-pool')(this.mapnik);
     this.mapnik.register_default_fonts();
     this.mapnik.register_system_fonts();
     this.mapnik.register_default_input_plugins();

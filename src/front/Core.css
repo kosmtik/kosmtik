@@ -537,8 +537,8 @@ input.switch:checked ~ label:after {
 /* *********************** */
 .k-command-palette .k-autcomplete-input {
     display: inline-block;
-    height: 32px;
-    line-height: 32px;
+    height: 25px;
+    line-height: 25px;
     margin-bottom: 0;
     width: 400px;
     padding: 4px;

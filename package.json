@@ -1,6 +1,6 @@
 {
   "name": "kosmtik",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
   "bin": "./index.js",
@@ -23,7 +23,7 @@
     "npm": ">=1.5.0"
   },
   "dependencies": {
-    "@mapbox/carto": "^0.16.1",
+    "carto": "^0.17.2",
     "js-yaml": "^3.4.2",
     "json-localizer": "0.0.3",
     "leaflet": "^1.0.2",

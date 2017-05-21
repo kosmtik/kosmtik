@@ -46,7 +46,7 @@ Config.prototype.loadUserConfig = function () {
     var configpath = this.getUserConfigPath(),
         config = {};
     try {
-        config = yaml.safeLoad(fs.readFileSync(configpath, 'utf-8'));
+        config = yaml.safeLoad(fs.readFileSync(configpath, 'utf-8')) || {};
         this.log('Loading config from', configpath);
     } catch (err) {
         this.log('No usable config file found in', configpath);

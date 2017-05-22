@@ -14,6 +14,7 @@ LocalConfig.prototype.patchMML = function (e) {
             e.continue();
         },
         error = function (err) {
+            err.stack = null; // do not show stack trace
             console.warn('[Local Config] Unable to load local config from', filepath);
             console.error(err);
         };

@@ -74,6 +74,23 @@ For example:
     kosmtik plugins --install kosmtik-map-compare [--install kosmtik-overlay…]
 
 
+## Configuration file
+
+By default Kosmtik places a configuration file into `$HOMEDIR/.config/kosmtik.yml`
+where $HOMEDIR is your home directory. You can change that by setting the
+environment variable `KOSMTIK_CONFIGPATH` to the appropriate file.
+
+In the configuration file Kosmtik stores information about installed plugins and
+you can change certain settings that should be persistent between runs.
+
+Configurable settings are:
+* autoReload (true/false)
+* backendPolling (true/false)
+* cacheVectorTiles (true/false)
+* dataInspectorLayers (object with layer names and true/false)
+* exportFormats (array of strings)
+* showCrosshairs (true/false)
+
 ## Local config
 
 Because you often need to change the project config to match your

@@ -1,27 +1,40 @@
 var npm = require('npm'),
     fs = require('fs'),
     path = require('path'),
-    semver = require('semver');
+    semver = require('semver'),
+    _has = require('lodash.has');
 
 var PluginsManager = function (config) {
+    var self = this;
+
     this.config = config;
-    this.config.commands.plugins = this.config.opts.command('plugins');
-    this.config.commands.plugins.option('installed', {
-        flag: true,
-        help: 'Show installed plugins'
-    }).help('Manage plugins');
-    this.config.commands.plugins.option('available', {
-        flag: true,
-        help: 'Show available plugins in registry'
-    });
-    this.config.commands.plugins.option('install', {
-        metavar: 'NAME',
-        help: 'Install a plugin',
-        list: true
-    });
-    this.config.commands.plugins.option('reinstall', {
-        flag: true,
-        help: 'Reinstall every installed plugin'
+    this.config.commands.plugins = this.config.opts.command('plugins')
+        .description('Manage plugins')
+        .option('--installed',
+            'Show installed plugins')
+        .option('--available',
+            'Show available plugins in registry')
+        .option('--install <name>',
+            'Install a plugin',
+            function (val) {
+                return val.split(',');
+        })
+        .option('--reinstall',
+            'Reinstall every installed plugin')
+        .action(function (options) {
+            if (_has(options, 'installed')) {
+                self.config.parsed_opts.installed = true;
+            }
+            if (_has(options, 'available')) {
+                self.config.parsed_opts.available = options.available;
+            }
+            if (_has(options, 'install')) {
+                self.config.parsed_opts.install = options.install;
+            }
+            if (_has(options, 'reinstall')) {
+                self.config.parsed_opts.reinstall = options.reinstall;
+            }
+            self.config.parsed_opts.commandName = 'plugins';
     });
     this.config.on('command:plugins', this.handleCommand.bind(this));
     this.config.beforeState('project:loaded', this.handleProject.bind(this));

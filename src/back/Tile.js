@@ -31,7 +31,7 @@ Tile.prototype.render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var im = new mapnik.Image(this.height, this.width);
-    map.render(im, {scale: project.mml.scale, variables: {zoom: this.z}}, cb);
+    map.render(im, {scale: project.mml.scale || 1, variables: {zoom: this.z}}, cb);
 };
 
 Tile.prototype.renderToVector = function (project, map, cb) {

@@ -66,7 +66,7 @@ PreviewServer.prototype.serve = function (req, res) {
     if (urlpath === '/') this.serveHome(uri, req, res);
     else if (this.hasRoute(urlpath)) this._routes[urlpath].call(this, req, res);
     else if (this.projects[els[1]]) this.forwardToProject(uri, els[1], req, res);
-    else this.serveFile(path.join(this.root, urlpath), res);
+    else this.serveFile(urlpath, res);
 };
 
 PreviewServer.prototype.forwardToProject = function (uri, id, req, res) {
@@ -89,6 +89,14 @@ PreviewServer.prototype.serveFile = function (filepath, res) {
     var self = this,
         ext = path.extname(filepath);
     if (!MIMES[ext]) return this.notFound(filepath, res);
+    
+    //we also want to find the files if the modules where deduped by npm 3+
+    if(filepath.startsWith('/node_modules/')) {
+        filepath = require.resolve(filepath.substr(14));
+    } else {
+        filepath = path.join(this.root, filepath);
+    }
+    
     fs.exists(filepath, function(exists) {
         if (exists) {
             fs.readFile(filepath, function(err, contents) {

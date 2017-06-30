@@ -29,7 +29,6 @@ BaseLoader.prototype.postprocess = function () {
 
 BaseLoader.prototype.normalizeLayer = function (layer) {
     if (!layer.srs) layer.srs = this.srs;
-    if (!layer.name) layer.name = layer.id;
     return layer;
 };
 

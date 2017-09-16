@@ -115,7 +115,7 @@ See the examples below to get it working right now.
 [
     {
         "where": "center",
-        "then": [29.9377, -3.4216, 9]
+        "then": [-122.25, 49.25, 10]
     },
     {
         "where": "Layer",
@@ -123,7 +123,7 @@ See the examples below to get it working right now.
             "Datasource.type": "postgis"
         },
         "then": {
-            "Datasource.dbname": "burundi",
+            "Datasource.dbname": "vancouver",
             "Datasource.password": "",
             "Datasource.user": "ybon",
             "Datasource.host": ""

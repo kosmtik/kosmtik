@@ -5,18 +5,15 @@
   bottom: 0;
   width: 100%;
   overflow: hidden;
-  z-index: 2000; 
+  z-index: 2000;
   width: 460px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
   /*transition: width 500ms;  Creates problem on FF when export extent is displayed */
   background-color: #444;
   color: #efefef;
 }
-.sidebar.large {
-  width: calc(100% - 80px);
-}
 .sidebar.collapsed {
-  width: 60px; 
+  width: 60px;
 }
 .sidebar-tabs {
   position: absolute;
@@ -58,6 +55,11 @@
   overflow-y: auto;
   padding-left: 10px;
 }
+.sidebar.large,
+.sidebar.large .sidebar-content {
+  width: calc(100% - 80px);
+}
+
 
 .sidebar-pane {
   display: none;

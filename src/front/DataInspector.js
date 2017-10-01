@@ -67,7 +67,7 @@ L.Kosmtik.DataInspector = L.Evented.extend({
         this.title = L.DomUtil.create('h3', '', this.container);
         this.formContainer = L.DomUtil.create('div', '', this.container);
         this.title.innerHTML = 'Data Inspector';
-        var layers = L.K.Config.project.layers.map(function (l) { return l.name; });
+        var layers = L.K.Config.project.layers.map(function (l) { return l.id; });
         var backgrounds = [['black', 'black'], ['transparent', 'transparent']];
 
         var layerSettings = [['dataInspectorLayers.__all__', {handler: L.FormBuilder.LabeledCheckBox, label: 'Show All' } ]];

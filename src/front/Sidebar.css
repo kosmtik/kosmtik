@@ -12,9 +12,6 @@
   background-color: #444;
   color: #efefef;
 }
-.sidebar.collapsed {
-  width: 60px;
-}
 .sidebar-tabs {
   position: absolute;
   top: 0;
@@ -56,8 +53,11 @@
   padding-left: 10px;
 }
 .sidebar.large,
-.sidebar.large .sidebar-content {
-  width: calc(100% - 80px);
+.sidebar .sidebar-content {
+  width: calc(100% - 50px);
+}
+.sidebar.collapsed {
+  width: 60px;
 }
 
 

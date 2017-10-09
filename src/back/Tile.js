@@ -9,7 +9,8 @@ var Tile = function (z, x, y, options) {
     this.x = +x;
     this.y = +y;
     this.projection = new mapnik.Projection(options.projection || Tile.DEFAULT_OUTPUT_PROJECTION);
-    this.scale = options.scale || 1;
+    this.scale = options.scale || 1;  // When the tile coverage gets bigger (1024px…) or for metatile.
+    this.mapScale = options.mapScale;  // Retina.
     this.height = options.height || options.size || DEFAULT_HEIGHT;
     this.width = options.width || options.size || DEFAULT_WIDTH;
     this.buffer_size = options.buffer_size || 0;
@@ -31,7 +32,7 @@ Tile.prototype.render = function (project, map, cb) {
     this.setupBounds();
     map.zoomToBox(this.projection.forward([this.minX, this.minY, this.maxX, this.maxY]));
     var im = new mapnik.Image(this.height, this.width);
-    map.render(im, {scale: project.mml.scale || 1, variables: {zoom: this.z}}, cb);
+    map.render(im, {scale: this.mapScale || 1, variables: {zoom: this.z}}, cb);
 };
 
 Tile.prototype.renderToVector = function (project, map, cb) {

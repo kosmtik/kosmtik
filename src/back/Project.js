@@ -64,7 +64,7 @@ Project.prototype.createMapPool = function (options) {
     this.render();
     this.config.log('Loading map…');
     if (!options.bufferSize) options.bufferSize = this.mml.bufferSize || 256;
-    if(!options.size) options.size = this.metatileSize();
+    if(!options.size) options.size = this.metatileSize() * (options.scale || 1);
     this.mapPool = this.mapnikPool.fromString(this.xml, options, {base: this.root});
     this.config.log('Map ready');
     return this.mapPool;
@@ -99,7 +99,7 @@ Project.prototype.tileSize = function () {
 };
 
 Project.prototype.metatileSize = function () {
-    return this.tileSize() * this.metatile( );
+    return this.tileSize() * this.metatile();
 };
 
 Project.prototype.metatile = function () {

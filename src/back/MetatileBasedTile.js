@@ -12,7 +12,6 @@ var MetatileBasedTile = function (z, x, y, options) {
     this.metaY = Math.floor(y / this.metatile);
     this.format = options.format || 'png';
     this.size = options.size || 256;
-    this.scale = this.size / 256 * this.metatile;
     this.options = options;
 };
 
@@ -69,7 +68,7 @@ MetatileBasedTile.prototype.extractFromBytes = function (buffer, cb) {
 
 MetatileBasedTile.prototype.renderMetatile = function (metaPath, project, map, cb) {
     var self = this;
-    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.metatile * this.size, scale: this.scale});
+    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.metatile * this.size, scale: this.metatile, mapScale: this.options.mapScale});
     tile.render(project, map, function (err, im) {
         if (err) return cb(err);
         im.encode(self.format, function (err, buffer) {

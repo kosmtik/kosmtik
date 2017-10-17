@@ -149,6 +149,10 @@ Config.prototype.initOptions = function () {
     this.opts.option('metatile', {
         help: 'Override mml metatile setting [Default: mml setting]'
     });
+    this.opts.option('variable', {
+        help: 'Override mml Mapnik run-time variables, syntax is key:value, eg. --variable=lang:fr',
+        list: true
+    });
 };
 
 Config.prototype.parseOptions = function () {

@@ -12,7 +12,14 @@ var ProjectServer = function (project, parent) {
     this.project = project;
     this.parent = parent;
     this._pollQueue = [];
-    var self = this;
+    var self = this,
+        onChange = function (type, filename) {
+            if (filename) {
+                if (filename.indexOf('.') === 0) return;
+                self.project.config.log('File', filename, 'changed on disk');
+            }
+            self.addToPollQueue({isDirty: true});
+        };
     this.project.when('loaded', function () {
         try {
             self.initMapPools();
@@ -20,13 +27,10 @@ var ProjectServer = function (project, parent) {
             console.log(err.message);
             self.addToPollQueue({error: err.message});
         }
-        fs.watch(self.project.root, function (type, filename) {
-            if (filename) {
-                if (filename.indexOf('.') === 0) return;
-                self.project.config.log('File', filename, 'changed on disk');
-            }
-            self.addToPollQueue({isDirty: true});
-        });
+        fs.watch(self.project.filepath, onChange);
+        for (var style of self.project.mml.Stylesheet) {
+            fs.watch(style.id, onChange);
+        }
     });
     this.project.load();
 };

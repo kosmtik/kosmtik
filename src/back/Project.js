@@ -25,6 +25,7 @@ var Project = function (config, filepath, options) {
     this.cachePath = path.join('tmp', this.id);
     this.beforeState('loaded', this.initMetaCache);
     this.beforeState('loaded', this.initVectorCache);
+    this.beforeState('loaded', this.overrideVariables);
 };
 
 util.inherits(Project, ConfigEmitter);
@@ -140,6 +141,17 @@ Project.prototype.initVectorCache = function (e) {
         self.config.log('Created vector cache dir', dir);
         e.continue();
     });
+};
+
+Project.prototype.overrideVariables = function (e) {
+    if (this.config.parsed_opts.variable) {
+        for (var raw of this.config.parsed_opts.variable) {
+            raw = raw.split(':');
+            if (raw.length !== 2) this.config.log('WARNING Bad variable value', raw);
+            else this.mml.variables[raw[0]] = raw[1];
+        }
+    }
+    e.continue();
 };
 
 exports.Project = Project;

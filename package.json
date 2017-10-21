@@ -6,7 +6,8 @@
   "bin": "./index.js",
   "preferGlobal": true,
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint src test *.js"
   },
   "keywords": [
     "openstreetmap",
@@ -37,6 +38,7 @@
     "semver": "^5.0.3"
   },
   "devDependencies": {
+    "eslint": "^4.9.0",
     "mocha": "^3.2.0"
   }
 }

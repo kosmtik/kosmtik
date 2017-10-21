@@ -9,7 +9,7 @@ var Helpers = function (config) {
 Helpers.prototype.request = function (options, callback) {
     if(this.config.parsed_opts.proxy) options.proxy = this.config.parsed_opts.proxy;
     if(!options.headers) options.headers = {};
-    options.headers["User-Agent"] = "kosmtik " + version;
+    options.headers['User-Agent'] = 'kosmtik ' + version;
     return request(options, callback);
 };
 

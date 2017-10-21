@@ -84,8 +84,9 @@ L.K.Exporter = L.Class.extend({
         formContainer.appendChild(this.builder.build());
         var reset = L.DomUtil.create('a', 'button neutral', container);
         reset.innerHTML = '⛶ Current view';
-        L.DomEvent.on(reset, 'click', L.DomEvent.stop)
-                  .on(reset, 'click', this.setCurrentView, this);
+        L.DomEvent
+            .on(reset, 'click', L.DomEvent.stop)
+            .on(reset, 'click', this.setCurrentView, this);
         var submit = L.DomUtil.create('a', 'button', container);
         submit.innerHTML = '⬇ Export map';
         L.DomEvent

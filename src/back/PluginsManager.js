@@ -70,7 +70,7 @@ PluginsManager.prototype.loadPackage = function () {
 PluginsManager.prototype.available = function (callback) {
     console.error('"available" is broken because "npm search" is broken, sorry.');
     console.error('See https://github.com/npm/npm/issues/6016.');
-    return
+    return;
     npm.load(this.loadPackage(), function () {
         npm.commands.search(['kosmtik'], true, function (err, results) {
             if (err) return callback(err);
@@ -159,15 +159,15 @@ PluginsManager.prototype.handleProject = function (e) {
     var self = this;
     if ('kosmtik' in e.project.mml && 'plugins' in e.project.mml.kosmtik) {
         var warn = e.project.mml.kosmtik.plugins
-        .filter(function(plugin) {
-            var installed = self.isInstalled(plugin);
-            if (!installed) {
-                self.install([plugin]);
-                return true;
-            }
-        });
+            .filter(function(plugin) {
+                var installed = self.isInstalled(plugin);
+                if (!installed) {
+                    self.install([plugin]);
+                    return true;
+                }
+            });
         if (warn) {
-            self.config.log("Please relaunch the server to make sure all plugins are properly loaded.");
+            self.config.log('Please relaunch the server to make sure all plugins are properly loaded.');
         }
     }
     e.continue();

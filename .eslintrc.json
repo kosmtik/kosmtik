@@ -10,7 +10,7 @@
         "consistent-return": 0,
         "new-cap": 0,
         "strict": [2, "never"],
-        "indent": [2, 4],
+        "indent": [2, 4, { "SwitchCase": 1 }],
         "no-shadow": 0,
         "semi-spacing": 0,
         "semi": [2, "always"]

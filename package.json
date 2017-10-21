@@ -6,7 +6,7 @@
   "bin": "./index.js",
   "preferGlobal": true,
   "scripts": {
-    "test": "node node_modules/.bin/mocha"
+    "test": "mocha"
   },
   "keywords": [
     "openstreetmap",

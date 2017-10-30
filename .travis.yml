@@ -15,4 +15,5 @@ addons:
       - g++-4.8
 install:
     - npm install
+    - npm run lint
     - npm test

@@ -29,7 +29,7 @@ var ProjectServer = function (project, parent) {
         }
         fs.watch(self.project.filepath, onChange);
         for (var style of self.project.mml.Stylesheet) {
-            fs.watch(style.id, onChange);
+            fs.watch(path.join(project.root, style.id), onChange);
         }
     });
     this.project.load();

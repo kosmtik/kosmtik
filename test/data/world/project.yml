@@ -31,5 +31,5 @@ Layer:
     Datasource:
       file: "world.geojson"
       type: "ogr"
-      layer: "OGRGeoJSON"
+      layer: "world"
     advanced: {}

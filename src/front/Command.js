@@ -20,7 +20,7 @@ L.Kosmtik.Command = L.Class.extend({
         };
         this.autocomplete = new L.K.Autocomplete(this.tool, {
             minChar: 0,
-            placeholder: 'Type command (ctrl-shift-P)…',
+            placeholder: 'Type command (ctrl-alt-P)…',
             emptyMessage: 'No matching command',
             formatResult: formatResult,
             submitDelay: 100
@@ -33,6 +33,15 @@ L.Kosmtik.Command = L.Class.extend({
         this.autocomplete.on('selected', function (e) {
             e.choice.callback.apply(e.choice.context || this._map);
         }, this);
+        this.add({
+            keyCode: L.K.Keys.P,
+            altKey: true,
+            ctrlKey: true,
+            callback: this.focus,
+            context: this,
+            name: 'Command palette: focus'
+        });
+        // Retrocompat.
         this.add({
             keyCode: L.K.Keys.P,
             shiftKey: true,

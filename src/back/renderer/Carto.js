@@ -17,8 +17,24 @@ Carto.prototype.render = function () {
             mapnik_version: this.project.mml.mapnik_version || this.project.config.parsed_opts.mapnik_version
         };
     this.project.config.log('Using mapnik version', options.mapnik_version);
-    return new carto.Renderer(env, options).render(this.project.mml);
+    var output = new carto.Renderer(env, options).render(this.project.mml);
 
+    if (output.msg) {
+        output.msg.forEach(function (v) {
+            if (v.type === 'error') {
+                console.error(carto.Util.getMessageToPrint(v));
+            }
+            else if (v.type === 'warning') {
+                console.warn(carto.Util.getMessageToPrint(v));
+            }
+        });
+    }
+
+    if (output.data) {
+        return output.data;
+    }
+
+    return null;
 };
 
 exports.Renderer = Carto;

@@ -612,7 +612,7 @@ ul.k-autocomplete-results {
 .leaflet-bar a.leaflet-disabled {
     background-color: #777;
 }
-.leaflet-control {
+.leaflet-control, .leaflet-touch .leaflet-bar {
     border: 1px solid #222;
     border-radius: 2px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
@@ -635,4 +635,10 @@ ul.k-autocomplete-results {
 }
 .leaflet-popup-content-wrapper {
     border-radius: 4px;
+}
+
+.leaflet-touch .leaflet-bar a {
+	width:26px;
+	height:26px;
+	line-height:22px;
 }

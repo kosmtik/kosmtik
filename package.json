@@ -24,7 +24,7 @@
     "npm": ">=1.5.0"
   },
   "dependencies": {
-    "carto": "^1.0.0",
+    "carto": "^1.1.0",
     "js-yaml": "^3.12.0",
     "json-localizer": "0.0.3",
     "leaflet": "^1.3.3",

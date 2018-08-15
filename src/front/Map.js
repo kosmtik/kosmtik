@@ -25,7 +25,7 @@ L.Kosmtik.Map = L.Map.extend({
             minZoom: this.options.minZoom,
             maxZoom: this.options.maxZoom
         };
-        this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}.png?t={version}', tilelayerOptions).addTo(this);
+        this.tilelayer = new L.TileLayer('./tile/{z}/{x}/{y}{r}.png?t={version}', tilelayerOptions).addTo(this);
         this.tilelayer.on('loading', function () {
             this.setState('loading');
         }, this);

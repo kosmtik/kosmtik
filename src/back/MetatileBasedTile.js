@@ -12,14 +12,15 @@ var MetatileBasedTile = function (z, x, y, options) {
     this.metaY = Math.floor(y / this.metatile);
     this.format = options.format || 'png';
     this.size = options.size || 256;
-    this.scale = this.size / 256 * this.metatile;
+    this.mapScale = options.mapScale || 1;
     this.options = options;
 };
 
 MetatileBasedTile.prototype.render = function (project, map, cb) {
     var self = this, basePath = project.getMetaCacheDir(),
-        metaPath = path.join(basePath, this.z + '.' + this.metaX + '.' + this.metaY + '.meta'),
-        lockPath = path.join(basePath, this.z + '.' + this.metaX + '.' + this.metaY + '.lock');
+        baseName = this.z + '.' + this.metaX + '.' + this.metaY + 'x' + this.mapScale,
+        metaPath = path.join(basePath,  baseName + '.meta'),
+        lockPath = path.join(basePath, baseName + '.lock');
 
     fs.readFile(metaPath, function (err, data) {
         if (err) {
@@ -69,7 +70,7 @@ MetatileBasedTile.prototype.extractFromBytes = function (buffer, cb) {
 
 MetatileBasedTile.prototype.renderMetatile = function (metaPath, project, map, cb) {
     var self = this;
-    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.metatile * this.size, scale: this.scale});
+    var tile = new Tile(self.z, self.metaX, self.metaY, {size: this.metatile * this.size, scale: this.metatile, mapScale: this.mapScale});
     tile.render(project, map, function (err, im) {
         if (err) return cb(err);
         im.encode(self.format, function (err, buffer) {

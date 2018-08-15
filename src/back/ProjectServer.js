@@ -74,8 +74,8 @@ ProjectServer.prototype.tile = function (z, x, y, res) {
         y = yels[0],
         scale = yels[1] ? parseInt(yels[1], 10) : 1,
         mapScale = scale * (this.project.mml.scale || 1),
-        size = this.project.tileSize() * scale;  // retina?
-    mapPool = scale === 2 ? this.retinaPool : this.mapPool;
+        size = this.project.tileSize() * scale,  // retina?
+        mapPool = scale === 2 ? this.retinaPool : this.mapPool;
     mapPool.acquire(function (err, map) {
         var release = function () {mapPool.release(map);};
         if (err) return self.raise(err.message, res);

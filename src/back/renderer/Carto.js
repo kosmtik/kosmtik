@@ -30,11 +30,7 @@ Carto.prototype.render = function () {
         });
     }
 
-    if (output.data) {
-        return output.data;
-    }
-
-    return null;
+    return output.data;
 };
 
 exports.Renderer = Carto;

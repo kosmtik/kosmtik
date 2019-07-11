@@ -230,6 +230,7 @@ ProjectServer.prototype.clearVectorCache = function (res) {
 };
 
 ProjectServer.prototype.export = function (res, options) {
+    var self = this;
     this.project.export(options, function (err, buffer) {
         if (err) return self.raise(err.message, res);
         res.writeHead(200, {

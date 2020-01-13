@@ -150,8 +150,9 @@ Config.prototype.initOptions = function () {
         help: 'Override mml metatile setting [Default: mml setting]'
     });
     this.opts.option('style_id', {
-        full: 'style-name',
-        help: 'Specify style name. Useful when multiple project.mml fies placed in one single directory. [Default: project directory name]'
+        type: 'string',
+        full: 'style-id',
+        help: 'Specify style id. Useful when multiple project.mml fies placed in one single directory. [Default: project directory name]'
     });
 };
 

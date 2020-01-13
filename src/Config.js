@@ -149,6 +149,10 @@ Config.prototype.initOptions = function () {
     this.opts.option('metatile', {
         help: 'Override mml metatile setting [Default: mml setting]'
     });
+    this.opts.option('style_id', {
+        full: 'style-name',
+        help: 'Specify style name. Useful when multiple project.mml fies placed in one single directory. [Default: project directory name]'
+    });
 };
 
 Config.prototype.parseOptions = function () {

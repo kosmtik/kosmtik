@@ -152,7 +152,7 @@ Config.prototype.initOptions = function () {
     this.opts.option('style_id', {
         type: 'string',
         full: 'style-id',
-        help: 'Specify style id. Useful when multiple project.mml fies placed in one single directory. [Default: project directory name]'
+        help: 'Specify style id. Useful when multiple project.mml files placed in one single directory. [Default: project directory name]'
     });
 };
 

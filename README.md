@@ -177,4 +177,4 @@ renderer name (e.g. `carto` for the default renderer or `magnacarto` for the Mag
 - [kosmtik-mbtiles-export](https://github.com/kosmtik/kosmtik-mbtiles-export): export your project in MBTiles
 - [kosmtik-magnacarto](https://github.com/kosmtik/kosmtik-magnacarto): Magnacarto renderer for CartoCSS
 
-Run `kosmtik plugins --available` to get an up to date list.
+Run `npm search kosmtik` to get an up to date list.

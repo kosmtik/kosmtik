@@ -29,7 +29,8 @@ var PluginsManager = function (config) {
         '../plugins/base-exporters/index.js',
         '../plugins/hash/index.js',
         '../plugins/local-config/index.js',
-        '../plugins/datasource-loader/index.js'
+        '../plugins/datasource-loader/index.js',
+        '../plugins/version/index.js',
     ].concat(this.config.userConfig.plugins || []);
     for (var i = 0; i < this._registered.length; i++) {
         this.load(this._registered[i]);

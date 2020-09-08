@@ -6,7 +6,8 @@ var util = require('util'),
     StateBase = require('./back/StateBase.js').StateBase,
     Helpers = require('./back/Helpers.js').Helpers,
     mapnik = require('mapnik'),
-    PluginsManager = require('./back/PluginsManager.js').PluginsManager;
+    PluginsManager = require('./back/PluginsManager.js').PluginsManager,
+    packageVersion = require('../package.json').version;
 
 global.kosmtik = {};
 kosmtik.src = __dirname;
@@ -115,6 +116,7 @@ Config.prototype.getLoader = function (ext) {
 Config.prototype.initOptions = function () {
     this.opts = require('nomnom');
     this.commands = {};
+    this.commands.version = this.opts.command('version').help('Show the package version');
     this.commands.serve = this.opts.command('serve').help('Run the server');
     this.commands.serve.option('path', {
         position: 1,
@@ -232,5 +234,7 @@ Config.prototype.defaultMapnikVersion = function () {
     var version = semver(mapnik.versions.mapnik);
     return version.format();
 };
+
+Config.prototype.version = packageVersion;
 
 exports.Config = Config;

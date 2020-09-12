@@ -21,7 +21,8 @@
   "author": "Yohan Boniface",
   "license": "WTFPL",
   "engines": {
-    "npm": ">=1.5.0"
+    "npm": ">=1.5.0",
+    "node": ">=6.9.0"
   },
   "dependencies": {
     "carto": "^1.2.0",
@@ -39,6 +40,6 @@
   },
   "devDependencies": {
     "eslint": "^4.9.0",
-    "mocha": "^3.2.0"
+    "mocha": "^8.1.3"
   }
 }

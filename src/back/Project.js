@@ -5,9 +5,9 @@ var path = require('path'),
 
 class Project extends ConfigEmitter {
     constructor(config, filepath, options) {
+        super(config);
         options = options || {};
         this.CLASSNAME = 'project';
-        super(config);
         this.filepath = filepath;
         this.id = this.config.parsed_opts.style_id || options.id || path.basename(path.dirname(fs.realpathSync(this.filepath)));
         this.root = path.dirname(path.resolve(this.filepath));

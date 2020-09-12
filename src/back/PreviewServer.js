@@ -20,8 +20,8 @@ var http = require('http'),
 
 class PreviewServer extends ConfigEmitter {
     constructor(config, root, options) {
-        this.CLASSNAME = 'server';
         super(config);
+        this.CLASSNAME = 'server';
         this.config.server = this;
         this.initRoutes();
         options = options || {};

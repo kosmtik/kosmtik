@@ -1,7 +1,9 @@
 language: node_js
 node_js:
+  - "14"
+  - "12"
+  - "10"
   - "8"
-  - "6"
 git:
   depth: 10
 env:

@@ -8,4 +8,4 @@ class Version {
     }
 }
 
-exports = { Plugin: Version };
+exports = module.exports = { Plugin: Version };

@@ -13,12 +13,11 @@ kosmtik.src = __dirname;
 
 class Config extends StateBase {
 
-    version = packageVersion;
-
     constructor(root, configpath) {
         super();
         this.configpath = configpath;
         this.root = root;
+        this.version = packageVersion;
         this.helpers = new Helpers(this);
         this.initOptions();
         this.initExporters();

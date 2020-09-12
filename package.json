@@ -21,16 +21,17 @@
   "author": "Yohan Boniface",
   "license": "WTFPL",
   "engines": {
-    "npm": ">=1.5.0"
+    "npm": ">=1.5.0",
+    "node": ">=6.9.0"
   },
   "dependencies": {
     "carto": "^1.2.0",
-    "js-yaml": "^3.12.0",
+    "js-yaml": "^3.14.0",
     "json-localizer": "0.0.3",
     "leaflet": "^1.3.3",
     "leaflet-formbuilder": "^0.2.0",
     "leaflet-hash": "^0.2.1",
-    "mapnik": "^4.2.1",
+    "mapnik": "^4.5.2",
     "mapnik-pool": "^0.1.3",
     "nomnom": "^1.8.1",
     "npm": "^6.9.0",
@@ -39,6 +40,6 @@
   },
   "devDependencies": {
     "eslint": "^4.9.0",
-    "mocha": "^3.2.0"
+    "mocha": "^8.1.3"
   }
 }

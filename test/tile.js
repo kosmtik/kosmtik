@@ -4,7 +4,7 @@ var Config = require('../src/Config.js').Config,
     fs = require('fs'),
     assert = require('assert'),
     mapnik = require('mapnik'),
-    process = require("process");
+    process = require('process');
 
 var trunc_6 = function(key, val) {
     return val.toFixed ? Number(val.toFixed(6)) : val;
@@ -34,7 +34,7 @@ describe('#Tile()', function () {
     describe('#render()', function () {
 
         it('should render a PNG of the world', function (done) {
-            if (process.version.startsWith("v10")) {
+            if (process.version.startsWith('v10')) {
                 // PNG output is not exactly the same in node v10
                 this.skip();
             }

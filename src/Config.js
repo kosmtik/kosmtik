@@ -5,16 +5,19 @@ var path = require('path'),
     StateBase = require('./back/StateBase.js').StateBase,
     Helpers = require('./back/Helpers.js').Helpers,
     mapnik = require('mapnik'),
-    PluginsManager = require('./back/PluginsManager.js').PluginsManager;
+    PluginsManager = require('./back/PluginsManager.js').PluginsManager,
+    packageVersion = require('../package.json').version;
 
 global.kosmtik = {};
 kosmtik.src = __dirname;
 
 class Config extends StateBase {
+
     constructor(root, configpath) {
         super();
         this.configpath = configpath;
         this.root = root;
+        this.version = packageVersion;
         this.helpers = new Helpers(this);
         this.initOptions();
         this.initExporters();
@@ -113,6 +116,7 @@ class Config extends StateBase {
     initOptions() {
         this.opts = require('nomnom');
         this.commands = {};
+        this.commands.version = this.opts.command('version').help('Show the package version');
         this.commands.serve = this.opts.command('serve').help('Run the server');
         this.commands.serve.option('path', {
             position: 1,

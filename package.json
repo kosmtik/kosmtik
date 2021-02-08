@@ -3,7 +3,7 @@
   "version": "0.0.17",
   "description": "Make maps with OpenStreetMap and Mapnik",
   "main": "index.js",
-  "bin": "./index.js",
+  "bin": {"kosmtik": "./index.js"},
   "preferGlobal": true,
   "scripts": {
     "test": "mocha",

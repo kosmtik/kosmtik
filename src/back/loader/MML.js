@@ -4,7 +4,7 @@ var fs = require('fs'),
 
 class Loader extends BaseLoader {
     loadFile() {
-        return yaml.safeLoad(fs.readFileSync(this.project.filepath, 'utf8'));
+        return yaml.load(fs.readFileSync(this.project.filepath, 'utf8'));
     };
 }
 

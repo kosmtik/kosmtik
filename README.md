@@ -44,10 +44,6 @@ you can also install locally with
 This will create a `node_modules/kosmtik` folder. You then have to replace all occurences of `kosmtik`
 below with `node node_modules/kosmtik/index.js`.
 
-To reinstall all plugins:
-
-    kosmtik plugins --reinstall
-
 ## Usage
 
 To get command line help, run:
@@ -63,15 +59,7 @@ Then open your browser at http://127.0.0.1:6789/.
 
 You may also want to install plugins. To see the list of available ones, type:
 
-    kosmtik plugins --available
-
-And then pick one and install it like this:
-
-    kosmtik plugins --install pluginname
-
-For example:
-
-    kosmtik plugins --install kosmtik-map-compare [--install kosmtik-overlay…]
+    npm search kosmtik
 
 
 ## Configuration file

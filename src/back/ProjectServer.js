@@ -152,6 +152,12 @@ class ProjectServer {
             var tile = new tileClass(z, x, y, {metatile: 1, buffer_size: 1});
             return tile.renderToVector(self.project, map, function (err, t) {
                 if (err) return self.raise(err.message, res, release);
+                if (t.getData().length == 0) {
+                    res.writeHead(204, {'Content-Type': 'image/png', 'Content-Length': 0});
+                    res.end();
+                    release();
+                    return;
+                }
                 var xtile = new XRayTile(z, x, y, t.getData(), {layer: query.layer, background: query.background});
                 xtile.render(self.project, map, function (err, im) {
                     if (err) return self.raise(err.message, res, release);

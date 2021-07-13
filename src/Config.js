@@ -58,7 +58,7 @@ class Config extends StateBase {
     saveUserConfig() {
         var configpath = this.getUserConfigPath(),
             self = this;
-        fs.writeFile(configpath, yaml.safeDump(this.userConfig), function (err) {
+        fs.writeFile(configpath, yaml.dump(this.userConfig), function (err) {
             self.log('Saved env conf to', configpath);
         });
     };

@@ -3,7 +3,7 @@ var BaseExporter = require('./Base.js').BaseExporter,
 
 class YAMLExporter extends BaseExporter {
     export(callback) {
-        callback(null, yaml.safeDump(this.project.load()));
+        callback(null, yaml.dump(this.project.load()));
     };
 }
 

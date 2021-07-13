@@ -19,7 +19,7 @@ class BaseLoader {
         if (this.mml.layers) {
             this.mml.Layer = (this.mml.Layer || []).concat(this.mml.layers.map(this.expandLayerName.bind(this)));
         }
-        this.mml.Layer = this.mml.Layer.map(this.normalizeLayer);
+        this.mml.Layer = this.mml.Layer.map(this.normalizeLayer.bind(this));
         if (this.mml.source) {
             if (typeof this.mml.source === 'string') this.mml.source = this.mml.source.split(this.mml.source_separator || ',');
             this.mml.source = this.mml.source.map(this.normalizeSource);

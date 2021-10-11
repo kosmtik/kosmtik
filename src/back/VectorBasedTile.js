@@ -6,9 +6,6 @@ var mapnik = require('mapnik'),
     zlib = require('zlib');
 
 class VectorBasedTile extends Tile {
-    constructor(z, x, y, options) {
-        Tile.call(this, z, x, y, options);
-    };
 
     _render(project, map, cb) {
         this.setupBounds();

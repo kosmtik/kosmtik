@@ -84,13 +84,13 @@ class ProjectServer {
             var tile = new tileClass(z, x, y, {size: size, metatile: self.project.metatile(), mapScale: mapScale});
             return tile.render(self.project, map, function (err, im) {
                 if (err) return self.raise(err.message, res, release);
-                im.encode('png', function (err, buffer) {
+                im.encode('png', (function (err, buffer) {
                     if (err) return self.raise(err.message, res, release);
                     res.writeHead(200, {'Content-Type': 'image/png', 'Content-Length': buffer.length});
                     res.write(buffer);
                     res.end();
                     release();
-                });
+                }).bind(im));
             });
         });
     };

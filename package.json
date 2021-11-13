@@ -6,7 +6,7 @@
   "bin": {"kosmtik": "./index.js"},
   "preferGlobal": true,
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --require test/fixtures.js",
     "lint": "eslint src test *.js"
   },
   "keywords": [

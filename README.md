@@ -29,20 +29,36 @@ Only the core needs:
 
 ## Install or Update
 
-Note: Node.js versions are moving very fast, and kosmtik or its dependencies are
-hardly totally up to date with latest release. Ideally, you should run the LTS
-version of Node.js. You can use a Node.js version manager (like
-[NVM](https://github.com/creationix/nvm)) to help.
+Note: Node.js versions are moving very fast, kosmtik and its dependencies may not be compatible
+with a current release and the npm package may be out of date.
 
-    npm -g install kosmtik
+### Install from source (recommended)
+
+Clone this repository and install with `npm`:
+
+```
+git clone https://github.com/kosmtik/kosmtik.git
+npm install -g
+```
 
 This might need root/Administrator rights. If you cannot install globally
-you can also install locally with
+you can also install in a local Node environment with
 
-    npm install kosmtik
+    npm install
 
 This will create a `node_modules/kosmtik` folder. You then have to replace all occurences of `kosmtik`
 below with `node node_modules/kosmtik/index.js`.
+
+### Install package:
+
+Requires Node.js v.9.3.0. Using [npm](https://github.com/creationix/nvm) (a Node.js version manager):
+
+```
+nvm install v.9.3.0
+nvm use v.9.3.0
+npm install -g kosmtik
+```
+This will install Node.js v.9.3.0 and kosmtik for the current user.
 
 ## Usage
 

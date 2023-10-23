@@ -1,4 +1,4 @@
-var npm = require('npm'),
+var exec = require('child_process').exec,
     fs = require('fs'),
     path = require('path'),
     semver = require('semver');
@@ -70,22 +70,10 @@ class PluginsManager {
     };
 
     available(callback) {
-        console.error('"available" is broken because "npm search" is broken, sorry.');
-        console.error('See https://github.com/npm/npm/issues/6016.');
-        return;
-        npm.load(this.loadPackage(), function () {
-            npm.commands.search(['kosmtik'], true, function (err, results) {
-                if (err) return callback(err);
-                var plugin, plugins = [];
-                for (var name in results) {
-                    plugin = results[name];
-                    if (plugin.keywords.indexOf('kosmtik') === -1) continue;
-                    plugins.push(plugin);
-                }
-                callback(null, plugins);
-            });
+        exec('npm search --json keywords:kosmtik', (error, stdout, stderr) => {
+            if (error) return callback(error);
+            callback(null, JSON.parse(stdout));
         });
-
     };
 
     install(names) {
@@ -96,22 +84,20 @@ class PluginsManager {
             var name = names[i++];
             if (!name) return;
             self.config.log('Starting installation of ' + name);
-            npm.load(pkg, function () {
-                npm.commands.view([name], true, function (err, data) {
-                    if (err) throw err.message;
-                    var version = Object.keys(data)[0];
-                    if (!version) return self.config.log('Not found', name, 'ABORTING');
-                    var plugin = data[version];
-                    if (!plugin.kosmtik || !semver.satisfies(pkg.version, plugin.kosmtik)) {
-                        return self.config.log('Unable to install', name, 'version', plugin.kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
-                    }
-                    npm.commands.install([name], function (err) {
-                        if (err) return self.config.log('Error when installing package', name, err);
-                        self.config.log('Successfully installed package', name);
-                        self.attach(plugin.name);
-                        self.config.saveUserConfig();
-                        loopInstall();
-                    });
+            exec(`npm view --json '${name}'`, (error, stdout, stderr) => {
+                if (error) throw error.message;
+                const plugin = JSON.parse(stdout);
+                if (!plugin.kosmtik || !semver.satisfies(pkg.version, plugin.kosmtik)) {
+                    return self.config.log('Unable to install', name, 'version', plugin.kosmtik, 'does not satisfy local kosmtik install', pkg.version, 'ABORTING');
+                }
+
+                exec(`npm install --json '${name}'`, (error, stdout, stderr) => {
+                    if (error) return self.config.log('Error when installing package', name, error);
+
+                    self.config.log('Successfully installed package', name);
+                    self.attach(plugin.name);
+                    self.config.saveUserConfig();
+                    loopInstall();
                 });
             });
         };

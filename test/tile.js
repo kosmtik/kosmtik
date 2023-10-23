@@ -34,8 +34,8 @@ describe('#Tile()', function () {
     describe('#render()', function () {
 
         it('should render a PNG of the world', function (done) {
-            if (process.version.startsWith('v10')) {
-                // PNG output is not exactly the same in node v10
+            if (process.version.startsWith('v20')) {
+                // PNG output is not exactly the same in node v20
                 this.skip();
             }
             var tile = new Tile(0, 0, 0);

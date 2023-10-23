@@ -6,20 +6,29 @@ on:
   pull_request:
     branches: [ master ]
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_name == 'master' }}
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 16.x]
+        node-version: [16.x, 18.x, 20.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm install
+
       - run: npm run lint
+
       - run: npm test

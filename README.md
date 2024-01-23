@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/kosmtik/kosmtik](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kosmtik/kosmtik?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Dependency Status](https://david-dm.org/kosmtik/kosmtik.svg)](https://david-dm.org/kosmtik/kosmtik)
-[![Build Status](https://travis-ci.org/kosmtik/kosmtik.svg?branch=master)](https://travis-ci.org/kosmtik/kosmtik)
+[![Node.js CI](https://github.com/kosmtik/kosmtik/actions/workflows/node.js.yml/badge.svg)](https://github.com/kosmtik/kosmtik/actions/workflows/node.js.yml)
 
 Very lite but extendable mapping framework to create Mapnik ready maps with
 OpenStreetMap data (and more).
@@ -29,24 +29,36 @@ Only the core needs:
 
 ## Install or Update
 
-Note: Node.js versions are moving very fast, and kosmtik or its dependencies are
-hardly totally up to date with latest release. Ideally, you should run the LTS
-version of Node.js. You can use a Node.js version manager (like
-[NVM](https://github.com/creationix/nvm)) to help.
+Note: Node.js versions are moving very fast, kosmtik and its dependencies may not be compatible
+with a current release and the npm package may be out of date.
 
-    npm -g install kosmtik
+### Install from source (recommended)
+
+Clone this repository and install with `npm`:
+
+```
+git clone https://github.com/kosmtik/kosmtik.git
+npm install -g
+```
 
 This might need root/Administrator rights. If you cannot install globally
-you can also install locally with
+you can also install in a local Node environment with
 
-    npm install kosmtik
+    npm install
 
 This will create a `node_modules/kosmtik` folder. You then have to replace all occurences of `kosmtik`
 below with `node node_modules/kosmtik/index.js`.
 
-To reinstall all plugins:
+### Install package:
 
-    kosmtik plugins --reinstall
+Requires Node.js v.9.3.0. Using [npm](https://github.com/creationix/nvm) (a Node.js version manager):
+
+```
+nvm install v.9.3.0
+nvm use v.9.3.0
+npm install -g kosmtik
+```
+This will install Node.js v.9.3.0 and kosmtik for the current user.
 
 ## Usage
 
@@ -63,15 +75,7 @@ Then open your browser at http://127.0.0.1:6789/.
 
 You may also want to install plugins. To see the list of available ones, type:
 
-    kosmtik plugins --available
-
-And then pick one and install it like this:
-
-    kosmtik plugins --install pluginname
-
-For example:
-
-    kosmtik plugins --install kosmtik-map-compare [--install kosmtik-overlay…]
+    npm search kosmtik
 
 
 ## Configuration file
@@ -177,4 +181,4 @@ renderer name (e.g. `carto` for the default renderer or `magnacarto` for the Mag
 - [kosmtik-mbtiles-export](https://github.com/kosmtik/kosmtik-mbtiles-export): export your project in MBTiles
 - [kosmtik-magnacarto](https://github.com/kosmtik/kosmtik-magnacarto): Magnacarto renderer for CartoCSS
 
-Run `kosmtik plugins --available` to get an up to date list.
+Run `npm search kosmtik` to get an up to date list.

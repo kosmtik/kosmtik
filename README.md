@@ -51,14 +51,14 @@ below with `node node_modules/kosmtik/index.js`.
 
 ### Install package:
 
-Requires Node.js v.9.3.0. Using [npm](https://github.com/creationix/nvm) (a Node.js version manager):
+Requires Node.js v9.3.0. Using [npm](https://github.com/creationix/nvm) (a Node.js version manager):
 
 ```
-nvm install v.9.3.0
-nvm use v.9.3.0
+nvm install v9.3.0
+nvm use v9.3.0
 npm install -g kosmtik
 ```
-This will install Node.js v.9.3.0 and kosmtik for the current user.
+This will install Node.js v9.3.0 and kosmtik for the current user.
 
 ## Usage
 

@@ -4,7 +4,7 @@ var path = require('path'),
     yaml = require('js-yaml'),
     StateBase = require('./back/StateBase.js').StateBase,
     Helpers = require('./back/Helpers.js').Helpers,
-    mapnik = require('mapnik'),
+    mapnik = require('@mapnik/mapnik'),
     PluginsManager = require('./back/PluginsManager.js').PluginsManager,
     packageVersion = require('../package.json').version;
 

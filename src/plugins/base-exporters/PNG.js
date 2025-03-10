@@ -1,4 +1,4 @@
-var mapnik = require('mapnik'),
+var mapnik = require('@mapnik/mapnik'),
     GeoUtils = require('../../back/GeoUtils.js'),
     VectorBasedTile = require('../../back/VectorBasedTile.js').Tile,
     BaseExporter = require('./Base.js').BaseExporter;

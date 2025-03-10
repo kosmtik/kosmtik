@@ -1,4 +1,4 @@
-var mapnik = require('mapnik'),
+var mapnik = require('@mapnik/mapnik'),
     Utils = require('./Utils.js'),
     fs = require('fs'),
     path = require('path'),

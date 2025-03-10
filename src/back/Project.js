@@ -15,7 +15,7 @@ class Project extends ConfigEmitter {
         try {
             fs.mkdirSync(this.dataDir);
         } catch (err) {}
-        this.mapnik = require('mapnik');
+        this.mapnik = require('@mapnik/mapnik');
         this.mapnikPool = require('mapnik-pool')(this.mapnik);
         this.mapnik.register_default_fonts();
         this.mapnik.register_system_fonts();

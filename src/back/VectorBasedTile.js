@@ -1,4 +1,4 @@
-var mapnik = require('mapnik'),
+var mapnik = require('@mapnik/mapnik'),
     path = require('path'),
     fs = require('fs'),
     Tile = require('./Tile.js').Tile,

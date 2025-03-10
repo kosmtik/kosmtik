@@ -3,7 +3,7 @@ var Config = require('../src/Config.js').Config,
     Tile = require('../src/back/Tile.js').Tile,
     fs = require('fs'),
     assert = require('assert'),
-    mapnik = require('mapnik'),
+    mapnik = require('@mapnik/mapnik'),
     process = require('process');
 
 var trunc_6 = function(key, val) {

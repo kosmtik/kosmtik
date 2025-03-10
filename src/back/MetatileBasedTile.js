@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    mapnik = require('mapnik'),
+    mapnik = require('@mapnik/mapnik'),
     Tile = require('./Tile.js').Tile,
     path = require('path');
 

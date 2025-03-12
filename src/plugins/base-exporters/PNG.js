@@ -5,26 +5,28 @@ var mapnik = require('@mapnik/mapnik'),
 
 class PNGExporter extends BaseExporter {
 
-    export(callback) {
-        this.scale = this.options.scale ? +this.options.scale : 2;
-        if (this.options.bounds) this.bounds = this.options.bounds.split(',').map(function (x) {return +x;});
-        else this.bounds = this.project.mml.bounds;
-        if (this.project.mml.source) this.renderFromVector(callback);
-        else this.render(callback);
-    };
-    render(callback) {
-        var self = this;
-        var map = new mapnik.Map(+this.options.width, +this.options.height);
-        map.fromString(this.project.render(), {base: this.project.root}, function render (err, map) {
-            var projection = new mapnik.Projection(map.srs),
-                im = new mapnik.Image(+self.options.width, +self.options.height);
-            map.zoomToBox(projection.forward(self.bounds));
-            map.render(im, {scale: self.scale}, function toImage (err, im) {
-                if (err) throw err;
-                im.encode(self.options.format, callback);
-            });
-        });
-    };
+  export(callback) {
+    this.scale = this.options.scale ? +this.options.scale : 2;
+    if (this.options.bounds) this.bounds = this.options.bounds.split(',').map(function (x) {return +x;});
+    else this.bounds = this.project.mml.bounds;
+    if (this.project.mml.source) this.renderFromVector(callback);
+    else this.render(callback);
+  };
+  render(callback) {
+    var self = this;
+    var map = new mapnik.Map(+this.options.width, +this.options.height);
+    map.fromString(this.project.render(), {base: this.project.root}, function render (err, map) {
+      var source = new mapnik.Projection("epsg:4326"),
+      var dest = new mapnik.Projection(map.srs),
+      var proj_tr = new mapnik.ProjTransform(source, dest),
+      var im = new mapnik.Image(+self.options.width, +self.options.height);
+      map.zoomToBox(proj_tr.forward(self.bounds));
+      map.render(im, {scale: self.scale}, function toImage (err, im) {
+        if (err) throw err;
+        im.encode(self.options.format, callback);
+      });
+    });
+  };
 
     renderFromVector(callback) {
         var self = this,
